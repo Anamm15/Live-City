@@ -13,3 +13,295 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+enum EconomicStatus {
+  UPPER
+  UPPER_MIDDLE
+  MIDDLE
+  LOWER_MIDDLE
+  LOWER
+  UNKNOWN
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+enum Religion {
+  ISLAM
+  CHRISTIAN
+  CATHOLIC
+  HINDU
+  BUDDHIST
+  CONFUCIAN
+}
+
+enum MaritalStatus {
+  NEVER_MARRIED
+  MARRIED
+  DIVORCED
+  WIDOWED
+}
+
+enum Education {
+  ELEMENTARY
+  MIDDLE_SCHOOL
+  HIGH_SCHOOL
+  DIPLOMA_3
+  DIPLOMA_4
+  BACHELOR
+  MASTER
+  DOCTORATE
+  NO_SCHOOLING
+}
+
+enum Occupation {
+  CIVIL_SERVANT
+  MILITARY
+  POLICE
+  PRIVATE_EMPLOYEE
+  ENTREPRENEUR
+  STUDENT
+  UNEMPLOYED
+  OTHER
+}
+
+enum ReportCategory {
+  CLEANLINESS
+  SECURITY
+  INFRASTRUCTURE
+  PUBLIC_SERVICE
+  ENVIRONMENT
+  SOCIAL
+  EDUCATION
+  HEALTH
+  TRANSPORTATION
+  HOUSING
+  OTHER
+}
+
+enum ReportStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum SubmissionCategory {
+  ID_CARD
+  FAMILY_CARD
+  POLICE_CLEARANCE
+  BUSINESS_CERTIFICATE
+  DOMICILE_CERTIFICATE
+  POVERTY_CERTIFICATE
+  EVENT_PERMIT
+  MICRO_BUSINESS_LICENSE
+  INHERITANCE_CERTIFICATE
+  HEIR_CERTIFICATE
+  DEATH_CERTIFICATE
+  BIRTH_CERTIFICATE
+  MARRIAGE_CERTIFICATE
+  DIVORCE_CERTIFICATE
+  COVER_LETTER
+}
+
+enum SubmissionStatus {
+  PENDING
+  PROCESSING
+  REJECTED
+  COMPLETED
+}
+
+enum PollsType {
+  VOTING
+  SURVEY
+}
+
+enum PollsStatus {
+  ACTIVE
+  CLOSED
+}
+
+enum CommunityRole {
+  MEMBER
+  ADMIN
+  MODERATOR
+}
+
+enum FileableType {
+  VILLAGE
+  FACILITY
+  COMMUNITY
+  NEWS
+  SUBMISSION
+  REPORT
+  USER
+}
+
+model Families {
+  id             Int      @id @default(autoincrement())
+  familyNumber   String   @unique
+  headFamily     String   @db.VarChar(100)
+  economicStatus EconomicStatus
+  address        String
+  users          Users[]
+}
+
+model Users {
+  id                     Int           @id @default(autoincrement())
+  nationalIdentityNumber String        @db.Char(16)
+  name                   String        @db.VarChar(100)
+  email                  String?       @unique
+  password               String        @db.VarChar(255)
+  points                 Int           @default(0)
+  gender                 Gender
+  birthday               DateTime
+  birthplace             String
+  religion               Religion
+  maritalStatus          MaritalStatus?
+  education              Education?
+  job                    Occupation?
+  phoneNumber            String?
+  familiesId             Int
+  family                 Families      @relation(fields: [familiesId], references: [id])
+  rewardLogs             RewardLogs[]
+  pollVotes              PollVotes[]
+  owner                  Communities[]
+  communityMemberships   CommunityMembers[]
+  submissions            Submissions[]
+  reports                Reports[]
+  newsComments           NewsComments[]
+  newsReactions          NewsReactions[]
+}
+
+model RewardLogs {
+  id          Int     @id @default(autoincrement())
+  description String
+  points      Int
+  userId      Int
+  user        Users   @relation(fields: [userId], references: [id])
+}
+
+model Polls {
+  id          Int           @id @default(autoincrement())
+  title       String
+  description String
+  type        PollsType
+  status      PollsStatus
+  options     PollOptions[]
+}
+
+model PollOptions {
+  id        Int         @id @default(autoincrement())
+  label     String
+  voteCount Int         @default(0)
+  pollsId   Int
+  poll      Polls       @relation(fields: [pollsId], references: [id])
+  votes     PollVotes[]
+}
+
+model PollVotes {
+  id            Int          @id @default(autoincrement())
+  usersId       Int
+  pollOptionsId Int
+  user          Users        @relation(fields: [usersId], references: [id])
+  option        PollOptions  @relation(fields: [pollOptionsId], references: [id])
+
+  @@unique([usersId, pollOptionsId]) // Opsional: user hanya boleh memilih satu kali pada satu opsi
+}
+
+model Communities {
+  id          Int                @id @default(autoincrement())
+  name        String
+  description String
+  ownerId     Int
+  owner       Users              @relation(fields: [ownerId], references: [id])
+  members     CommunityMembers[]
+}
+
+model CommunityMembers {
+  id            Int         @id @default(autoincrement())
+  role          CommunityRole
+  joinedAt      DateTime    @default(now())
+  communitiesId Int
+  userId        Int
+  community     Communities @relation(fields: [communitiesId], references: [id])
+  user          Users       @relation(fields: [userId], references: [id])
+
+  @@unique([userId, communitiesId])
+}
+
+model Reports {
+  id          Int        @id @default(autoincrement())
+  title       String
+  date        DateTime   @default(now())
+  description String
+  category    ReportCategory
+  status      ReportStatus
+  response    String?
+  usersId     Int
+  user        Users      @relation(fields: [usersId], references: [id])
+}
+
+model Submissions {
+  id          Int               @id @default(autoincrement())
+  title       String
+  date        DateTime          @default(now())
+  category    SubmissionCategory
+  status      SubmissionStatus
+  description String
+  usersId     Int
+  user        Users             @relation(fields: [usersId], references: [id])
+}
+
+model News {
+  id            Int             @id @default(autoincrement())
+  title         String
+  date          DateTime        @default(now())
+  content       String
+  reactionCount Int             @default(0)
+  commentCount  Int             @default(0)
+  comments      NewsComments[]
+  reactions     NewsReactions[]
+}
+
+model NewsComments {
+  id       Int     @id @default(autoincrement())
+  content  String
+  usersId  Int
+  newsId   Int
+  user     Users   @relation(fields: [usersId], references: [id])
+  news     News    @relation(fields: [newsId], references: [id])
+}
+
+model NewsReactions {
+  id       Int     @id @default(autoincrement())
+  usersId  Int
+  newsId   Int
+  user     Users   @relation(fields: [usersId], references: [id])
+  news     News    @relation(fields: [newsId], references: [id])
+
+  @@unique([usersId, newsId]) // 1 user hanya bisa react 1x ke news yang sama
+}
+
+model Villages {
+  id         Int    @id @default(autoincrement())
+  description String
+  postalCode  String
+}
+
+model Facilities {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String?
+  latitude    Float
+  longitude   Float
+  buildDate   DateTime
+}
+
+model Files {
+  id           Int       @id @default(autoincrement())
+  urlFile      String
+  fileableId   Int
+  fileableType FileableType
+}
