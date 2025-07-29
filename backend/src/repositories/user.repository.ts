@@ -1,29 +1,100 @@
 import { IUserRepository } from "../interfaces/repositories/IUserRepository";
+import { User, GetUserResponse, CreateUserDto, UpdateUserDto } from "../dto/user.dto";
+import { PrismaClient } from '../generated/prisma';
 
+const userSelectFields = {
+   id: true,
+   name: true,
+   email: true,
+   gender: true,
+   role: true,
+   birthday: true,
+   birthplace: true,
+   religion: true,
+   maritalStatus: true,
+   education: true,
+   job: true,
+   phoneNumber: true,
+   points: true
+};
 
 export class UserRepository implements IUserRepository {
-   async getUsers(): Promise<User[]> {
-       
+   private prisma: PrismaClient;
+
+   constructor(prisma: PrismaClient) {
+      this.prisma = prisma;
    }
 
-   async getUserById(userId: string): Promise<User | null> {
-       // Logic to find a user by ID
+   async getUsers(): Promise<GetUserResponse[]> {
+      try {
+         return this.prisma.users.findMany({
+            select: userSelectFields
+         });
+      } catch (error: any) {
+         throw new Error("Failed to get users: " + error.message);
+      }
    }
 
-   // Implementation of IUserRepository methods
+   async getUserById(id: number): Promise<GetUserResponse | null> {
+      try {
+         return this.prisma.users.findUnique({
+            where: { id: id },
+            select: userSelectFields
+         });
+      } catch (error: any) {
+         throw new Error("Failed to get user by ID: " + error.message);
+      }
+   }
+
    async getUserByEmail(email: string): Promise<User | null> {
-      // Logic to find a user by email
+      try {
+         return this.prisma.users.findUnique({
+            where: { email: email }
+         });
+      } catch (error: any) {
+         throw new Error(`Failed to get user by email: ${error.message}`);
+      }
    }
    
    async createUser(userData: CreateUserDto): Promise<User> {
-      // Logic to create a new user
+      try {
+         return this.prisma.users.create({
+            data: userData
+         });
+      } catch (error: any) {
+         throw new Error(`Failed to create user: ${error.message}`);
+      }
    }
    
-   async updateUser(id: string, userData: UpdateUserDto): Promise<User | null> {
-      // Logic to update an existing user
+   async updateUser(id: number, userData: UpdateUserDto): Promise<User> {
+      try {
+         return this.prisma.users.update({
+            where: { id: id },
+            data: userData
+         });
+      } catch (error: any) {
+         throw new Error(`Failed to update user with ID ${id}: ${error.message}`);
+      }
    }
-   
-   async deleteUser(id: string): Promise<void> {
-      // Logic to delete a user
+
+   async updateRefreshToken(id: number, refreshToken: string | null): Promise<void> {
+      try {
+         await this.prisma.users.update({
+            where: { id: id },
+            data: { refreshToken: refreshToken }
+         });
+      } catch (error: any) {
+         throw new Error(`Failed to update refresh token for user with ID ${id}: ${error.message}`);
+      }
+   }
+
+   async deleteUser(id: number): Promise<void> {
+      try {
+         await this.prisma.users.delete({
+            where: { id: id }
+         });
+      } catch (error: any) {
+         throw new Error(`Failed to delete user with ID ${id}: ${error.message}`);
+      }
    }
 }

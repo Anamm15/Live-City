@@ -1,0 +1,51 @@
+@baseUrl = http://localhost:3000/api/v1
+
+### Get Users
+GET {{ baseUrl }}/users
+
+### Get User by ID
+GET {{ baseUrl }}/users/1
+
+### Create User
+POST {{ baseUrl }}/users
+Content-Type: application/json
+
+{
+  "nationalIdentityNumber": "8276578943746538",
+  "name": "Choirul Anam",
+  "email": "test@example.com",
+  "password": "anam1234",
+  "gender": "MALE",
+  "birthday": "1990-01-01T00:00:00.000Z",
+  "birthplace": "New York",
+  "religion": "CHRISTIAN",
+  "maritalStatus": "MARRIED",
+  "education": "BACHELOR",
+  "job": "STUDENT",
+  "phoneNumber": "1234567890",
+  "family": {
+    "connect": { "id": 1 }
+  }
+}
+
+
+### Update User
+PATCH  {{ baseUrl }}/users/5
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjUiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc1MzgwODA3OCwiZXhwIjoxNzUzODExNjc4fQ.Rzh2U7F4mUkgpc8JrI0KhAjFQOA0M5hkudGJdI0MzJk
+Content-Type: application/json
+
+{
+  "name": "Choirul Anam Updated"
+}
+
+### Delete User
+DELETE {{ baseUrl }}/users/3
+
+### Login User
+POST {{ baseUrl }}/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "anam1234"
+}

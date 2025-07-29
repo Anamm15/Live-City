@@ -14,6 +14,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  ADMIN
+  USER
+}
+
 enum EconomicStatus {
   UPPER
   UPPER_MIDDLE
@@ -35,6 +40,7 @@ enum Religion {
   HINDU
   BUDDHIST
   CONFUCIAN
+  JUDAISM
 }
 
 enum MaritalStatus {
@@ -57,12 +63,10 @@ enum Education {
 }
 
 enum Occupation {
-  CIVIL_SERVANT
-  MILITARY
-  POLICE
-  PRIVATE_EMPLOYEE
-  ENTREPRENEUR
+  EMPLOYED
   STUDENT
+  RETIRED
+  ENTREPRENEUR
   UNEMPLOYED
   OTHER
 }
@@ -152,6 +156,7 @@ model Users {
   nationalIdentityNumber String        @db.Char(16)
   name                   String        @db.VarChar(100)
   email                  String?       @unique
+  role                   Role          @default(USER)
   password               String        @db.VarChar(255)
   points                 Int           @default(0)
   gender                 Gender
@@ -162,6 +167,7 @@ model Users {
   education              Education?
   job                    Occupation?
   phoneNumber            String?
+  refreshToken           String?
   familiesId             Int
   family                 Families      @relation(fields: [familiesId], references: [id])
   rewardLogs             RewardLogs[]
