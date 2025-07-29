@@ -1,8 +1,7 @@
 
 
-export interface IAuthController {
-   login(email: string, password: string): Promise<void>;
-   register(email: string, password: string): Promise<void>;
-   logout(): Promise<void>;
-   refreshToken(token: string): Promise<void>;
+export interface IAuthService {
+   login(email: string, password: string): Promise<string>;
+   logout(id: number): Promise<void>;
+   refreshToken(id: number, token: string): Promise<void>;
 }
