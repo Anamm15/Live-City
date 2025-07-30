@@ -8,7 +8,6 @@ import { validate } from '../middlewares/validate';
 import { CreateUserSchema, UpdateUserSchema } from '../validators/user.validator';
 
 const router = Router();
-
 const userRepository = new UserRepository(prisma);
 const userService = new UserService(userRepository);
 const userController = new UserController(userService);
