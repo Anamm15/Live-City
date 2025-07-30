@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { optionalNullable } from '../utils/zod';
-import { Education, Gender, MaritalStatus, Occupation, Religion } from '../helpers/constants';
+import { Education, Gender, MaritalStatus, Occupation, Religion } from '../helpers/entity.constants';
 
 export const CreateUserSchema = z.object({
    nationalIdentityNumber: z.string().min(16, "Nomor identitas harus 16 karakter"),
