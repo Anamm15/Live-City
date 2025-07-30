@@ -1,5 +1,5 @@
 import { IUserRepository } from "../interfaces/repositories/IUserRepository";
-import { User, GetUserResponse, CreateUserDto, UpdateUserDto } from "../dto/user.dto";
+import { User, GetUserResponse, CreateUserRequest, UpdateUserRequest } from "../dto/user.dto";
 import { PrismaClient } from '../generated/prisma';
 
 const userSelectFields = {
@@ -56,7 +56,7 @@ export class UserRepository implements IUserRepository {
       }
    }
    
-   async createUser(userData: CreateUserDto): Promise<User> {
+   async createUser(userData: CreateUserRequest): Promise<User> {
       try {
          return this.prisma.users.create({
             data: userData
@@ -66,7 +66,7 @@ export class UserRepository implements IUserRepository {
       }
    }
    
-   async updateUser(id: number, userData: UpdateUserDto): Promise<User> {
+   async updateUser(id: number, userData: UpdateUserRequest): Promise<User> {
       try {
          return this.prisma.users.update({
             where: { id: id },

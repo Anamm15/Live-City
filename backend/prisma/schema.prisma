@@ -149,6 +149,9 @@ model Families {
   economicStatus EconomicStatus
   address        String
   users          Users[]
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime?  @updatedAt
+  deletedAt      DateTime?
 }
 
 model Users {
@@ -168,8 +171,8 @@ model Users {
   job                    Occupation?
   phoneNumber            String?
   refreshToken           String?
-  familiesId             Int
-  family                 Families      @relation(fields: [familiesId], references: [id])
+  familyId               Int
+  family                 Families      @relation(fields: [familyId], references: [id])
   rewardLogs             RewardLogs[]
   pollVotes              PollVotes[]
   owner                  Communities[]
@@ -178,6 +181,9 @@ model Users {
   reports                Reports[]
   newsComments           NewsComments[]
   newsReactions          NewsReactions[]
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime?  @updatedAt
+  deletedAt              DateTime?
 }
 
 model RewardLogs {
@@ -186,6 +192,9 @@ model RewardLogs {
   points      Int
   userId      Int
   user        Users   @relation(fields: [userId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime?  @updatedAt
+  deletedAt   DateTime?
 }
 
 model Polls {
@@ -195,25 +204,34 @@ model Polls {
   type        PollsType
   status      PollsStatus
   options     PollOptions[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime?  @updatedAt
+  deletedAt   DateTime?
 }
 
 model PollOptions {
-  id        Int         @id @default(autoincrement())
-  label     String
-  voteCount Int         @default(0)
-  pollsId   Int
-  poll      Polls       @relation(fields: [pollsId], references: [id])
-  votes     PollVotes[]
+  id          Int         @id @default(autoincrement())
+  label       String
+  voteCount   Int         @default(0)
+  pollId      Int
+  poll        Polls       @relation(fields: [pollId], references: [id])
+  votes       PollVotes[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime?  @updatedAt
+  deletedAt   DateTime?
 }
 
 model PollVotes {
   id            Int          @id @default(autoincrement())
-  usersId       Int
+  userId        Int
   pollOptionsId Int
-  user          Users        @relation(fields: [usersId], references: [id])
+  user          Users        @relation(fields: [userId], references: [id])
   option        PollOptions  @relation(fields: [pollOptionsId], references: [id])
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime?  @updatedAt
+  deletedAt     DateTime?
 
-  @@unique([usersId, pollOptionsId]) // Opsional: user hanya boleh memilih satu kali pada satu opsi
+  @@unique([userId, pollOptionsId]) // Opsional: user hanya boleh memilih satu kali pada satu opsi
 }
 
 model Communities {
@@ -223,6 +241,9 @@ model Communities {
   ownerId     Int
   owner       Users              @relation(fields: [ownerId], references: [id])
   members     CommunityMembers[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime?  @updatedAt
+  deletedAt   DateTime?
 }
 
 model CommunityMembers {
@@ -233,6 +254,9 @@ model CommunityMembers {
   userId        Int
   community     Communities @relation(fields: [communitiesId], references: [id])
   user          Users       @relation(fields: [userId], references: [id])
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime?  @updatedAt
+  deletedAt     DateTime?
 
   @@unique([userId, communitiesId])
 }
@@ -245,8 +269,11 @@ model Reports {
   category    ReportCategory
   status      ReportStatus
   response    String?
-  usersId     Int
-  user        Users      @relation(fields: [usersId], references: [id])
+  userId      Int
+  user        Users      @relation(fields: [userId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime?  @updatedAt
+  deletedAt   DateTime?
 }
 
 model Submissions {
@@ -256,8 +283,11 @@ model Submissions {
   category    SubmissionCategory
   status      SubmissionStatus
   description String
-  usersId     Int
-  user        Users             @relation(fields: [usersId], references: [id])
+  userId      Int
+  user        Users             @relation(fields: [userId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime?  @updatedAt
+  deletedAt   DateTime?
 }
 
 model News {
@@ -269,31 +299,43 @@ model News {
   commentCount  Int             @default(0)
   comments      NewsComments[]
   reactions     NewsReactions[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime?  @updatedAt
+  deletedAt     DateTime?
 }
 
 model NewsComments {
-  id       Int     @id @default(autoincrement())
-  content  String
-  usersId  Int
-  newsId   Int
-  user     Users   @relation(fields: [usersId], references: [id])
-  news     News    @relation(fields: [newsId], references: [id])
+  id          Int     @id @default(autoincrement())
+  content     String
+  userId      Int
+  newsId      Int
+  user        Users   @relation(fields: [userId], references: [id])
+  news        News    @relation(fields: [newsId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime?  @updatedAt
+  deletedAt   DateTime?
 }
 
 model NewsReactions {
-  id       Int     @id @default(autoincrement())
-  usersId  Int
-  newsId   Int
-  user     Users   @relation(fields: [usersId], references: [id])
-  news     News    @relation(fields: [newsId], references: [id])
+  id          Int     @id @default(autoincrement())
+  userId      Int
+  newsId      Int
+  user        Users   @relation(fields: [userId], references: [id])
+  news        News    @relation(fields: [newsId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime?  @updatedAt
+  deletedAt   DateTime?
 
-  @@unique([usersId, newsId]) // 1 user hanya bisa react 1x ke news yang sama
+  @@unique([userId, newsId])
 }
 
 model Villages {
-  id         Int    @id @default(autoincrement())
+  id          Int    @id @default(autoincrement())
   description String
   postalCode  String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime?  @updatedAt
+  deletedAt   DateTime?
 }
 
 model Facilities {
@@ -303,6 +345,9 @@ model Facilities {
   latitude    Float
   longitude   Float
   buildDate   DateTime
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime?  @updatedAt
+  deletedAt   DateTime?
 }
 
 model Files {
@@ -310,4 +355,7 @@ model Files {
   urlFile      String
   fileableId   Int
   fileableType FileableType
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime?  @updatedAt
+  deletedAt    DateTime?
 }

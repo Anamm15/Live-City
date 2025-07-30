@@ -13,7 +13,7 @@ Content-Type: application/json
 {
   "nationalIdentityNumber": "8276578943746538",
   "name": "Choirul Anam",
-  "email": "test@example.com",
+  "email": "test2@example.com",
   "password": "anam1234",
   "gender": "MALE",
   "birthday": "1990-01-01T00:00:00.000Z",
@@ -22,16 +22,15 @@ Content-Type: application/json
   "maritalStatus": "MARRIED",
   "education": "BACHELOR",
   "job": "STUDENT",
-  "phoneNumber": "1234567890",
   "family": {
-    "connect": { "id": 1 }
+    "connect": { "id": 3 }
   }
 }
 
 
 ### Update User
-PATCH  {{ baseUrl }}/users/5
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjUiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc1MzgwODA3OCwiZXhwIjoxNzUzODExNjc4fQ.Rzh2U7F4mUkgpc8JrI0KhAjFQOA0M5hkudGJdI0MzJk
+PATCH  {{ baseUrl }}/users/6
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc1Mzg1MDM2OCwiZXhwIjoxNzUzODUzOTY4fQ.QWFQXL1k5hyJifvurhfmb5kIilX9ins8ve9w50mFZ7Y
 Content-Type: application/json
 
 {
@@ -49,3 +48,44 @@ Content-Type: application/json
   "email": "test@example.com",
   "password": "anam1234"
 }
+
+### Get Submissions
+GET {{ baseUrl }}/submissions/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc1Mzg1MTEyNiwiZXhwIjoxNzUzODU0NzI2fQ.RK7I7nHu2_MT6B3trrMZD6l8Ql7CP9lB9l0dk0_11gQ
+
+### Create Submission
+POST {{ baseUrl }}/submissions
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc1Mzg1MDM2OCwiZXhwIjoxNzUzODUzOTY4fQ.QWFQXL1k5hyJifvurhfmb5kIilX9ins8ve9w50mFZ7Y
+Content-Type: application/json
+
+{
+  "title": "Submission Title 2",
+  "date": "1990-01-01T00:00:00.000Z",
+  "category": "DOMICILE_CERTIFICATE",
+  "status": "PENDING",
+  "description": "This is a test submission.",
+  "userId": 6
+}
+
+### Update Submission
+PATCH {{ baseUrl }}/submissions/3
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc1Mzg1MDM2OCwiZXhwIjoxNzUzODUzOTY4fQ.QWFQXL1k5hyJifvurhfmb5kIilX9ins8ve9w50mFZ7Y
+Content-Type: application/json
+
+{
+  "title": "Updated Submission Title",
+  "description": "This is an updated test submission."
+}
+
+### Update status of Submission
+PATCH {{ baseUrl }}/submissions/5/status
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc1Mzg0NDYwNywiZXhwIjoxNzUzODQ4MjA3fQ.uU6-oHtm37VlVPTOXwwtwtrajqxy_0sIesCeIwSz9Z0
+Content-Type: application/json
+
+{
+  "status": "COMPLETED"
+}
+
+### Delete Submission
+DELETE {{ baseUrl }}/submissions/2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc1Mzg0NDYwNywiZXhwIjoxNzUzODQ4MjA3fQ.uU6-oHtm37VlVPTOXwwtwtrajqxy_0sIesCeIwSz9Z0
