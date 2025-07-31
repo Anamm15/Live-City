@@ -1,4 +1,3 @@
-
 export enum CommonMessage {
    INVALID_CREDENTIALS = "Invalid credentials",
    INVALID_REQUEST_DATA = "Invalid request data",
@@ -8,7 +7,7 @@ export enum CommonMessage {
    FILE_UPLOAD_FAILED = "Failed to upload file",
    TOKEN_REFRESHED = "Token refreshed successfully",
    TOKEN_REFRESH_FAILED = "Token refresh failed",
-   TOKEN_NOT_FOUND = "Token not found"
+   TOKEN_NOT_FOUND = "Token not found",
 }
 
 export enum UserMessage {
@@ -28,6 +27,29 @@ export enum UserMessage {
    USER_LOGOUT_SUCCESSFUL = "User logout successful",
    USER_LOGOUT_FAILED = "Failed to logout",
    USER_PASSWORD_CHANGED = "User password changed successfully",
-   USER_REFRESH_TOKEN_SUCCESSFUL = "User refreshed token successfuly",
-   USER_REFRESH_TOKEN_FAILED = "Failed to refresh token"
 }
+
+export enum NewsMessage {
+   NEWS_RETRIEVED = "News retrieved successfully",
+   NEWS_CREATED = "News created successfully",
+   NEWS_UPDATED = "News updated successfully",
+   NEWS_DELETED = "News deleted successfully",
+   NEWS_RETRIEVE_FAILED = "Failed to retrieve news",
+   NEWS_CREATE_FAILED = "Failed to create news",
+   NEWS_UPDATE_FAILED = "Failed to update news",
+   NEWS_DELETE_FAILED = "Failed to delete news",
+   NEWS_NOT_FOUND = "News not found",
+   NEWS_COMMENT_RETRIEVED = "News comments retrieved successfully",
+   NEWS_COMMENT_CREATED = "News comment created successfully",
+   NEWS_COMMENT_DELETED = "News comment deleted successfully",
+   NEWS_COMMENT_RETRIEVE_FAILED = "Failed to retrieve news comment",
+   NEWS_COMMENT_CREATE_FAILED = "Failed to create news comment",
+   NEWS_COMMENT_DELETE_FAILED = "Failed to delete news comment",
+   NEWS_COMMENT_NOT_FOUND = "News comment not found",
+   NEWS_REACTION_RETRIEVED = "News reactions retrieved successfully",
+   NEWS_REACTION_CREATED = "News reaction created successfully",
+   NEWS_REACTION_RETRIEVE_FAILED = "Failed to retrieve news reaction",
+   NEWS_REACTION_CREATE_FAILED = "Failed to create news reaction",
+   NEWS_REACTION_NOT_FOUND = "News reaction not found",
+}
+

@@ -1,0 +1,38 @@
+### Login User
+@baseUrl = http://localhost:3000/api/v1
+POST {{ baseUrl }}/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "anam1234"
+}
+
+### Get News
+GET {{baseUrl}}/news
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTM5MjAzNDksImV4cCI6MTc1MzkyMzk0OX0.BhVmuIJ5ZeK5I-7GYkI_a6fPHigai5Fs9ANedregZCU
+
+### Create News
+POST {{baseUrl}}/news
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTM5MjAzNDksImV4cCI6MTc1MzkyMzk0OX0.BhVmuIJ5ZeK5I-7GYkI_a6fPHigai5Fs9ANedregZCU
+Content-Type: application/json
+
+{
+   "title": "News test title",
+   "date": "1990-01-01T00:00:00.000Z",
+   "content": "News content title"
+}
+
+### Update 
+PATCH {{baseUrl}}/news/7
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTM5MjAzNDksImV4cCI6MTc1MzkyMzk0OX0.BhVmuIJ5ZeK5I-7GYkI_a6fPHigai5Fs9ANedregZCU
+Content-Type: application/json
+
+{
+   "title": "News test title updated",
+   "content": "News content title updated"
+}
+
+### Delete
+DELETE {{baseUrl}}/news/6
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTM5MjAzNDksImV4cCI6MTc1MzkyMzk0OX0.BhVmuIJ5ZeK5I-7GYkI_a6fPHigai5Fs9ANedregZCU
