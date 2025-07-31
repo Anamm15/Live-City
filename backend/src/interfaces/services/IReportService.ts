@@ -1,6 +1,6 @@
 import { CreateReportRequest, GetReportResponse, UpdateReportRequest, UpdateResponseReportRequest } from "../../dto/report.dto";
 
-export interface IReportRepository {
+export interface IReportService {
    getReports(): Promise<GetReportResponse[]>;
    getReportById(id: number): Promise<GetReportResponse | null>;
    getReportsByUserId(userId: number): Promise<GetReportResponse[]>;

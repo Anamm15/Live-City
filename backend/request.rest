@@ -90,3 +90,45 @@ Content-Type: application/json
 ### Delete Submission
 DELETE {{ baseUrl }}/submissions/2
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc1Mzg0NDYwNywiZXhwIjoxNzUzODQ4MjA3fQ.uU6-oHtm37VlVPTOXwwtwtrajqxy_0sIesCeIwSz9Z0
+
+
+### Get Report
+GET {{baseUrl}}/reports/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc1Mzg2NTAxMywiZXhwIjoxNzUzODY4NjEzfQ.E6e9xn2h9UNaFBIM-vO0fzcchLbtt1w1hqFC49fuKqE
+
+### Create report
+POST {{baseUrl}}/reports
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTM4NzU3MzQsImV4cCI6MTc1Mzg3OTMzNH0.nLEUXv0V42K3CYCfgwuc6flS3waLC2mbo8nZH5umsS4
+Content-Type: application/json
+
+{
+  "title": "Test report",
+  "description": "Test",
+  "category": "INFRASTRUCTURE",
+  "status": "PENDING",
+  "userId": 6
+}
+
+### Update report
+PATCH {{baseUrl}}/reports/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc1Mzg3NTU4MCwiZXhwIjoxNzUzODc5MTgwfQ.slN9QsRhJ8I5Y_40_6nNoFW8Da_dmeFg_YnDwRewKsw
+Content-Type: application/json
+
+{
+  "title": "updated title"
+}
+
+### update report response
+PATCH {{baseUrl}}/reports/1/response
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTM4NzU3MzQsImV4cCI6MTc1Mzg3OTMzNH0.nLEUXv0V42K3CYCfgwuc6flS3waLC2mbo8nZH5umsS4
+Content-Type: application/json
+
+{
+  "response": "test new response",
+  "status": "IN_PROGRESS"
+}
+
+### delete report response
+DELETE {{baseUrl}}/reports/2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTM4NzU3MzQsImV4cCI6MTc1Mzg3OTMzNH0.nLEUXv0V42K3CYCfgwuc6flS3waLC2mbo8nZH5umsS4
+
