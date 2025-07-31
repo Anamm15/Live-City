@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { ReportCategory, ReportStatus } from '../helpers/constants';
+import { ReportCategory, ReportStatus } from '../helpers/entity.constants';
 
 export const CreateReportSchema = z.object({
    title: z.string().min(1, "Judul tidak boleh kosong"),
