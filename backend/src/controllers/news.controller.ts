@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import { INewsController } from "../interfaces/controllers/INewsController";
 import { INewsService } from "../interfaces/services/INewsService";
 import { buildResponseError, buildResponseSuccess } from "../utils/response";
-import { CreateNewsReactionRequest } from "../dto/news.dto";
 import { CreateNewsInput } from "../validators/news.validator";
 import { NewsMessage } from "../helpers/message.constants";
 import { error } from "console";
@@ -61,7 +60,7 @@ export class NewsController implements INewsController {
    async deleteNews(req: Request, res: Response, next: NextFunction): Promise<void> {
       try {
          await this.newsService.deleteNews(parseInt(req.params.id, 10));
-         res.status(200).send(buildResponseSuccess(null, NewsMessage.NEWS_DELETED));
+         res.status(204).send(buildResponseSuccess(null, NewsMessage.NEWS_DELETED));
       } catch (error: any) {
          res.status(400).send(buildResponseError(error.message, NewsMessage.NEWS_DELETE_FAILED));
       }   
@@ -106,7 +105,7 @@ export class NewsController implements INewsController {
             throw new Error("Invalid comment id");
          }
          await this.newsService.deleteNewsComment(commentId);
-         res.status(200).send(buildResponseSuccess(null, NewsMessage.NEWS_COMMENT_DELETED));
+         res.status(204).send(buildResponseSuccess(null, NewsMessage.NEWS_COMMENT_DELETED));
       } catch (error: any) {
          res.status(400).send(buildResponseError(error.message, NewsMessage.NEWS_COMMENT_DELETE_FAILED));
       }   

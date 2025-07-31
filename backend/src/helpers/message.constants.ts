@@ -29,6 +29,32 @@ export enum UserMessage {
    USER_PASSWORD_CHANGED = "User password changed successfully",
 }
 
+export enum SubmissionMessage {
+   SUBMISSION_RETRIEVED = "Submission retrieved successfully",
+   SUBMISSION_CREATED = "Submission created successfully",
+   SUBMISSION_UPDATED = "Submission updated successfully",
+   SUBMISSION_STATUS_UPDATED = "Submission status updated successfully",
+   SUBMISSION_RETRIEVE_FAILED = "Failed to retrieve submission",
+   SUBMISSION_CREATE_FAILED = "Failed to create submission",
+   SUBMISSION_UPDATE_FAILED = "Failed to update submission",
+   SUBMISSION_STATUS_UPDATE_FAILED = "Failed to update submission status",
+   SUBMISSION_DELETE_FAILED = "Failed to delete submission",
+   SUBMISSION_NOT_FOUND = "Submission not found",
+}
+
+export enum ReportMessage {
+   REPORT_RETRIEVED = "Report retrieved successfully",
+   REPORT_CREATED = "Report created successfully",
+   REPORT_UPDATED = "Report updated successfully",
+   REPORT_RESPONSE_UPDATED = "Report response updated successfully",
+   REPORT_RETRIEVE_FAILED = "Failed to retrieve report",
+   REPORT_CREATE_FAILED = "Failed to create report",
+   REPORT_UPDATE_FAILED = "Failed to update report",
+   REPORT_RESPONSE_UPDATE_FAILED = "Failed to update report response",
+   REPORT_DELETE_FAILED = "Failed to delete report",
+   REPORT_NOT_FOUND = "Report not found",
+}
+
 export enum NewsMessage {
    NEWS_RETRIEVED = "News retrieved successfully",
    NEWS_CREATED = "News created successfully",

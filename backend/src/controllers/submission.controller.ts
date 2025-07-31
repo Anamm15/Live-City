@@ -3,6 +3,7 @@ import { ISubmissionController } from "../interfaces/controllers/ISubmissionCont
 import { ISubmissionService } from "../interfaces/services/ISubmissionSerivce";
 import { buildResponseSuccess, buildResponseError } from "../utils/response";
 import { CreateSubmissionRequest, UpdateSubmissionRequest, UpdateSubmissionStatusRequest } from "../validators/submission.validator";
+import { SubmissionMessage } from "../helpers/message.constants";
 
 
 export class SubmissionController implements ISubmissionController {
@@ -15,9 +16,9 @@ export class SubmissionController implements ISubmissionController {
    async getSubmissions(req: Request, res: Response, next: NextFunction): Promise<void> {
       try {
          const submissions = await this.submissionService.getSubmissions();
-         res.status(200).send(buildResponseSuccess(submissions, "Submissions fetched successfully"));
+         res.status(200).send(buildResponseSuccess(submissions, SubmissionMessage.SUBMISSION_RETRIEVED));
       } catch (error: any) {
-         res.status(400).send(buildResponseError(error.message, "Failed to fetch submissions"));
+         res.status(400).send(buildResponseError(error.message, SubmissionMessage.SUBMISSION_RETRIEVE_FAILED));
       }
    }
 
@@ -28,9 +29,9 @@ export class SubmissionController implements ISubmissionController {
             throw new Error("Invalid submission ID");
          }
          const submission = await this.submissionService.getSubmissionById(submissionId);
-         res.status(200).send(buildResponseSuccess(submission, "Submission fetched successfully"));
+         res.status(200).send(buildResponseSuccess(submission, SubmissionMessage.SUBMISSION_RETRIEVED));
       } catch (error: any) {
-         res.status(400).send(buildResponseError(error.message, "Failed to fetch submission"));
+         res.status(400).send(buildResponseError(error.message, SubmissionMessage.SUBMISSION_RETRIEVE_FAILED));
       }
    }
 
@@ -41,18 +42,18 @@ export class SubmissionController implements ISubmissionController {
             throw new Error("Invalid user ID");
          }
          const submissions = await this.submissionService.getSubmissionsByUserId(userId);
-         res.status(200).send(buildResponseSuccess(submissions, "Submissions fetched successfully"));
+         res.status(200).send(buildResponseSuccess(submissions, SubmissionMessage.SUBMISSION_RETRIEVED));
       } catch (error: any) {
-         res.status(400).send(buildResponseError(error.message, "Failed to fetch submissions"));
+         res.status(400).send(buildResponseError(error.message, SubmissionMessage.SUBMISSION_RETRIEVE_FAILED));
       }
    }
 
    async createSubmission(req: Request<{}, {}, CreateSubmissionRequest>, res: Response, next: NextFunction): Promise<void> {
       try {
          const submission = await this.submissionService.createSubmission(req.body);
-         res.status(201).send(buildResponseSuccess(submission, "Submission created successfully"));
+         res.status(201).send(buildResponseSuccess(submission, SubmissionMessage.SUBMISSION_CREATED));
       } catch (error: any) {
-         res.status(400).send(buildResponseError(error.message, "Failed to create submission"));
+         res.status(400).send(buildResponseError(error.message, SubmissionMessage.SUBMISSION_CREATE_FAILED));
       }
    }
 
@@ -63,9 +64,9 @@ export class SubmissionController implements ISubmissionController {
             throw new Error("Invalid submission ID");
          }
          const submission = await this.submissionService.updateSubmission(submissionId, req.body);
-         res.status(200).send(buildResponseSuccess(submission, "Submission updated successfully"));
+         res.status(200).send(buildResponseSuccess(submission, SubmissionMessage.SUBMISSION_UPDATED));
       } catch (error: any) {
-         res.status(400).send(buildResponseError(error.message, "Failed to update submission"));
+         res.status(400).send(buildResponseError(error.message, SubmissionMessage.SUBMISSION_UPDATE_FAILED));
       }
    }
 
@@ -76,9 +77,9 @@ export class SubmissionController implements ISubmissionController {
             throw new Error("Invalid submission ID");
          }
          const updatedSubmission = await this.submissionService.updateSubmissionStatus(submissionId, req.body.status);
-         res.status(200).send(buildResponseSuccess(updatedSubmission, "Submission status updated successfully"));
+         res.status(200).send(buildResponseSuccess(updatedSubmission, SubmissionMessage.SUBMISSION_STATUS_UPDATED));
       } catch (error: any) {
-         res.status(400).send(buildResponseError(error.message, "Failed to update submission status"));
+         res.status(400).send(buildResponseError(error.message, SubmissionMessage.SUBMISSION_STATUS_UPDATE_FAILED));
       }
    }
 
@@ -91,7 +92,7 @@ export class SubmissionController implements ISubmissionController {
          await this.submissionService.deleteSubmission(submissionId);
          res.status(204).send();
       } catch (error: any) {
-         res.status(400).send(buildResponseError(error.message, "Failed to delete submission"));
+         res.status(400).send(buildResponseError(error.message, SubmissionMessage.SUBMISSION_DELETE_FAILED));
       }
    }
 }
