@@ -1,0 +1,42 @@
+@baseUrl = http://localhost:3000/api/v1
+### Login User
+POST {{ baseUrl }}/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "anam1234"
+}
+
+###
+GET {{baseUrl}}/families
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTM5NjUyMTYsImV4cCI6MTc1Mzk2ODgxNn0.CS7vRkDFwCjYMnWSnwsWUwcZfdutg9plY-CULWapZB0
+
+###
+GET {{baseUrl}}/families/3
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTM5NjUyMTYsImV4cCI6MTc1Mzk2ODgxNn0.CS7vRkDFwCjYMnWSnwsWUwcZfdutg9plY-CULWapZB0
+
+###
+POST {{baseUrl}}/families
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTM5NjUyMTYsImV4cCI6MTc1Mzk2ODgxNn0.CS7vRkDFwCjYMnWSnwsWUwcZfdutg9plY-CULWapZB0
+Content-Type: application/json
+
+{
+   "familyNumber": "7265456787653453",
+   "headFamily": "Test",
+   "address": "Test",
+   "economicStatus": "UPPER"
+}
+
+###
+PATCH {{baseUrl}}/families/3
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTM5NjUyMTYsImV4cCI6MTc1Mzk2ODgxNn0.CS7vRkDFwCjYMnWSnwsWUwcZfdutg9plY-CULWapZB0
+Content-Type: application/json
+
+{
+   "headFamily": "Test updated"
+}
+
+###
+DELETE {{baseUrl}}/families/4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTM5NjUyMTYsImV4cCI6MTc1Mzk2ODgxNn0.CS7vRkDFwCjYMnWSnwsWUwcZfdutg9plY-CULWapZB0
