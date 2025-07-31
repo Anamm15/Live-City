@@ -3,7 +3,6 @@ import { IUserRepository } from "../interfaces/repositories/IUserRepository";
 import { IUserService } from "../interfaces/services/IUserService";
 import { hashPassword } from "../utils/encode";
 
-
 export class UserService implements IUserService {
    private userRepository: IUserRepository;
 
@@ -48,7 +47,7 @@ export class UserService implements IUserService {
       try {
          await this.userRepository.deleteUser(id);
       } catch (error: any) {
-         throw new Error("Failed to delete user: " + error.message);
+         throw new Error(error.message);
       }
    }
 }

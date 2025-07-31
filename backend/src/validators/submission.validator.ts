@@ -1,6 +1,5 @@
 import { z } from 'zod';
-import { optionalNullable } from '../utils/zod';
-import { SubmissionCategory } from '../helpers/constants';
+import { SubmissionCategory } from '../helpers/entity.constants';
 import { SubmissionStatus } from '../generated/prisma';
 
 export const CreateSubmissionSchema = z.object({

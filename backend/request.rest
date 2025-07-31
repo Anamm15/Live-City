@@ -39,6 +39,7 @@ Content-Type: application/json
 
 ### Delete User
 DELETE {{ baseUrl }}/users/3
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTM4OTE0MjMsImV4cCI6MTc1Mzg5NTAyM30.ZQsXQXnPdZF5pl-wK8Ba6A8HHBwXPc436VM0GU25aGY
 
 ### Login User
 POST {{ baseUrl }}/auth/login
