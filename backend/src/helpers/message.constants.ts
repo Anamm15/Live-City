@@ -102,3 +102,15 @@ export enum FacilityMessage {
    FACILITY_DELETE_FAILED = "Failed to delete facility",
    FACILITY_NOT_FOUND = "Facility not found",
 }
+
+export enum VillageMessage {
+   VILLAGE_RETRIEVED = "Village retrieved successfully",
+   VILLAGE_CREATED = "Village created successfully",
+   VILLAGE_UPDATED = "Village updated successfully",
+   VILLAGE_DELETED = "Village deleted successfully",
+   VILLAGE_RETRIEVE_FAILED = "Failed to retrieve village",
+   VILLAGE_CREATE_FAILED = "Failed to create village",
+   VILLAGE_UPDATE_FAILED = "Failed to update village",
+   VILLAGE_DELETE_FAILED = "Failed to delete village",
+   VILLAGE_NOT_FOUND = "Village not found",
+}

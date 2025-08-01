@@ -6,6 +6,7 @@ import reportRoutes from './report.route';
 import newsRoutes from './news.route';
 import familyRoutes from './family.route';
 import facilityRoutes from './facility.route';
+import villageRoutes from './village.route';
 
 const router = Router();
 router.use('/auth', authRoutes);
@@ -18,5 +19,6 @@ router.use('/submissions', submissionRoutes);
 router.use('/reports', reportRoutes);
 router.use('/news', newsRoutes);
 router.use('/facilities', facilityRoutes);
+router.use('/villages', villageRoutes);
 
 export default router;
