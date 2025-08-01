@@ -91,3 +91,14 @@ export enum FamilyMessage {
    FAMILY_NOT_FOUND = "Family not found",
 }
 
+export enum FacilityMessage {
+   FACILITY_RETRIEVED = "Facility retrieved successfully",
+   FACILITY_CREATED = "Facility created successfully",
+   FACILITY_UPDATED = "Facility updated successfully",
+   FACILITY_DELETED = "Facility deleted successfully",
+   FACILITY_RETRIEVE_FAILED = "Failed to retrieve facility",
+   FACILITY_CREATE_FAILED = "Failed to create facility",
+   FACILITY_UPDATE_FAILED = "Failed to update facility",
+   FACILITY_DELETE_FAILED = "Failed to delete facility",
+   FACILITY_NOT_FOUND = "Facility not found",
+}
