@@ -79,3 +79,15 @@ export enum NewsMessage {
    NEWS_REACTION_NOT_FOUND = "News reaction not found",
 }
 
+export enum FamilyMessage {
+   FAMILY_RETRIEVED = "Family retrieved successfully",
+   FAMILY_CREATED = "Family created successfully",
+   FAMILY_UPDATED = "Family updated successfully",
+   FAMILY_DELETED = "Family deleted successfully",
+   FAMILY_RETRIEVE_FAILED = "Failed to retrieve family",
+   FAMILY_CREATE_FAILED = "Failed to create family",
+   FAMILY_UPDATE_FAILED = "Failed to update family",
+   FAMILY_DELETE_FAILED = "Failed to delete family",
+   FAMILY_NOT_FOUND = "Family not found",
+}
+
