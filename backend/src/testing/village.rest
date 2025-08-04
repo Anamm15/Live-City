@@ -1,0 +1,36 @@
+@baseUrl = http://localhost:3000/api/v1
+
+### Login User
+POST {{ baseUrl }}/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "anam1234"
+}
+
+###
+GET {{baseUrl}}/villages
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTQwMjA0NzMsImV4cCI6MTc1NDAyNDA3M30.ffrnVebvwVHpVw0gU-tgxyxyO8InfTTM8utX2JgOicQ
+
+###
+POST {{baseUrl}}/villages
+Authorization: Bearer 
+Content-Type: application/json
+
+{
+
+}
+
+###
+PATCH {{baseUrl}}/villages/1
+Authorization: Bearer 
+Content-Type: application/json
+
+{
+  
+}
+
+###
+DELETE {{baseUrl}}/villages/2
+Authorization: Bearer 

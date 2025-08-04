@@ -267,7 +267,7 @@ model Reports {
   date        DateTime   @default(now())
   description String
   category    ReportCategory
-  status      ReportStatus
+  status      ReportStatus  @default(PENDING)
   response    String?
   userId      Int
   user        Users      @relation(fields: [userId], references: [id])
@@ -281,7 +281,7 @@ model Submissions {
   title       String
   date        DateTime          @default(now())
   category    SubmissionCategory
-  status      SubmissionStatus
+  status      SubmissionStatus  @default(PENDING)
   description String
   userId      Int
   user        Users             @relation(fields: [userId], references: [id])
@@ -331,8 +331,10 @@ model NewsReactions {
 
 model Villages {
   id          Int    @id @default(autoincrement())
-  description String
+  name        String
   postalCode  String
+  latitude    Float
+  longitude   Float
   createdAt   DateTime  @default(now())
   updatedAt   DateTime?  @updatedAt
   deletedAt   DateTime?
