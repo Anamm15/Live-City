@@ -1,0 +1,44 @@
+@baseUrl = http://localhost:3000/api/v1
+
+### Login User
+POST {{ baseUrl }}/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "anam1234"
+}
+
+### 
+GET {{baseUrl}}/facilities
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTM5NjEyOTQsImV4cCI6MTc1Mzk2NDg5NH0.nZpzjwNkbLQ2g2yzzYBnpOJkFLN1R1SZJoyO15z9nd4
+
+###
+GET {{baseUrl}}/facilities/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTM5NjEyOTQsImV4cCI6MTc1Mzk2NDg5NH0.nZpzjwNkbLQ2g2yzzYBnpOJkFLN1R1SZJoyO15z9nd4
+
+###
+POST {{baseUrl}}/facilities
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTM5NjEyOTQsImV4cCI6MTc1Mzk2NDg5NH0.nZpzjwNkbLQ2g2yzzYBnpOJkFLN1R1SZJoyO15z9nd4
+Content-Type: application/json
+
+{
+   "name": "facility 1",
+   "description": "test desc",
+   "latitude": 234.21312,
+   "longitude": 324.23423,
+   "buildDate": "1990-01-01T00:00:00.000Z"
+}
+
+###
+PATCH {{baseUrl}}/facilities/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTM5NjEyOTQsImV4cCI6MTc1Mzk2NDg5NH0.nZpzjwNkbLQ2g2yzzYBnpOJkFLN1R1SZJoyO15z9nd4
+Content-Type: application/json
+
+{
+   "name": "facility updated"
+}
+
+###
+DELETE {{baseUrl}}/facilities/2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTM5NjEyOTQsImV4cCI6MTc1Mzk2NDg5NH0.nZpzjwNkbLQ2g2yzzYBnpOJkFLN1R1SZJoyO15z9nd4

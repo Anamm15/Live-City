@@ -1,6 +1,7 @@
 import { CreateFacilityRequest, GetFacilityResponse, UpdateFacilityRequest } from "../../dto/facility.dto";
 
-export interface IFacilityRepository {
+
+export interface IFacilityService {
    getFacilities(): Promise<GetFacilityResponse[]>;
    getFacilityById(id: number): Promise<GetFacilityResponse | null>;
    createFacility(data: CreateFacilityRequest): Promise<GetFacilityResponse>;
