@@ -224,14 +224,14 @@ model PollOptions {
 model PollVotes {
   id            Int          @id @default(autoincrement())
   userId        Int
-  pollOptionsId Int
+  pollOptionId Int
   user          Users        @relation(fields: [userId], references: [id])
-  option        PollOptions  @relation(fields: [pollOptionsId], references: [id])
+  option        PollOptions  @relation(fields: [pollOptionId], references: [id])
   createdAt     DateTime  @default(now())
   updatedAt     DateTime?  @updatedAt
   deletedAt     DateTime?
 
-  @@unique([userId, pollOptionsId]) // Opsional: user hanya boleh memilih satu kali pada satu opsi
+  @@unique([userId, pollOptionId]) // Opsional: user hanya boleh memilih satu kali pada satu opsi
 }
 
 model Communities {
