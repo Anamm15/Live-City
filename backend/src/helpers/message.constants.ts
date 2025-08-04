@@ -103,6 +103,20 @@ export enum FacilityMessage {
    FACILITY_NOT_FOUND = "Facility not found",
 }
 
+export enum PollsMessage {
+   POLL_RETRIEVED = "Poll retrieved successfully",
+   POLL_CREATED = "Poll created successfully",
+   POLL_VOTED = "Poll voted successfully",
+   POLL_UPDATED = "Poll updated successfully",
+   POLL_DELETED = "Poll deleted successfully",
+   POLL_RETRIEVE_FAILED = "Failed to retrieve poll",
+   POLL_CREATE_FAILED = "Failed to create poll",
+   POLL_VOTE_FAILED = "Failed to vote poll",
+   POLL_UPDATE_FAILED = "Failed to update poll",
+   POLL_DELETE_FAILED = "Failed to delete poll",
+   POLL_NOT_FOUND = "Poll not found",
+}
+
 export enum VillageMessage {
    VILLAGE_RETRIEVED = "Village retrieved successfully",
    VILLAGE_CREATED = "Village created successfully",
