@@ -1,6 +1,8 @@
 import { CreateReportRequest, GetReportResponse, UpdateReportRequest, UpdateResponseReportRequest } from "../dto/report.dto";
+import { ReportMessage } from "../helpers/message.constants";
 import { IReportRepository } from "../interfaces/repositories/IReportRepository";
 import { IReportService } from "../interfaces/services/IReportService";
+import { NotFoundError } from "../utils/errors";
 
 
 export class ReportService implements IReportService {
@@ -12,57 +14,69 @@ export class ReportService implements IReportService {
 
    async getReports(): Promise<GetReportResponse[]> {
       try {
-         return this.reportRepository.getReports();
-      } catch (error: any) {
-         throw new Error("Failed to get reports: " + error.message);
+         const reports = await this.reportRepository.getReports();
+         if (reports.length === 0) {
+            throw new NotFoundError(ReportMessage.REPORT_NOT_FOUND);
+         }
+         return reports;
+      } catch (error) {
+         throw error;
       }
    }
 
    async getReportById(id: number): Promise<GetReportResponse | null> {
       try {
-         return this.reportRepository.getReportById(id);
-      } catch (error: any) {
-         throw new Error("Failed to get reports: " + error.message);
+         const report = await this.reportRepository.getReportById(id);
+         if (!report) {
+            throw new NotFoundError(ReportMessage.REPORT_NOT_FOUND);
+         }
+         return report;
+      } catch (error) {
+         throw error;
       }
    }
 
    async getReportsByUserId(userId: number): Promise<GetReportResponse[]> {
       try {
-         return this.reportRepository.getReportsByUserId(userId);
-      } catch (error: any) {
-         throw new Error("Failed to get reports: " + error.message);
+         const reports = await this.reportRepository.getReportsByUserId(userId);
+         if (reports.length === 0) {
+            throw new NotFoundError(ReportMessage.REPORT_NOT_FOUND);
+         }
+         return reports;
+      } catch (error) {
+         throw error;
       }
    }
 
    async createReport(report: CreateReportRequest): Promise<GetReportResponse> {
       try {
          return this.reportRepository.createReport(report);
-      } catch (error: any) {
-         throw new Error("Failed to get reports: " + error.message);
+      } catch (error) {
+         throw error;
       }
    }
 
    async updateReport(id: number, report: UpdateReportRequest): Promise<GetReportResponse> {
       try {
          return this.reportRepository.updateReport(id, report);
-      } catch (error: any) {
-         throw new Error("Failed to get reports: " + error.message);
+      } catch (error) {
+         throw error;
       }
    }
 
    async updateResponseReport(id: number, report: UpdateResponseReportRequest): Promise<GetReportResponse> {
       try {
          return this.reportRepository.updateResponseReport(id, report);
-      } catch (error: any) {
-         throw new Error("Failed to get reports: " + error.message);
+      } catch (error) {
+         throw error;
       }
    }
 
    async deleteReport(id: number): Promise<void> {
       try {
          return this.reportRepository.deleteReport(id);
-      } catch (error: any) {
-         throw new Error("Failed to get reports: " + error.message);
+      } catch (error) {
+         throw error;
       }
    }
 }

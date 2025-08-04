@@ -1,6 +1,7 @@
 import { IUserRepository } from "../interfaces/repositories/IUserRepository";
 import { User, GetUserResponse, CreateUserRequest, UpdateUserRequest } from "../dto/user.dto";
 import { PrismaClient } from '../generated/prisma';
+import { AppError } from "../utils/errors";
 
 const userSelectFields = {
    id: true,
@@ -31,7 +32,7 @@ export class UserRepository implements IUserRepository {
             select: userSelectFields
          });
       } catch (error: any) {
-         throw new Error("Failed to get users: " + error.message);
+         throw new AppError(error.message);
       }
    }
 
@@ -42,7 +43,7 @@ export class UserRepository implements IUserRepository {
             select: userSelectFields
          });
       } catch (error: any) {
-         throw new Error("Failed to get user by ID: " + error.message);
+         throw new AppError(error.message);
       }
    }
 
@@ -52,7 +53,7 @@ export class UserRepository implements IUserRepository {
             where: { email: email }
          });
       } catch (error: any) {
-         throw new Error(`Failed to get user by email: ${error.message}`);
+         throw new AppError(error.message);
       }
    }
    
@@ -62,7 +63,7 @@ export class UserRepository implements IUserRepository {
             data: userData
          });
       } catch (error: any) {
-         throw new Error(`Failed to create user: ${error.message}`);
+         throw new AppError(error.message);
       }
    }
    
@@ -73,7 +74,7 @@ export class UserRepository implements IUserRepository {
             data: userData
          });
       } catch (error: any) {
-         throw new Error(`Failed to update user with ID ${id}: ${error.message}`);
+         throw new AppError(error.message);
       }
    }
 
@@ -84,7 +85,7 @@ export class UserRepository implements IUserRepository {
             data: { refreshToken: refreshToken }
          });
       } catch (error: any) {
-         throw new Error(`Failed to update refresh token for user with ID ${id}: ${error.message}`);
+         throw new AppError(error.message);
       }
    }
 
@@ -94,7 +95,7 @@ export class UserRepository implements IUserRepository {
             where: { id: id }
          });
       } catch (error: any) {
-         throw new Error(`Failed to delete user with ID ${id}: ${error.message}`);
+         throw new AppError(error.message);
       }
    }
 }

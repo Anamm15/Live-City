@@ -2,7 +2,7 @@ import { CreateNewsCommentRequest, CreateNewsReactionRequest, CreateNewsRequest,
 
 export interface INewsService {
    getNews(): Promise<GetNewsResponse[]>;
-   getNewsById(id: number): Promise<GetNewsResponse | null>;
+   getNewsById(id: number): Promise<GetNewsResponse>;
    createNews(news: CreateNewsRequest): Promise<GetNewsResponse>;
    updateNews(id: number, news: UpdateNewsRequest): Promise<GetNewsResponse>;
    deleteNews(newsId: number): Promise<void>;

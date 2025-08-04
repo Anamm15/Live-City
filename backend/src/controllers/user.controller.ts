@@ -3,7 +3,9 @@ import { Request, Response, NextFunction } from 'express';
 import { IUserService } from "../interfaces/services/IUserService";
 import { buildResponseSuccess, buildResponseError } from "../utils/response";
 import { CreateUserInput, UpdateUserInput } from "../validators/user.validator";
-import { UserMessage } from "../helpers/message.constants"; 
+import { CommonMessage, UserMessage } from "../helpers/message.constants"; 
+import { BadRequestError, NotFoundError } from "../utils/errors";
+import { StatusCode } from "../helpers/status_code.constant";
 
 export class UserController implements IUserController {
    private userService: IUserService;
@@ -14,49 +16,81 @@ export class UserController implements IUserController {
    
    async getUsers(req: Request, res: Response, next: NextFunction): Promise<void> {
       try {
-         const users = await this.userService.getUsers();
-         res.status(200).send(buildResponseSuccess(users, UserMessage.USERS_RETRIEVED));
+         const results = await this.userService.getUsers();
+         res.status(StatusCode.OK).send(buildResponseSuccess(results, UserMessage.USERS_RETRIEVED));
       } catch (error: any) {
-         res.status(500).send(buildResponseError(error.message, UserMessage.USER_RETRIEVE_FAILED));
+         if (error instanceof NotFoundError) {
+            res.status(StatusCode.NOT_FOUND).send(buildResponseError(error.message, UserMessage.USER_NOT_FOUND));
+         }
+         else {
+            res.status(StatusCode.INTERNAL_SERVER_ERROR).send(buildResponseError(error.message, CommonMessage.SERVER_ERROR));
+         }
       }
    }
 
    async getUserById(req: Request, res: Response, next: NextFunction): Promise<void> {
-      const userId = parseInt(req.params.id, 10);
       try {
+         const userId = parseInt(req.params.id, 10); 
+         if (isNaN(userId)) {
+            throw new BadRequestError(CommonMessage.INVALID_PARAMS);
+         }
          const user = await this.userService.getUserById(userId);
-         res.status(200).send(buildResponseSuccess(user, UserMessage.USER_RETRIEVED));
+         res.status(StatusCode.OK).send(buildResponseSuccess(user, UserMessage.USER_RETRIEVED));
       } catch (error: any) {
-         res.status(500).send(buildResponseError(error.message, UserMessage.USER_RETRIEVE_FAILED));
+         if (error instanceof BadRequestError) {
+            res.status(StatusCode.BAD_REQUEST).send(buildResponseError(error.message, CommonMessage.INVALID_PARAMS));
+         }
+         else if (error instanceof NotFoundError) {
+            res.status(StatusCode.NOT_FOUND).send(buildResponseError(error.message, UserMessage.USER_NOT_FOUND));
+         }
+         else {
+            res.status(StatusCode.INTERNAL_SERVER_ERROR).send(buildResponseError(error.message, CommonMessage.SERVER_ERROR));
+         }
       }
    }
 
    async createUser(req: Request<{}, {}, CreateUserInput>, res: Response, next: NextFunction): Promise<void> {
       try {
          const newUser = await this.userService.createUser(req.body);
-         res.status(201).send(buildResponseSuccess(newUser, UserMessage.USER_CREATED));
+         res.status(StatusCode.CREATED).send(buildResponseSuccess(newUser, UserMessage.USER_CREATED));
       } catch (error: any) {
-         res.status(400).send(buildResponseError(error.message, UserMessage.USER_CREATE_FAILED));
+         res.status(StatusCode.INTERNAL_SERVER_ERROR).send(buildResponseError(error.message, UserMessage.USER_CREATE_FAILED));
       }
    }
 
    async updateUser(req: Request<{ id: string; }, {}, UpdateUserInput>, res: Response, next: NextFunction): Promise<void> {
-      const userId = parseInt(req.params.id, 10);
       try {
+         const userId = parseInt(req.params.id, 10);
+         if (isNaN(userId)) {
+            throw new BadRequestError(CommonMessage.INVALID_PARAMS);
+         }
          const updatedUser = await this.userService.updateUser(userId, req.body);
-         res.status(200).send(buildResponseSuccess(updatedUser, UserMessage.USER_UPDATED));
+         res.status(StatusCode.OK).send(buildResponseSuccess(updatedUser, UserMessage.USER_UPDATED));
       } catch (error: any) {
-         res.status(400).send(buildResponseError(error.message, UserMessage.USER_UPDATE_FAILED));
+         if (error instanceof BadRequestError) {
+            res.status(StatusCode.BAD_REQUEST).send(buildResponseError(error.message, CommonMessage.INVALID_PARAMS));
+         }
+         else {
+            res.status(StatusCode.INTERNAL_SERVER_ERROR).send(buildResponseError(error.message, UserMessage.USER_UPDATE_FAILED));
+         }
       }
    }
 
    async deleteUser(req: Request, res: Response, next: NextFunction): Promise<void> {
-      const userId = parseInt(req.params.id, 10);
       try {
+         const userId = parseInt(req.params.id, 10);
+         if (isNaN(userId)) {
+            throw new BadRequestError(CommonMessage.INVALID_PARAMS);
+         }
          await this.userService.deleteUser(userId);
-         res.status(204).send(buildResponseSuccess(null, UserMessage.USER_DELETED));
+         res.status(StatusCode.NO_CONTENT).send();
       } catch (error: any) {
-         res.status(500).send(buildResponseError(error.message, UserMessage.USER_DELETE_FAILED));
+         if (error instanceof BadRequestError) {
+            res.status(StatusCode.BAD_REQUEST).send(buildResponseError(error.message, CommonMessage.INVALID_PARAMS));
+         }
+         else {
+            res.status(StatusCode.INTERNAL_SERVER_ERROR).send(buildResponseError(error.message, UserMessage.USER_DELETE_FAILED));
+         }
       }
    }
 }

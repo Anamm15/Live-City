@@ -1,6 +1,8 @@
 import { CreateFamilyRequest, GetFamilyResponse, GetFamilyWithMembers, UpdateFamilyRequest } from "../dto/family.dto";
+import { FamilyMessage } from "../helpers/message.constants";
 import { IFamilyRepository } from "../interfaces/repositories/IFamilyRepository";
 import { IFamilyService } from "../interfaces/services/IFamilyService";
+import { NotFoundError } from "../utils/errors";
 
 
 
@@ -14,24 +16,28 @@ export class FamilyService implements IFamilyService {
    async getFamilies(): Promise<GetFamilyResponse[]> {
       try {
          return this.familyRepository.getFamilies();
-      } catch (error: any) {
-         throw new Error(error.message);
+      } catch (error) {
+         throw error;
       }
    }
 
-   async getFamilyWithMembers(id: number): Promise<GetFamilyWithMembers | null> {
+   async getFamilyWithMembers(id: number): Promise<GetFamilyWithMembers> {
       try {
-         return this.familyRepository.getFamilyWithMembers(id);
-      } catch (error: any) {
-         throw new Error(error.message);
+         const families = await this.familyRepository.getFamilyWithMembers(id);
+         if (!families) {
+            throw new NotFoundError(FamilyMessage.FAMILY_NOT_FOUND);
+         }
+         return families;
+      } catch (error) {
+         throw error;
       }    
    }
 
    async createFamily(family: CreateFamilyRequest): Promise<GetFamilyResponse> {
       try {
          return this.familyRepository.createFamily(family);
-      } catch (error: any) {
-         throw new Error(error.message);
+      } catch (error) {
+         throw error;
       }     
    }
 
@@ -39,16 +45,16 @@ export class FamilyService implements IFamilyService {
       try {
          const data: UpdateFamilyRequest = { ...family, id };
          return this.familyRepository.updateFamily(data);
-      } catch (error: any) {
-         throw new Error(error.message);
+      } catch (error) {
+         throw error;
       }    
    }
 
    async deleteFamily(id: number): Promise<void> {
       try {
          await this.familyRepository.deleteFamily(id);
-      } catch (error: any) {
-         throw new Error(error.message);
+      } catch (error) {
+         throw error;
       }    
    }
 }

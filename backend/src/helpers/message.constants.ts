@@ -1,6 +1,7 @@
 export enum CommonMessage {
    INVALID_CREDENTIALS = "Invalid credentials",
    INVALID_REQUEST_DATA = "Invalid request data",
+   INVALID_PARAMS = "Invalid params",
    FILE_UPLOADED = "File uploaded successfully",
    FILE_DELETED = "File deleted successfully",
    FILE_NOT_FOUND = "File not found",
@@ -8,6 +9,7 @@ export enum CommonMessage {
    TOKEN_REFRESHED = "Token refreshed successfully",
    TOKEN_REFRESH_FAILED = "Token refresh failed",
    TOKEN_NOT_FOUND = "Token not found",
+   SERVER_ERROR = "Internal server error",
 }
 
 export enum UserMessage {
@@ -27,6 +29,9 @@ export enum UserMessage {
    USER_LOGOUT_SUCCESSFUL = "User logout successful",
    USER_LOGOUT_FAILED = "Failed to logout",
    USER_PASSWORD_CHANGED = "User password changed successfully",
+   USER_EMAIL_INVALID = "Invalid email",
+   USER_PASSWORD_INCORRECT = "Invalid password",
+   USER_EMAIL_OR_PASSWORD_INVALID = "Invalid email or password",
 }
 
 export enum SubmissionMessage {

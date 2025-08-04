@@ -1,6 +1,7 @@
 import { CreateReportRequest, GetReportResponse, UpdateReportRequest, UpdateResponseReportRequest } from "../dto/report.dto";
 import { PrismaClient } from "../generated/prisma";
 import { IReportRepository } from "../interfaces/repositories/IReportRepository";
+import { AppError } from "../utils/errors";
 
 const reportSelectedField = {
    id: true,
@@ -35,7 +36,7 @@ export class ReportRepository implements IReportRepository {
          });
          return reports;
       } catch (error: any) {
-         throw new Error("Failed to get reports: " + error.message);
+         throw new AppError(error.message);
       }
    }
 
@@ -47,7 +48,7 @@ export class ReportRepository implements IReportRepository {
          });
          return report;
       } catch (error: any) {
-         throw new Error("Failed to get report: " + error.message);
+         throw new AppError(error.message);
       }
    }
 
@@ -59,7 +60,7 @@ export class ReportRepository implements IReportRepository {
          });
          return reports;
       } catch (error: any) {
-         throw new Error("Failed to get report: " + error.message);
+         throw new AppError(error.message);
       }
    }
 
@@ -70,7 +71,7 @@ export class ReportRepository implements IReportRepository {
          });
          return newReport;
       } catch (error: any) {
-         throw new Error("Failed to create report: " + error.message);
+         throw new AppError(error.message);
       }
    }
 
@@ -82,7 +83,7 @@ export class ReportRepository implements IReportRepository {
          });
          return updatedReport;
       } catch (error: any) {
-         throw new Error("Failed to update report: " + error.message);
+         throw new AppError(error.message);
       }
    }
 
@@ -94,7 +95,7 @@ export class ReportRepository implements IReportRepository {
          })
          return updatedReport;
       } catch (error: any) {
-         throw new Error("Failed to update report: " + error.message);
+         throw new AppError(error.message);
       }
    }
 
@@ -104,7 +105,7 @@ export class ReportRepository implements IReportRepository {
             where: { id }
          })
       } catch (error: any) {
-         throw new Error("Failed to delete report: " + error.message);
+         throw new AppError(error.message);
       }
    }
 }

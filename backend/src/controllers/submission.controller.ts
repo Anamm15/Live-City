@@ -3,7 +3,9 @@ import { ISubmissionController } from "../interfaces/controllers/ISubmissionCont
 import { ISubmissionService } from "../interfaces/services/ISubmissionSerivce";
 import { buildResponseSuccess, buildResponseError } from "../utils/response";
 import { CreateSubmissionRequest, UpdateSubmissionRequest, UpdateSubmissionStatusRequest } from "../validators/submission.validator";
-import { SubmissionMessage } from "../helpers/message.constants";
+import { CommonMessage, SubmissionMessage } from "../helpers/message.constants";
+import { StatusCode } from "../helpers/status_code.constant";
+import { BadRequestError, NotFoundError } from "../utils/errors";
 
 
 export class SubmissionController implements ISubmissionController {
@@ -15,10 +17,14 @@ export class SubmissionController implements ISubmissionController {
 
    async getSubmissions(req: Request, res: Response, next: NextFunction): Promise<void> {
       try {
-         const submissions = await this.submissionService.getSubmissions();
-         res.status(200).send(buildResponseSuccess(submissions, SubmissionMessage.SUBMISSION_RETRIEVED));
+         const results = await this.submissionService.getSubmissions();
+         res.status(StatusCode.OK).send(buildResponseSuccess(results, SubmissionMessage.SUBMISSION_RETRIEVED));
       } catch (error: any) {
-         res.status(400).send(buildResponseError(error.message, SubmissionMessage.SUBMISSION_RETRIEVE_FAILED));
+         if (error instanceof NotFoundError) {
+            res.status(StatusCode.NOT_FOUND).send(buildResponseError(error.message, SubmissionMessage.SUBMISSION_NOT_FOUND));
+         } else {
+            res.status(StatusCode.INTERNAL_SERVER_ERROR).send(buildResponseError(error.message, CommonMessage.SERVER_ERROR));
+         }
       }
    }
 
@@ -26,12 +32,18 @@ export class SubmissionController implements ISubmissionController {
       try {
          const submissionId = parseInt(req.params.id, 10);
          if (isNaN(submissionId)) {
-            throw new Error("Invalid submission ID");
+            throw new BadRequestError(CommonMessage.INVALID_PARAMS);
          }
-         const submission = await this.submissionService.getSubmissionById(submissionId);
-         res.status(200).send(buildResponseSuccess(submission, SubmissionMessage.SUBMISSION_RETRIEVED));
+         const result = await this.submissionService.getSubmissionById(submissionId);
+         res.status(StatusCode.OK).send(buildResponseSuccess(result, SubmissionMessage.SUBMISSION_RETRIEVED));
       } catch (error: any) {
-         res.status(400).send(buildResponseError(error.message, SubmissionMessage.SUBMISSION_RETRIEVE_FAILED));
+         if (error instanceof NotFoundError) {
+            res.status(StatusCode.NOT_FOUND).send(buildResponseError(error.message, SubmissionMessage.SUBMISSION_NOT_FOUND));
+         } else if (error instanceof BadRequestError) {
+            res.status(StatusCode.BAD_REQUEST).send(buildResponseError(error.message, CommonMessage.INVALID_PARAMS));
+         } else {
+            res.status(StatusCode.INTERNAL_SERVER_ERROR).send(buildResponseError(error.message, CommonMessage.SERVER_ERROR));
+         }
       }
    }
 
@@ -39,21 +51,27 @@ export class SubmissionController implements ISubmissionController {
       try {
          const userId = parseInt(req.params.userId, 10);
          if (isNaN(userId)) {
-            throw new Error("Invalid user ID");
+            throw new BadRequestError(CommonMessage.INVALID_PARAMS);
          }
-         const submissions = await this.submissionService.getSubmissionsByUserId(userId);
-         res.status(200).send(buildResponseSuccess(submissions, SubmissionMessage.SUBMISSION_RETRIEVED));
+         const results = await this.submissionService.getSubmissionsByUserId(userId);
+         res.status(StatusCode.OK).send(buildResponseSuccess(results, SubmissionMessage.SUBMISSION_RETRIEVED));
       } catch (error: any) {
-         res.status(400).send(buildResponseError(error.message, SubmissionMessage.SUBMISSION_RETRIEVE_FAILED));
+         if (error instanceof NotFoundError) {
+            res.status(StatusCode.NOT_FOUND).send(buildResponseError(error.message, SubmissionMessage.SUBMISSION_NOT_FOUND));
+         } else if (error instanceof BadRequestError) {
+            res.status(StatusCode.BAD_REQUEST).send(buildResponseError(error.message, CommonMessage.INVALID_PARAMS));
+         } else {
+            res.status(StatusCode.INTERNAL_SERVER_ERROR).send(buildResponseError(error.message, CommonMessage.SERVER_ERROR));
+         }
       }
    }
 
    async createSubmission(req: Request<{}, {}, CreateSubmissionRequest>, res: Response, next: NextFunction): Promise<void> {
       try {
-         const submission = await this.submissionService.createSubmission(req.body);
-         res.status(201).send(buildResponseSuccess(submission, SubmissionMessage.SUBMISSION_CREATED));
+         const result = await this.submissionService.createSubmission(req.body);
+         res.status(StatusCode.CREATED).send(buildResponseSuccess(result, SubmissionMessage.SUBMISSION_CREATED));
       } catch (error: any) {
-         res.status(400).send(buildResponseError(error.message, SubmissionMessage.SUBMISSION_CREATE_FAILED));
+         res.status(StatusCode.INTERNAL_SERVER_ERROR).send(buildResponseError(error.message, SubmissionMessage.SUBMISSION_CREATE_FAILED));
       }
    }
 
@@ -61,12 +79,16 @@ export class SubmissionController implements ISubmissionController {
       try {
          const submissionId = parseInt(req.params.id, 10);
          if (isNaN(submissionId)) {
-            throw new Error("Invalid submission ID");
+            throw new BadRequestError(CommonMessage.INVALID_PARAMS);
          }
-         const submission = await this.submissionService.updateSubmission(submissionId, req.body);
-         res.status(200).send(buildResponseSuccess(submission, SubmissionMessage.SUBMISSION_UPDATED));
+         const result = await this.submissionService.updateSubmission(submissionId, req.body);
+         res.status(StatusCode.OK).send(buildResponseSuccess(result, SubmissionMessage.SUBMISSION_UPDATED));
       } catch (error: any) {
-         res.status(400).send(buildResponseError(error.message, SubmissionMessage.SUBMISSION_UPDATE_FAILED));
+         if (error instanceof BadRequestError) {
+            res.status(StatusCode.BAD_REQUEST).send(buildResponseError(error.message, CommonMessage.INVALID_PARAMS));
+         } else {
+            res.status(StatusCode.INTERNAL_SERVER_ERROR).send(buildResponseError(error.message, CommonMessage.SERVER_ERROR));
+         }
       }
    }
 
@@ -74,12 +96,16 @@ export class SubmissionController implements ISubmissionController {
        try {
          const submissionId = parseInt(req.params.id, 10);
          if (isNaN(submissionId)) {
-            throw new Error("Invalid submission ID");
+            throw new BadRequestError(CommonMessage.INVALID_PARAMS);
          }
-         const updatedSubmission = await this.submissionService.updateSubmissionStatus(submissionId, req.body.status);
-         res.status(200).send(buildResponseSuccess(updatedSubmission, SubmissionMessage.SUBMISSION_STATUS_UPDATED));
+         const result = await this.submissionService.updateSubmissionStatus(submissionId, req.body.status);
+         res.status(StatusCode.OK).send(buildResponseSuccess(result, SubmissionMessage.SUBMISSION_STATUS_UPDATED));
       } catch (error: any) {
-         res.status(400).send(buildResponseError(error.message, SubmissionMessage.SUBMISSION_STATUS_UPDATE_FAILED));
+         if (error instanceof BadRequestError) {
+            res.status(StatusCode.BAD_REQUEST).send(buildResponseError(error.message, CommonMessage.INVALID_PARAMS));
+         } else {
+            res.status(StatusCode.INTERNAL_SERVER_ERROR).send(buildResponseError(error.message, CommonMessage.SERVER_ERROR));
+         }
       }
    }
 
@@ -87,12 +113,16 @@ export class SubmissionController implements ISubmissionController {
       try {
          const submissionId = parseInt(req.params.id, 10);
          if (isNaN(submissionId)) {
-            throw new Error("Invalid submission ID");
+            throw new BadRequestError(CommonMessage.INVALID_PARAMS);
          }
          await this.submissionService.deleteSubmission(submissionId);
          res.status(204).send();
       } catch (error: any) {
-         res.status(400).send(buildResponseError(error.message, SubmissionMessage.SUBMISSION_DELETE_FAILED));
+         if (error instanceof BadRequestError) {
+            res.status(StatusCode.BAD_REQUEST).send(buildResponseError(error.message, CommonMessage.INVALID_PARAMS));
+         } else {
+            res.status(StatusCode.INTERNAL_SERVER_ERROR).send(buildResponseError(error.message, CommonMessage.SERVER_ERROR));
+         }
       }
    }
 }

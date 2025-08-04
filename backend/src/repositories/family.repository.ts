@@ -6,6 +6,7 @@ import {
 } from "../dto/family.dto";
 import { PrismaClient } from "../generated/prisma";
 import { IFamilyRepository } from "../interfaces/repositories/IFamilyRepository";
+import { AppError } from "../utils/errors";
 
 const selectedFamilyFields = {
    id: true,
@@ -47,7 +48,7 @@ export class FamilyRepository implements IFamilyRepository {
          });
          return families;
       } catch (error: any) {
-         throw new Error(error.message);
+         throw new AppError(error.message);
       }
    }
 
@@ -59,7 +60,7 @@ export class FamilyRepository implements IFamilyRepository {
          });
          return family;
       } catch (error: any) {
-         throw new Error(error.message);
+         throw new AppError(error.message);
       }
    }
 
@@ -70,7 +71,7 @@ export class FamilyRepository implements IFamilyRepository {
          });
          return createdFamily;
       } catch (error: any) {
-         throw new Error(error.message);
+         throw new AppError(error.message);
       }
    }
 
@@ -82,7 +83,7 @@ export class FamilyRepository implements IFamilyRepository {
          });
          return updatedFamily;
       } catch (error: any) {
-         throw new Error(error.message);
+         throw new AppError(error.message);
       }
    }
 
@@ -92,7 +93,7 @@ export class FamilyRepository implements IFamilyRepository {
             where: { id }
          });
       } catch (error: any) {
-         throw new Error(error.message);
+         throw new AppError(error.message);
       }
    }
 }

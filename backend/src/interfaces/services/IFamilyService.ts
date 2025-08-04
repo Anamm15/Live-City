@@ -2,7 +2,7 @@ import { CreateFamilyRequest, GetFamilyResponse, GetFamilyWithMembers, UpdateFam
 
 export interface IFamilyService {
    getFamilies(): Promise<GetFamilyResponse[]>;
-   getFamilyWithMembers(id: number): Promise<GetFamilyWithMembers | null>;
+   getFamilyWithMembers(id: number): Promise<GetFamilyWithMembers>;
    createFamily(family: CreateFamilyRequest): Promise<GetFamilyResponse>;
    updateFamily(id:number, family: UpdateFamilyRequest): Promise<GetFamilyResponse>;
    deleteFamily(id: number): Promise<void>;

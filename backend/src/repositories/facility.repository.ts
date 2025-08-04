@@ -1,6 +1,7 @@
 import { CreateFacilityRequest, GetFacilityResponse, UpdateFacilityRequest } from "../dto/facility.dto";
 import { PrismaClient } from "../generated/prisma";
 import { IFacilityRepository } from "../interfaces/repositories/IFacilityRepository";
+import { AppError } from "../utils/errors";
 
 const selectedFacilityFields = {
    id: true,
@@ -25,7 +26,7 @@ export class FacilityRepository implements IFacilityRepository {
          });
          return facilities;
       } catch (error: any) {
-         throw new Error(error.message);
+         throw new AppError(error.message);
       }
    }
 
@@ -37,7 +38,7 @@ export class FacilityRepository implements IFacilityRepository {
          });
          return facility;
       } catch (error: any) {
-         throw new Error(error.message);
+         throw new AppError(error.message);
       }
    }
 
@@ -49,7 +50,7 @@ export class FacilityRepository implements IFacilityRepository {
          });
          return newFacility;
       } catch (error: any) {
-         throw new Error(error.message);
+         throw new AppError(error.message);
       }
    }
 
@@ -62,7 +63,7 @@ export class FacilityRepository implements IFacilityRepository {
          });
          return updatedFacility;
       } catch (error: any) {
-         throw new Error(error.message);
+         throw new AppError(error.message);
       }
    }
 
@@ -72,7 +73,7 @@ export class FacilityRepository implements IFacilityRepository {
          where: { id }
       });
       } catch (error: any) {
-         throw new Error(error.message);
+         throw new AppError(error.message);
       }
    }
 }

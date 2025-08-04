@@ -1,7 +1,9 @@
 import { CreateUserRequest, GetUserResponse, UpdateUserRequest } from "../dto/user.dto";
+import { UserMessage } from "../helpers/message.constants";
 import { IUserRepository } from "../interfaces/repositories/IUserRepository";
 import { IUserService } from "../interfaces/services/IUserService";
 import { hashPassword } from "../utils/encode";
+import { NotFoundError } from "../utils/errors";
 
 export class UserService implements IUserService {
    private userRepository: IUserRepository;
@@ -12,42 +14,55 @@ export class UserService implements IUserService {
 
    async getUsers(): Promise<GetUserResponse[]> {
       try {
-         return this.userRepository.getUsers();
-      } catch (error: any) {
-         throw new Error("Failed to get users: " + error.message);
+         const users = await this.userRepository.getUsers();
+         if (users.length === 0) {
+            throw new NotFoundError(UserMessage.USER_NOT_FOUND);
+         }
+         return users;
+      } catch (error) {
+         throw error;
       }
    }
 
-   async getUserById(id: number): Promise<GetUserResponse | null> {
+   async getUserById(id: number): Promise<GetUserResponse> {
       try {
-         return this.userRepository.getUserById(id);
-      } catch (error: any) {
-         throw new Error("Failed to get user by ID: " + error.message);
+         const user = await this.userRepository.getUserById(id);
+         if (!user) {
+            throw new NotFoundError(UserMessage.USER_NOT_FOUND);
+         }
+         return user;
+      } catch (error) {
+         throw error;
       }
    }
 
    async createUser(userData: CreateUserRequest): Promise<GetUserResponse> {
       try {
-         userData.password = await hashPassword(userData.password);
-         return this.userRepository.createUser(userData);
-      } catch (error: any) {
-         throw new Error("Failed to create user: " + error.message);
+         const hashedPassword = await hashPassword(userData.password);
+         const userToCreate = {
+            ...userData,
+            password: hashedPassword,
+         };
+         const createdUser = await this.userRepository.createUser(userToCreate);
+         return createdUser;
+      } catch (error) {
+         throw error;
       }
    }
 
    async updateUser(id: number, userData: UpdateUserRequest): Promise<GetUserResponse> {
       try {
          return this.userRepository.updateUser(id, userData);
-      } catch (error: any) {
-         throw new Error("Failed to update user: " + error.message);
+      } catch (error) {
+         throw error;
       }
    }
 
    async deleteUser(id: number): Promise<void> {
       try {
          await this.userRepository.deleteUser(id);
-      } catch (error: any) {
-         throw new Error(error.message);
+      } catch (error) {
+         throw error;
       }
    }
 }

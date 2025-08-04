@@ -1,6 +1,7 @@
 import { CreateNewsCommentRequest, CreateNewsReactionRequest, CreateNewsRequest, GetNewsResponse, NewsCommentResponse, NewsReactionResponse, UpdateNewsRequest } from "../dto/news.dto";
 import { PrismaClient } from "../generated/prisma";
 import { INewsRepository } from "../interfaces/repositories/INewsRepository";
+import { AppError } from "../utils/errors";
 
 const selectedNewsField = {
    id: true,
@@ -48,7 +49,7 @@ export class NewsRepository implements INewsRepository {
          });
          return news;
       } catch (error: any) {
-         throw new Error("Error fetching news: " + error.message);
+         throw new AppError(error.message);
       }
    }
 
@@ -60,7 +61,7 @@ export class NewsRepository implements INewsRepository {
          });
          return news;
       } catch (error: any) {
-         throw new Error("Error fetching news: " + error.message);
+         throw new AppError(error.message);
       }
    }
 
@@ -71,7 +72,7 @@ export class NewsRepository implements INewsRepository {
          });
          return newNews;
       } catch (error: any) {
-         throw new Error("Error fetching news: " + error.message);
+         throw new AppError(error.message);
       }
    }
 
@@ -84,7 +85,7 @@ export class NewsRepository implements INewsRepository {
          });
          return updatedNews;
       } catch (error: any) {
-         throw new Error("Error fetching news: " + error.message);
+         throw new AppError(error.message);
       }
    }
 
@@ -94,7 +95,7 @@ export class NewsRepository implements INewsRepository {
             where: { id }
          })
       } catch (error: any) {
-         throw new Error("Error fetching news: " + error.message);
+         throw new AppError(error.message);
       }
    }
 
@@ -106,7 +107,7 @@ export class NewsRepository implements INewsRepository {
          })
          return comments;
       } catch (error: any) {
-         throw new Error("Error fetching news: " + error.message);
+         throw new AppError(error.message);
       }   
    }
 
@@ -118,7 +119,7 @@ export class NewsRepository implements INewsRepository {
          });
          return newNewsComment;
       } catch (error: any) {
-         throw new Error("Error fetching news: " + error.message);
+         throw new AppError(error.message);
       }
    }
 
@@ -128,7 +129,7 @@ export class NewsRepository implements INewsRepository {
             where: { id }
          })
       } catch (error: any) {
-         throw new Error("Error fetching news: " + error.message);
+         throw new AppError(error.message);
       }
    }
 
@@ -140,7 +141,7 @@ export class NewsRepository implements INewsRepository {
          })
          return reactions;
       } catch (error: any) {
-         throw new Error("Error fetching news: " + error.message);
+         throw new AppError(error.message);
       }
    }
 
@@ -152,7 +153,7 @@ export class NewsRepository implements INewsRepository {
          });
          return newReaction;
       } catch (error: any) {
-         throw new Error("Error fetching news: " + error.message);
+         throw new AppError(error.message);
       }
    }
 }

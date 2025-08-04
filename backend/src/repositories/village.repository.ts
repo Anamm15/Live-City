@@ -1,6 +1,7 @@
 import { CreateVillageRequest, GetResponseVillage, UpdateVillageRequest } from "../dto/villages.dto";
 import { PrismaClient } from "../generated/prisma";
 import { IVillageRepository } from "../interfaces/repositories/IVillageRepository";
+import { AppError } from "../utils/errors";
 
 const selectedVillageFields = {
    id: true,
@@ -25,7 +26,7 @@ export class VillageRepository implements IVillageRepository {
          });
          return villages;
       } catch (error: any) {
-         throw new Error(error.message);
+         throw new AppError(error.message);
       }
    }
 
@@ -37,7 +38,7 @@ export class VillageRepository implements IVillageRepository {
          });
          return newVillage;
       } catch (error: any) {
-         throw new Error(error.message);
+         throw new AppError(error.message);
       }   
    }
 
@@ -50,7 +51,7 @@ export class VillageRepository implements IVillageRepository {
          });
          return updatedVillage;
       } catch (error: any) {
-         throw new Error(error.message);
+         throw new AppError(error.message);
       }
    }
 
@@ -60,7 +61,7 @@ export class VillageRepository implements IVillageRepository {
             where: { id }
          })
       } catch (error: any) {
-         throw new Error(error.message);
+         throw new AppError(error.message);
       }
    }
 }

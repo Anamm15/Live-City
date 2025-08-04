@@ -1,6 +1,7 @@
 import { CreateSubmissionRequest, GetSubmissionResponse, UpdateSubmissionRequest } from "../dto/submission.dto";
 import { PrismaClient, SubmissionStatus } from "../generated/prisma";
 import { ISubmissionRepository } from "../interfaces/repositories/ISubmissionRepository";
+import { AppError } from "../utils/errors";
 
 const submissionSelectFields = {
    id: true,
@@ -35,7 +36,7 @@ export class SubmissionRepository implements ISubmissionRepository {
          });
          return submission;
       } catch (error: any) {
-         throw new Error(`Error fetching submission by ID: ${error.message}`);
+         throw new AppError(error.message);
       }
    }
 
@@ -46,7 +47,7 @@ export class SubmissionRepository implements ISubmissionRepository {
       });
       return submissions;
       } catch (error: any) {
-         throw new Error(`Error fetching submissions: ${error.message}`);
+         throw new AppError(error.message);
       }
    }
 
@@ -58,7 +59,7 @@ export class SubmissionRepository implements ISubmissionRepository {
          });
          return submissions;
       } catch (error: any) {
-         throw new Error(`Error fetching submissions by user ID: ${error.message}`);
+         throw new AppError(error.message);
       }
    }
 
@@ -69,7 +70,7 @@ export class SubmissionRepository implements ISubmissionRepository {
          });
          return newSubmission;
       } catch (error: any) {
-         throw new Error(`Error creating submission: ${error.message}`);
+         throw new AppError(error.message);
       }
    }
 
@@ -81,7 +82,7 @@ export class SubmissionRepository implements ISubmissionRepository {
          });
          return updatedSubmission;
       } catch (error: any) {
-         throw new Error(`Error updating submission: ${error.message}`);
+         throw new AppError(error.message);
       }
    }
 
@@ -93,7 +94,7 @@ export class SubmissionRepository implements ISubmissionRepository {
          });
          return updatedSubmission;
       } catch (error: any) {
-         throw new Error(`Error updating submission status: ${error.message}`);
+         throw new AppError(error.message);
       }
    }
 
@@ -103,7 +104,7 @@ export class SubmissionRepository implements ISubmissionRepository {
             where: { id },
          });
       } catch (error: any) {
-         throw new Error(`Error deleting submission: ${error.message}`);
+         throw new AppError(error.message);
       }
    }
 }

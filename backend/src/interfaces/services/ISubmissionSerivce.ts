@@ -3,8 +3,8 @@ import { SubmissionStatus } from "../../generated/prisma";
 
 export interface ISubmissionService {
    getSubmissions(): Promise<GetSubmissionResponse[]>;
-   getSubmissionById(id: number): Promise<GetSubmissionResponse | null>;
-   getSubmissionsByUserId(userId: number): Promise<GetSubmissionResponse[] | null>;
+   getSubmissionById(id: number): Promise<GetSubmissionResponse>;
+   getSubmissionsByUserId(userId: number): Promise<GetSubmissionResponse[]>;
    createSubmission(submission: CreateSubmissionRequest): Promise<GetSubmissionResponse>;
    updateSubmission(id: number, submission: UpdateSubmissionRequest): Promise<GetSubmissionResponse>;
    updateSubmissionStatus(id: number, status: SubmissionStatus): Promise<GetSubmissionResponse>;
