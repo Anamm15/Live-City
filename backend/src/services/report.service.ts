@@ -5,6 +5,7 @@ import {
    UpdateResponseReportRequest } from "../dto/report.dto";
 import { LIMIT_REPORT_PAGE } from "../helpers/app.constants";
 import { ReportMessage } from "../helpers/message.constants";
+import { IFileRepository } from "../interfaces/repositories/IFileRepository";
 import { IReportRepository } from "../interfaces/repositories/IReportRepository";
 import { IReportService } from "../interfaces/services/IReportService";
 import { NotFoundError } from "../utils/errors";
@@ -12,9 +13,11 @@ import { NotFoundError } from "../utils/errors";
 
 export class ReportService implements IReportService {
    private reportRepository: IReportRepository;
+   private fileRepository: IFileRepository;
 
-   constructor(reportRepository: IReportRepository) {
+   constructor(reportRepository: IReportRepository, fileRepository: IFileRepository) {
       this.reportRepository = reportRepository;
+      this.fileRepository = fileRepository;
    }
 
    async getReports(page: number, filter: string): Promise<ReportResponse[]> {

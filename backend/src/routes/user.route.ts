@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { UserRepository } from '../repositories/user.repository';
+import { FileRepository } from "../repositories/file.repository";
 import { UserService } from '../services/user.service';
 import { UserController } from '../controllers/user.controller';
 import prisma from '../database/prisma';
@@ -8,8 +9,9 @@ import { validate } from '../middlewares/validate';
 import { CreateUserSchema, UpdateUserSchema } from '../validators/user.validator';
 
 const router = Router();
+const fileRepository = new FileRepository(prisma);
 const userRepository = new UserRepository(prisma);
-const userService = new UserService(userRepository);
+const userService = new UserService(userRepository, fileRepository);
 const userController = new UserController(userService);
 
 router.get('/', userController.getUsers.bind(userController));

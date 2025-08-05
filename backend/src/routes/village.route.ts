@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { VillageRepository } from "../repositories/village.repository";
+import { FileRepository } from "../repositories/file.repository";
 import { VillageService } from "../services/village.service";
 import { VillageController } from "../controllers/village.controller";
 import prisma from "../database/prisma";
@@ -11,7 +12,8 @@ import { Role } from "../generated/prisma";
 
 const router = Router();
 const villageRepository = new VillageRepository(prisma);
-const villageService = new VillageService(villageRepository);
+const fileRepository = new FileRepository(prisma);
+const villageService = new VillageService(villageRepository, fileRepository);
 const villageController = new VillageController(villageService);
 
 router.get('/', authMiddleware, villageController.getVillages.bind(villageController));

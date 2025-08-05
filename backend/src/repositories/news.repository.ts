@@ -6,7 +6,7 @@ import {
    NewsCommentResponse, 
    NewsReactionResponse, 
    UpdateNewsRequest } from "../dto/news.dto";
-import { PrismaClient } from "../generated/prisma";
+import { Prisma, PrismaClient } from "../generated/prisma";
 import { INewsRepository } from "../interfaces/repositories/INewsRepository";
 import { AppError } from "../utils/errors";
 
@@ -87,9 +87,9 @@ export class NewsRepository implements INewsRepository {
       }
    }
 
-   async createNews(data: CreateNewsRequest): Promise<NewsResponse> {
+   async createNews(data: CreateNewsRequest, tx: Prisma.TransactionClient): Promise<NewsResponse> {
       try {
-         const newNews = await this.prisma.news.create({
+         const newNews = await tx.news.create({
             data,
             select: selectedNewsField,
          });

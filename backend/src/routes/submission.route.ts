@@ -2,6 +2,7 @@ import { Router } from "express";
 import { SubmissionController } from "../controllers/submission.controller";
 import { SubmissionService } from "../services/submission.service";
 import { SubmissionRepository } from "../repositories/submission.repository";
+import { FileRepository } from "../repositories/file.repository";
 import prisma from "../database/prisma";
 import authMiddleware from "../middlewares/authentication";
 import authorizeRoles from "../middlewares/authorization";
@@ -10,8 +11,9 @@ import { validate } from "../middlewares/validate";
 import { CreateSubmissionSchema, UpdateSubmissionSchema, UpdateSubmissionStatusSchema } from "../validators/submission.validator";
 
 const router = Router();
+const fileRepository = new FileRepository(prisma);
 const submissionRepository = new SubmissionRepository(prisma);
-const submissionService = new SubmissionService(submissionRepository);
+const submissionService = new SubmissionService(submissionRepository, fileRepository);
 const submissionController = new SubmissionController(submissionService);
 
 router.get('/', authMiddleware, authorizeRoles(Role.ADMIN), submissionController.getSubmissions.bind(submissionController));

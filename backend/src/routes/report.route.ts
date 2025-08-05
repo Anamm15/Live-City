@@ -3,14 +3,16 @@ import { ReportController } from "../controllers/report.controller";
 import { PrismaClient, Role } from "../generated/prisma";
 import { ReportRepository } from "../repositories/report.repository";
 import { ReportService } from "../services/report.service";
+import { FileRepository } from "../repositories/file.repository";
 import authMiddleware from "../middlewares/authentication";
 import authorizeRoles from "../middlewares/authorization";
 import { validate } from "../middlewares/validate";
 import { CreateReportSchema, UpdateReportSchema, UpdateResponseReportSchema } from "../validators/report.validator";
 
 const prisma = new PrismaClient();
+const fileRepository = new FileRepository(prisma);
 const reportRepositry = new ReportRepository(prisma);
-const reportService = new ReportService(reportRepositry);
+const reportService = new ReportService(reportRepositry, fileRepository);
 const reportController = new ReportController(reportService);  
 
 const router = Router();

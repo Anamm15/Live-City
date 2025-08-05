@@ -14,12 +14,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlI
 
 ### Create News
 POST {{baseUrl}}/news
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTM5MjAzNDksImV4cCI6MTc1MzkyMzk0OX0.BhVmuIJ5ZeK5I-7GYkI_a6fPHigai5Fs9ANedregZCU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTQzOTg3ODQsImV4cCI6MTc1NDQwMjM4NH0.QlPm-oVEJloeLaAwV67zJ5kkRXdopGt4BcruRhoAZnE
 Content-Type: application/json
 
 {
    "title": "News test title",
-   "date": "1990-01-01T00:00:00.000Z",
+   "date": "1990-01-01T00:00:00.000",
    "content": "News content title"
 }
 

@@ -5,6 +5,7 @@ import {
 import { SubmissionStatus } from "../generated/prisma";
 import { LIMIT_SUBMISSION_PAGE } from "../helpers/app.constants";
 import { SubmissionMessage } from "../helpers/message.constants";
+import { IFileRepository } from "../interfaces/repositories/IFileRepository";
 import { ISubmissionRepository } from "../interfaces/repositories/ISubmissionRepository";
 import { ISubmissionService } from "../interfaces/services/ISubmissionSerivce";
 import { NotFoundError } from "../utils/errors";
@@ -12,9 +13,11 @@ import { NotFoundError } from "../utils/errors";
 
 export class SubmissionService implements ISubmissionService {
    private submissionRepository: ISubmissionRepository;
+   private fileRepository: IFileRepository;
 
-   constructor(submissionRepository: ISubmissionRepository) {
+   constructor(submissionRepository: ISubmissionRepository, fileRepository: IFileRepository) {
       this.submissionRepository = submissionRepository;
+      this.fileRepository = fileRepository;
    }
 
    async getSubmissions(page: number, filter: string): Promise<SubmissionResponse[]> {

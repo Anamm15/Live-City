@@ -1,3 +1,5 @@
+import cloudinary from "../config/cloudinary";
+import fs from "fs";
 import { 
    CreateNewsCommentRequest, 
    CreateNewsReactionRequest, 
@@ -8,15 +10,21 @@ import {
    UpdateNewsRequest, } from "../dto/news.dto";
 import { LIMIT_NEWS_COMMENT_PAGE, LIMIT_NEWS_PAGE } from "../helpers/app.constants";
 import { NewsMessage } from "../helpers/message.constants";
+import { IFileRepository } from "../interfaces/repositories/IFileRepository";
 import { INewsRepository } from "../interfaces/repositories/INewsRepository";
 import { INewsService } from "../interfaces/services/INewsService";
 import { NotFoundError } from "../utils/errors";
+import { UploadFile } from "../dto/file.dto";
+import { FileableType, Prisma, PrismaClient } from "../generated/prisma";
+import { generateFilename } from "../utils/formatFilename";
 
 export class NewsService implements INewsService {
    private newsRepository: INewsRepository;
+   private fileRepository: IFileRepository;
 
-   constructor(newsRepository: INewsRepository) {
+   constructor(newsRepository: INewsRepository, fileRepository: IFileRepository) {
       this.newsRepository = newsRepository;
+      this.fileRepository = fileRepository;
    }
 
    async getNews(page: number): Promise<NewsResponse[]> {
@@ -45,12 +53,34 @@ export class NewsService implements INewsService {
       }       
    }
 
-   async createNews(news: CreateNewsRequest): Promise<NewsResponse> {
-      try {
-         return this.newsRepository.createNews(news);
-      } catch (error) {
-         throw error;
-      }   
+   async createNews(news: CreateNewsRequest, file: Express.Multer.File): Promise<NewsResponse> {
+      let cloudinaryResult: any | null = null;
+      const prisma = new PrismaClient();
+      
+      return await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
+         try {
+            const newNews = await this.newsRepository.createNews(news, tx);
+            const newFilename = generateFilename(FileableType.NEWS, newNews.id);
+            cloudinaryResult = await cloudinary.uploader.upload(file.path, {
+               folder: FileableType.NEWS,
+               public_id: newFilename
+            });
+            
+            fs.unlinkSync(file.path);
+            const fileData: UploadFile = {
+               urlFile: cloudinaryResult.secure_url,
+               fileableId: newNews.id,
+               fileableType: FileableType.NEWS
+            };
+            await this.fileRepository.uploadFile(fileData, tx);
+            return newNews;
+         } catch (error) {
+            if (cloudinaryResult?.public_id) {
+               await cloudinary.uploader.destroy(cloudinaryResult.public_id);
+            }
+            throw error;
+         }
+      });
    }
 
    async updateNews(id: number, news: UpdateNewsRequest): Promise<NewsResponse> {

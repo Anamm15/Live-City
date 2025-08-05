@@ -2,7 +2,9 @@ import { Router } from "express";
 import { NewsController } from "../controllers/news.controller";
 import { NewsService } from "../services/news.service";
 import { NewsRepository } from "../repositories/news.repository";
+import { FileRepository } from "../repositories/file.repository";
 import prisma from "../database/prisma";
+import upload from "../middlewares/upload";
 import authMiddleware from "../middlewares/authentication";
 import authorizeRoles from "../middlewares/authorization";
 import { Role } from "../generated/prisma";
@@ -10,13 +12,14 @@ import { validate } from "../middlewares/validate";
 import { CreateNewsCommentSchema, CreateNewsReactionSchema, CreateNewsSchema, UpdateNewsSchema } from "../validators/news.validator";
 
 const newsRepository = new NewsRepository(prisma);
-const newsService = new NewsService(newsRepository);
+const fileRepository = new FileRepository(prisma);
+const newsService = new NewsService(newsRepository, fileRepository);
 const newsController = new NewsController(newsService);
 const router = Router();
 
 router.get('/', authMiddleware, newsController.getNews.bind(newsController));
 router.get('/:id', authMiddleware, newsController.getNewsById.bind(newsController));
-router.post('/', authMiddleware, authorizeRoles(Role.ADMIN), validate(CreateNewsSchema), newsController.createNews.bind(newsController));
+router.post('/', authMiddleware, authorizeRoles(Role.ADMIN), upload.single('image'), validate(CreateNewsSchema), newsController.createNews.bind(newsController));
 router.patch('/:id', authMiddleware, authorizeRoles(Role.ADMIN), validate(UpdateNewsSchema), newsController.updateNews.bind(newsController));
 router.delete('/:id', authMiddleware, authorizeRoles(Role.ADMIN), newsController.deleteNews.bind(newsController));
 router.get('/:id/comments', authMiddleware, newsController.getNewsComments.bind(newsController));
