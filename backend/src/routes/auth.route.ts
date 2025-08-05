@@ -1,19 +1,25 @@
 import { Router } from 'express';
-import prisma from '../database/prisma';
-import { UserRepository } from '../repositories/user.repository';
-import { AuthService } from '../services/auth.service';
-import { AuthController } from '../controllers/auth.controller';
 import { validate } from '../middlewares/validate';
 import { LoginSchema } from '../validators/auth.validator';
+import { IAuthController } from '../interfaces/controllers/IAuthController';
 
-const router = Router();
+export class AuthRoutes {
+   private router: Router;
+   private authController: IAuthController;
 
-const userRepository = new UserRepository(prisma);
-const authService = new AuthService(userRepository);
-const authController = new AuthController(authService);
+   constructor(authController: IAuthController) {
+      this.router = Router();
+      this.authController = authController;
+      this.configureRoutes();
+   }
 
-router.post('/login', validate(LoginSchema), authController.login.bind(authController));
-router.post('/logout', authController.logout.bind(authController));
-router.post('/refresh-token', authController.refreshToken.bind(authController));
+   private configureRoutes() {
+      this.router.post('/login', validate(LoginSchema), this.authController.login.bind(this.authController));
+      this.router.post('/logout', this.authController.logout.bind(this.authController));
+      this.router.post('/refresh-token', this.authController.refreshToken.bind(this.authController));
+   }
 
-export default router;
+   public getRoutes() {
+      return this.router;
+   }
+}

@@ -11,7 +11,7 @@ Content-Type: application/json
 
 ### 
 GET {{baseUrl}}/facilities
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTM5NjEyOTQsImV4cCI6MTc1Mzk2NDg5NH0.nZpzjwNkbLQ2g2yzzYBnpOJkFLN1R1SZJoyO15z9nd4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTQ0MDg0MTksImV4cCI6MTc1NDQxMjAxOX0.F-THeF5_EE71tTiDJXofVzeui_Pjtp7SMza6D1Ya-_o
 
 ###
 GET {{baseUrl}}/facilities/1

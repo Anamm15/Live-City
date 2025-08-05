@@ -1,27 +1,33 @@
 import { Router } from "express";
-import { SubmissionController } from "../controllers/submission.controller";
-import { SubmissionService } from "../services/submission.service";
-import { SubmissionRepository } from "../repositories/submission.repository";
-import { FileRepository } from "../repositories/file.repository";
-import prisma from "../database/prisma";
 import authMiddleware from "../middlewares/authentication";
 import authorizeRoles from "../middlewares/authorization";
 import { Role } from "../generated/prisma";
 import { validate } from "../middlewares/validate";
 import { CreateSubmissionSchema, UpdateSubmissionSchema, UpdateSubmissionStatusSchema } from "../validators/submission.validator";
+import { ISubmissionController } from "../interfaces/controllers/ISubmissionController";
 
-const router = Router();
-const fileRepository = new FileRepository(prisma);
-const submissionRepository = new SubmissionRepository(prisma);
-const submissionService = new SubmissionService(submissionRepository, fileRepository);
-const submissionController = new SubmissionController(submissionService);
+export class SubmissionRoutes {
+   private router: Router;
+   private submissionController: ISubmissionController;
 
-router.get('/', authMiddleware, authorizeRoles(Role.ADMIN), submissionController.getSubmissions.bind(submissionController));
-router.get('/:id', authMiddleware, submissionController.getSubmissionById.bind(submissionController));
-router.get('/user/:userId', authMiddleware, submissionController.getSubmissionsByUserId.bind(submissionController));
-router.post('/', authMiddleware, validate(CreateSubmissionSchema), submissionController.createSubmission.bind(submissionController));
-router.patch('/:id', authMiddleware, validate(UpdateSubmissionSchema), submissionController.updateSubmission.bind(submissionController));
-router.patch('/:id/status', authMiddleware, validate(UpdateSubmissionStatusSchema), authorizeRoles(Role.ADMIN), submissionController.updateSubmissionStatus.bind(submissionController));
-router.delete('/:id', authMiddleware, submissionController.deleteSubmission.bind(submissionController));
+   constructor(submissionController: ISubmissionController) {
+      this.router = Router();
+      this.submissionController = submissionController;
+      this.configureRoutes();
+   }
 
-export default router;
+   private configureRoutes() {
+      this.router.get('/', authMiddleware, authorizeRoles(Role.ADMIN), this.submissionController.getSubmissions.bind(this.submissionController));
+      this.router.get('/:id', authMiddleware, this.submissionController.getSubmissionById.bind(this.submissionController));
+      this.router.get('/user/:userId', authMiddleware, this.submissionController.getSubmissionsByUserId.bind(this.submissionController));
+      this.router.post('/', authMiddleware, validate(CreateSubmissionSchema), this.submissionController.createSubmission.bind(this.submissionController));
+      this.router.patch('/:id', authMiddleware, validate(UpdateSubmissionSchema), this.submissionController.updateSubmission.bind(this.submissionController));
+      this.router.patch('/:id/status', authMiddleware, validate(UpdateSubmissionStatusSchema), authorizeRoles(Role.ADMIN), this.submissionController.updateSubmissionStatus.bind(this.submissionController));
+      this.router.delete('/:id', authMiddleware, this.submissionController.deleteSubmission.bind(this.submissionController));
+      return this.router;
+   }
+
+   public getRoutes() {
+      return this.router;
+   }
+}
