@@ -271,8 +271,8 @@ model Reports {
   response    String?
   userId      Int
   user        Users      @relation(fields: [userId], references: [id])
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime?  @updatedAt
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime?  @default(now())
   deletedAt   DateTime?
 }
 
@@ -285,8 +285,8 @@ model Submissions {
   description String
   userId      Int
   user        Users             @relation(fields: [userId], references: [id])
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime?  @updatedAt
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime?         @default(now())
   deletedAt   DateTime?
 }
 
@@ -299,56 +299,56 @@ model News {
   commentCount  Int             @default(0)
   comments      NewsComments[]
   reactions     NewsReactions[]
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime?  @updatedAt
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime?       @default(now())
   deletedAt     DateTime?
 }
 
 model NewsComments {
-  id          Int     @id @default(autoincrement())
+  id          Int        @id @default(autoincrement())
   content     String
   userId      Int
   newsId      Int
-  user        Users   @relation(fields: [userId], references: [id])
-  news        News    @relation(fields: [newsId], references: [id])
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime?  @updatedAt
+  user        Users      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  news        News       @relation(fields: [newsId], references: [id], onDelete: Cascade)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime?  @default(now())
   deletedAt   DateTime?
 }
 
 model NewsReactions {
-  id          Int     @id @default(autoincrement())
+  id          Int        @id @default(autoincrement())
   userId      Int
   newsId      Int
-  user        Users   @relation(fields: [userId], references: [id])
-  news        News    @relation(fields: [newsId], references: [id])
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime?  @updatedAt
+  user        Users      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  news        News       @relation(fields: [newsId], references: [id], onDelete: Cascade)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime?  @default(now())
   deletedAt   DateTime?
 
   @@unique([userId, newsId])
 }
 
 model Villages {
-  id          Int    @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   name        String
   postalCode  String
   latitude    Float
   longitude   Float
   createdAt   DateTime  @default(now())
-  updatedAt   DateTime?  @updatedAt
+  updatedAt   DateTime? @default(now())
   deletedAt   DateTime?
 }
 
 model Facilities {
-  id          Int       @id @default(autoincrement())
+  id          Int        @id @default(autoincrement())
   name        String
   description String?
   latitude    Float
   longitude   Float
   buildDate   DateTime
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime?  @updatedAt
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime?  @default(now())
   deletedAt   DateTime?
 }
 
@@ -358,6 +358,6 @@ model Files {
   fileableId   Int
   fileableType FileableType
   createdAt    DateTime  @default(now())
-  updatedAt    DateTime?  @updatedAt
+  updatedAt    DateTime? @default(now())
   deletedAt    DateTime?
 }

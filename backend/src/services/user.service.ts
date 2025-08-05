@@ -1,4 +1,7 @@
-import { CreateUserRequest, GetUserResponse, UpdateUserRequest } from "../dto/user.dto";
+import { 
+   CreateUserRequest, 
+   UserResponse, 
+   UpdateUserRequest } from "../dto/user.dto";
 import { UserMessage } from "../helpers/message.constants";
 import { IUserRepository } from "../interfaces/repositories/IUserRepository";
 import { IUserService } from "../interfaces/services/IUserService";
@@ -12,7 +15,7 @@ export class UserService implements IUserService {
       this.userRepository = userRepository;
    }
 
-   async getUsers(): Promise<GetUserResponse[]> {
+   async getUsers(): Promise<UserResponse[]> {
       try {
          const users = await this.userRepository.getUsers();
          if (users.length === 0) {
@@ -24,7 +27,7 @@ export class UserService implements IUserService {
       }
    }
 
-   async getUserById(id: number): Promise<GetUserResponse> {
+   async getUserById(id: number): Promise<UserResponse> {
       try {
          const user = await this.userRepository.getUserById(id);
          if (!user) {
@@ -36,7 +39,7 @@ export class UserService implements IUserService {
       }
    }
 
-   async createUser(userData: CreateUserRequest): Promise<GetUserResponse> {
+   async createUser(userData: CreateUserRequest): Promise<UserResponse> {
       try {
          const hashedPassword = await hashPassword(userData.password);
          const userToCreate = {
@@ -50,7 +53,7 @@ export class UserService implements IUserService {
       }
    }
 
-   async updateUser(id: number, userData: UpdateUserRequest): Promise<GetUserResponse> {
+   async updateUser(id: number, userData: UpdateUserRequest): Promise<UserResponse> {
       try {
          return this.userRepository.updateUser(id, userData);
       } catch (error) {

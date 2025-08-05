@@ -1,9 +1,16 @@
-import { CreateNewsCommentRequest, CreateNewsReactionRequest, CreateNewsRequest, GetNewsResponse, NewsCommentResponse, NewsReactionResponse, UpdateNewsRequest } from "../dto/news.dto";
+import { 
+   CreateNewsCommentRequest, 
+   CreateNewsReactionRequest, 
+   CreateNewsRequest, 
+   NewsResponse, 
+   NewsCommentResponse, 
+   NewsReactionResponse, 
+   UpdateNewsRequest, } from "../dto/news.dto";
+import { LIMIT_NEWS_COMMENT_PAGE, LIMIT_NEWS_PAGE } from "../helpers/app.constants";
 import { NewsMessage } from "../helpers/message.constants";
 import { INewsRepository } from "../interfaces/repositories/INewsRepository";
 import { INewsService } from "../interfaces/services/INewsService";
 import { NotFoundError } from "../utils/errors";
-
 
 export class NewsService implements INewsService {
    private newsRepository: INewsRepository;
@@ -12,9 +19,11 @@ export class NewsService implements INewsService {
       this.newsRepository = newsRepository;
    }
 
-   async getNews(): Promise<GetNewsResponse[]> {
+   async getNews(page: number): Promise<NewsResponse[]> {
       try {
-         const news = await this.newsRepository.getNews();
+         if (page < 1) page = 1;
+         const offset = (page - 1) * LIMIT_NEWS_PAGE;
+         const news = await this.newsRepository.getNews(offset, LIMIT_NEWS_PAGE);
          if (news.length === 0) {
             throw new NotFoundError(NewsMessage.NEWS_NOT_FOUND);
          }
@@ -24,7 +33,7 @@ export class NewsService implements INewsService {
       }       
    }
 
-   async getNewsById(id: number): Promise<GetNewsResponse> {
+   async getNewsById(id: number): Promise<NewsResponse> {
       try {
          const news = await this.newsRepository.getNewsById(id);
          if (!news) {
@@ -36,7 +45,7 @@ export class NewsService implements INewsService {
       }       
    }
 
-   async createNews(news: CreateNewsRequest): Promise<GetNewsResponse> {
+   async createNews(news: CreateNewsRequest): Promise<NewsResponse> {
       try {
          return this.newsRepository.createNews(news);
       } catch (error) {
@@ -44,13 +53,9 @@ export class NewsService implements INewsService {
       }   
    }
 
-   async updateNews(id: number, news: UpdateNewsRequest): Promise<GetNewsResponse> {
+   async updateNews(id: number, news: UpdateNewsRequest): Promise<NewsResponse> {
       try {
-         const data: UpdateNewsRequest = {
-            ...news,
-            id
-         }
-         return this.newsRepository.updateNews(data);
+         return this.newsRepository.updateNews(id, news);
       } catch (error) {
          throw error;
       }   
@@ -64,9 +69,10 @@ export class NewsService implements INewsService {
       }   
    }
 
-   async getNewsComments(newsId: number): Promise<NewsCommentResponse[]> {
+   async getNewsComments(newsId: number, page: number): Promise<NewsCommentResponse[]> {
       try {
-         return this.newsRepository.getNewsComments(newsId);
+         const offset = (page - 1) * LIMIT_NEWS_COMMENT_PAGE;
+         return this.newsRepository.getNewsComments(newsId, offset, LIMIT_NEWS_COMMENT_PAGE);
       } catch (error) {
          throw error;
       }       

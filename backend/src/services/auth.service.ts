@@ -4,7 +4,7 @@ import { UserMessage } from "../helpers/message.constants";
 import { IUserRepository } from "../interfaces/repositories/IUserRepository";
 import { IAuthService } from "../interfaces/services/IAuthService";
 import { comparePasswords } from "../utils/encode";
-import { AppError, NotFoundError, UnauthenticatedError } from "../utils/errors";
+import { NotFoundError, UnauthenticatedError } from "../utils/errors";
 import { JWTService } from "../utils/jwt";
 
 export class AuthService implements IAuthService {

@@ -1,11 +1,15 @@
-import { CreateReportRequest, GetReportResponse, UpdateReportRequest, UpdateResponseReportRequest } from "../../dto/report.dto";
+import { 
+   CreateReportRequest, 
+   ReportResponse, 
+   UpdateReportRequest, 
+   UpdateResponseReportRequest } from "../../dto/report.dto";
 
 export interface IReportRepository {
-   getReports(): Promise<GetReportResponse[]>;
-   getReportById(id: number): Promise<GetReportResponse | null>;
-   getReportsByUserId(userId: number): Promise<GetReportResponse[]>;
-   createReport(report: CreateReportRequest): Promise<GetReportResponse>;
-   updateReport(id: number, report: UpdateReportRequest): Promise<GetReportResponse>;
-   updateResponseReport(id: number, report: UpdateResponseReportRequest): Promise<GetReportResponse>;
+   getReports(filter: string, offset: number, limit: number): Promise<ReportResponse[]>;
+   getReportById(id: number): Promise<ReportResponse | null>;
+   getReportsByUserId(userId: number): Promise<ReportResponse[]>;
+   createReport(data: CreateReportRequest): Promise<ReportResponse>;
+   updateReport(id: number, data: UpdateReportRequest): Promise<ReportResponse>;
+   updateResponseReport(id: number, data: UpdateResponseReportRequest): Promise<ReportResponse>;
    deleteReport(id: number): Promise<void>;
 }

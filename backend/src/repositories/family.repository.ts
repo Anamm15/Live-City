@@ -1,7 +1,7 @@
 import {
    CreateFamilyRequest,
-   GetFamilyResponse,
-   GetFamilyWithMembers,
+   FamilyResponse,
+   FamilyWithMembersResponse,
    UpdateFamilyRequest
 } from "../dto/family.dto";
 import { PrismaClient } from "../generated/prisma";
@@ -41,7 +41,7 @@ export class FamilyRepository implements IFamilyRepository {
       this.prisma = prisma;
    }
 
-   async getFamilies(): Promise<GetFamilyResponse[]> {
+   async getFamilies(): Promise<FamilyResponse[]> {
       try {
          const families = await this.prisma.families.findMany({
             select: selectedFamilyFields
@@ -52,7 +52,7 @@ export class FamilyRepository implements IFamilyRepository {
       }
    }
 
-   async getFamilyWithMembers(id: number): Promise<GetFamilyWithMembers | null> {
+   async getFamilyWithMembers(id: number): Promise<FamilyWithMembersResponse | null> {
       try {
          const family = await this.prisma.families.findUnique({
             where: { id },
@@ -64,10 +64,11 @@ export class FamilyRepository implements IFamilyRepository {
       }
    }
 
-   async createFamily(family: CreateFamilyRequest): Promise<GetFamilyResponse> {
+   async createFamily(data: CreateFamilyRequest): Promise<FamilyResponse> {
       try {
          const createdFamily = await this.prisma.families.create({
-            data: family
+            data,
+            select: selectedFamilyFields
          });
          return createdFamily;
       } catch (error: any) {
@@ -75,11 +76,12 @@ export class FamilyRepository implements IFamilyRepository {
       }
    }
 
-   async updateFamily(family: UpdateFamilyRequest): Promise<GetFamilyResponse> {
+   async updateFamily(id: number, data: UpdateFamilyRequest): Promise<FamilyResponse> {
       try {
          const updatedFamily = await this.prisma.families.update({
-            where: { id: family.id },
-            data: family
+            where: { id },
+            data,
+            select: selectedFamilyFields
          });
          return updatedFamily;
       } catch (error: any) {

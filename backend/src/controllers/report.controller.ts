@@ -6,6 +6,7 @@ import { IReportService } from "../interfaces/services/IReportService";
 import { CommonMessage, ReportMessage } from "../helpers/message.constants";
 import { StatusCode } from "../helpers/status_code.constant";
 import { BadRequestError, NotFoundError } from "../utils/errors";
+import { ReportStatus, ReportStatusType } from "../helpers/entity.constants";
 
 export class ReportController implements IReportController {
    private reportService: IReportService;
@@ -16,12 +17,22 @@ export class ReportController implements IReportController {
 
    async getReports(req: Request, res: Response, next: NextFunction): Promise<void> {
       try {
-         const results = await this.reportService.getReports();
+         let page: number = parseInt(req.query.page as string, 10) || 1;
+         let filter: string = req.query.filter as string || '';
+         if (filter && !ReportStatus.includes(filter as ReportStatusType)) {
+            throw new BadRequestError(CommonMessage.INVALID_PARAMS);
+         }
+
+         const results = await this.reportService.getReports(page, filter);
          res.status(StatusCode.OK).send(buildResponseSuccess(results, ReportMessage.REPORT_RETRIEVED));
       } catch (error: any) {
          if (error instanceof NotFoundError) {
             res.status(StatusCode.NOT_FOUND).send(buildResponseError(error.message, ReportMessage.REPORT_NOT_FOUND));
-         } else {
+         } 
+         else if (error instanceof BadRequestError) {
+            res.status(StatusCode.BAD_REQUEST).send(buildResponseError(error.message, CommonMessage.INVALID_PARAMS));
+         } 
+         else {
             res.status(StatusCode.INTERNAL_SERVER_ERROR).send(buildResponseError(error.message, CommonMessage.SERVER_ERROR));
          }
       }   

@@ -1,4 +1,7 @@
-import { CreateVillageRequest, GetResponseVillage, UpdateVillageRequest } from "../dto/villages.dto";
+import { 
+   CreateVillageRequest, 
+   VillageResponse, 
+   UpdateVillageRequest } from "../dto/villages.dto";
 import { PrismaClient } from "../generated/prisma";
 import { IVillageRepository } from "../interfaces/repositories/IVillageRepository";
 import { AppError } from "../utils/errors";
@@ -19,7 +22,7 @@ export class VillageRepository implements IVillageRepository {
       this.prisma = prisma;
    }
 
-   async getVillages(): Promise<GetResponseVillage[]> {
+   async getVillages(): Promise<VillageResponse[]> {
       try {
          const villages = await this.prisma.villages.findMany({
             select: selectedVillageFields
@@ -30,7 +33,7 @@ export class VillageRepository implements IVillageRepository {
       }
    }
 
-   async createVillage(data: CreateVillageRequest): Promise<GetResponseVillage> {
+   async createVillage(data: CreateVillageRequest): Promise<VillageResponse> {
       try {
          const newVillage = await this.prisma.villages.create({
             data,
@@ -42,7 +45,7 @@ export class VillageRepository implements IVillageRepository {
       }   
    }
 
-   async updateVillage(id: number, data: UpdateVillageRequest): Promise<GetResponseVillage> {
+   async updateVillage(id: number, data: UpdateVillageRequest): Promise<VillageResponse> {
       try {
          const updatedVillage = await this.prisma.villages.update({
             where: { id },

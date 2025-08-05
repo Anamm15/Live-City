@@ -1,11 +1,15 @@
-import { User, GetUserResponse, CreateUserRequest, UpdateUserRequest } from "../../dto/user.dto";
+import { 
+   User, 
+   UserResponse,
+   CreateUserRequest, 
+   UpdateUserRequest } from "../../dto/user.dto";
 
 export interface IUserRepository {
-   getUsers(): Promise<GetUserResponse[]>;
-   getUserById(id: number): Promise<GetUserResponse | null>;
+   getUsers(): Promise<UserResponse[]>;
+   getUserById(id: number): Promise<UserResponse | null>;
    getUserByEmail(email: string): Promise<User | null>;
-   createUser(userData: CreateUserRequest): Promise<GetUserResponse>;
-   updateUser(id: number, userData: UpdateUserRequest): Promise<GetUserResponse>;
+   createUser(data: CreateUserRequest): Promise<UserResponse>;
+   updateUser(id: number, data: UpdateUserRequest): Promise<UserResponse>;
    updateRefreshToken(id: number, refreshToken: string | null): Promise<void>;
    deleteUser(id: number): Promise<void>;
 }

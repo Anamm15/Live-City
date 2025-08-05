@@ -1,4 +1,11 @@
-import { CreateNewsCommentRequest, CreateNewsReactionRequest, CreateNewsRequest, GetNewsResponse, NewsCommentResponse, NewsReactionResponse, UpdateNewsRequest } from "../dto/news.dto";
+import { 
+   CreateNewsCommentRequest, 
+   CreateNewsReactionRequest, 
+   CreateNewsRequest, 
+   NewsResponse, 
+   NewsCommentResponse, 
+   NewsReactionResponse, 
+   UpdateNewsRequest } from "../dto/news.dto";
 import { PrismaClient } from "../generated/prisma";
 import { INewsRepository } from "../interfaces/repositories/INewsRepository";
 import { AppError } from "../utils/errors";
@@ -35,6 +42,18 @@ const selectedNewsReactionField = {
    }
 }
 
+const selectedNewsWithDetailField = {
+   id: true,
+   title: true,
+   date: true,
+   content: true,
+   reactionCount: true,
+   commentCount: true,
+   comments: {
+      select: selectedNewsCommentField
+   }
+}
+
 export class NewsRepository implements INewsRepository {
    private prisma: PrismaClient;
 
@@ -42,10 +61,13 @@ export class NewsRepository implements INewsRepository {
       this.prisma = prisma;
    }
 
-   async getNews(): Promise<GetNewsResponse[]> {
+   async getNews(offset: number, limit: number): Promise<NewsResponse[]> {
       try {
          const news = await this.prisma.news.findMany({
-            select: selectedNewsField
+            select: selectedNewsField,
+            skip: offset,
+            take: limit,
+            orderBy: { id: "desc" }
          });
          return news;
       } catch (error: any) {
@@ -53,11 +75,11 @@ export class NewsRepository implements INewsRepository {
       }
    }
 
-   async getNewsById(id: number): Promise<GetNewsResponse | null> {
+   async getNewsById(id: number): Promise<NewsResponse | null> {
       try {
          const news = await this.prisma.news.findUnique({
             where: { id },
-            select: selectedNewsField
+            select: selectedNewsWithDetailField
          });
          return news;
       } catch (error: any) {
@@ -65,10 +87,11 @@ export class NewsRepository implements INewsRepository {
       }
    }
 
-   async createNews(data: CreateNewsRequest): Promise<GetNewsResponse> {
+   async createNews(data: CreateNewsRequest): Promise<NewsResponse> {
       try {
          const newNews = await this.prisma.news.create({
             data,
+            select: selectedNewsField,
          });
          return newNews;
       } catch (error: any) {
@@ -76,10 +99,10 @@ export class NewsRepository implements INewsRepository {
       }
    }
 
-   async updateNews(data: UpdateNewsRequest): Promise<GetNewsResponse> {
+   async updateNews(id: number, data: UpdateNewsRequest): Promise<NewsResponse> {
       try {
          const updatedNews = await this.prisma.news.update({
-            where: { id: data.id },
+            where: { id },
             data: data,
             select: selectedNewsField
          });
@@ -99,11 +122,13 @@ export class NewsRepository implements INewsRepository {
       }
    }
 
-   async getNewsComments(newsId: number): Promise<NewsCommentResponse[]> {
+   async getNewsComments(newsId: number, offset: number, limit: number): Promise<NewsCommentResponse[]> {
       try {
          const comments = await this.prisma.newsComments.findMany({
             where: { newsId },
-            select: selectedNewsCommentField
+            select: selectedNewsCommentField,
+            skip: offset,
+            take: limit
          })
          return comments;
       } catch (error: any) {

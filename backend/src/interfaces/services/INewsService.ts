@@ -1,12 +1,19 @@
-import { CreateNewsCommentRequest, CreateNewsReactionRequest, CreateNewsRequest, GetNewsResponse, NewsCommentResponse, NewsReactionResponse, UpdateNewsRequest } from "../../dto/news.dto";
+import { 
+   CreateNewsCommentRequest, 
+   CreateNewsReactionRequest, 
+   CreateNewsRequest, 
+   NewsResponse, 
+   NewsCommentResponse, 
+   NewsReactionResponse, 
+   UpdateNewsRequest, } from "../../dto/news.dto";
 
 export interface INewsService {
-   getNews(): Promise<GetNewsResponse[]>;
-   getNewsById(id: number): Promise<GetNewsResponse>;
-   createNews(news: CreateNewsRequest): Promise<GetNewsResponse>;
-   updateNews(id: number, news: UpdateNewsRequest): Promise<GetNewsResponse>;
+   getNews(page: number): Promise<NewsResponse[]>;
+   getNewsById(id: number): Promise<NewsResponse>;
+   createNews(news: CreateNewsRequest): Promise<NewsResponse>;
+   updateNews(id: number, news: UpdateNewsRequest): Promise<NewsResponse>;
    deleteNews(newsId: number): Promise<void>;
-   getNewsComments(newsId: number): Promise<NewsCommentResponse[]>;
+   getNewsComments(newsId: number, page: number): Promise<NewsCommentResponse[]>;
    createNewsComment(newsId: number, userId: number, comment: CreateNewsCommentRequest): Promise<NewsCommentResponse>;
    deleteNewsComment(id: number): Promise<void>;
    getNewsReactions(newsId: number): Promise<NewsReactionResponse[]>;

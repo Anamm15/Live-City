@@ -18,7 +18,7 @@ export type User = {
    phoneNumber: string | null;
 }
 
-export type GetUserResponse = {
+export type UserResponse = {
    id: number;
    name: string;
    email: string | null;

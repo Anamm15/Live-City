@@ -12,7 +12,7 @@ export type Submission = {
    }
 }
 
-export type GetSubmissionResponse = {
+export type SubmissionResponse = {
    id: number;
    title: string;
    date: Date;

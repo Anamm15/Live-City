@@ -1,4 +1,4 @@
-export type GetNewsResponse = {
+export type NewsResponse = {
    id: number;
    title: string;
    date: Date;
@@ -33,7 +33,6 @@ export type CreateNewsRequest = {
 }
 
 export type UpdateNewsRequest = {
-   id: number;
    title?: string;
    date?: Date;
    content?: string;

@@ -1,6 +1,6 @@
 import { 
    CreateFacilityRequest, 
-   GetFacilityResponse, 
+   FacilityResponse, 
    UpdateFacilityRequest } from "../dto/facility.dto";
 import { FacilityMessage } from "../helpers/message.constants";
 import { IFacilityRepository } from "../interfaces/repositories/IFacilityRepository";
@@ -14,7 +14,7 @@ export class FacilityService implements IFacilityService {
       this.facilityRepository = facilityRepository;
    }
 
-   async getFacilities(): Promise<GetFacilityResponse[]> {
+   async getFacilities(): Promise<FacilityResponse[]> {
       try {
          const facilities = await this.facilityRepository.getFacilities();
          if (facilities.length === 0) {
@@ -26,7 +26,7 @@ export class FacilityService implements IFacilityService {
       }    
    }
 
-   async getFacilityById(id: number): Promise<GetFacilityResponse> {
+   async getFacilityById(id: number): Promise<FacilityResponse> {
       try {
          const facility = await this.facilityRepository.getFacilityById(id);
          if (!facility) {
@@ -38,7 +38,7 @@ export class FacilityService implements IFacilityService {
       } 
    }
 
-   async createFacility(data: CreateFacilityRequest): Promise<GetFacilityResponse> {
+   async createFacility(data: CreateFacilityRequest): Promise<FacilityResponse> {
       try {
          return this.facilityRepository.createFacility(data);
       } catch (error) {
@@ -46,7 +46,7 @@ export class FacilityService implements IFacilityService {
       } 
    }
 
-   async updateFacility(id: number, data: UpdateFacilityRequest): Promise<GetFacilityResponse> {
+   async updateFacility(id: number, data: UpdateFacilityRequest): Promise<FacilityResponse> {
       try {
          return this.facilityRepository.updateFacility(id, data);
       } catch (error) {

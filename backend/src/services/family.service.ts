@@ -1,4 +1,8 @@
-import { CreateFamilyRequest, GetFamilyResponse, GetFamilyWithMembers, UpdateFamilyRequest } from "../dto/family.dto";
+import { 
+   CreateFamilyRequest, 
+   FamilyResponse, 
+   FamilyWithMembersResponse, 
+   UpdateFamilyRequest } from "../dto/family.dto";
 import { FamilyMessage } from "../helpers/message.constants";
 import { IFamilyRepository } from "../interfaces/repositories/IFamilyRepository";
 import { IFamilyService } from "../interfaces/services/IFamilyService";
@@ -13,7 +17,7 @@ export class FamilyService implements IFamilyService {
       this.familyRepository = familyRepository
    }
    
-   async getFamilies(): Promise<GetFamilyResponse[]> {
+   async getFamilies(): Promise<FamilyResponse[]> {
       try {
          return this.familyRepository.getFamilies();
       } catch (error) {
@@ -21,7 +25,7 @@ export class FamilyService implements IFamilyService {
       }
    }
 
-   async getFamilyWithMembers(id: number): Promise<GetFamilyWithMembers> {
+   async getFamilyWithMembers(id: number): Promise<FamilyWithMembersResponse> {
       try {
          const families = await this.familyRepository.getFamilyWithMembers(id);
          if (!families) {
@@ -33,7 +37,7 @@ export class FamilyService implements IFamilyService {
       }    
    }
 
-   async createFamily(family: CreateFamilyRequest): Promise<GetFamilyResponse> {
+   async createFamily(family: CreateFamilyRequest): Promise<FamilyResponse> {
       try {
          return this.familyRepository.createFamily(family);
       } catch (error) {
@@ -41,10 +45,9 @@ export class FamilyService implements IFamilyService {
       }     
    }
 
-   async updateFamily(id: number, family: UpdateFamilyRequest): Promise<GetFamilyResponse> {
+   async updateFamily(id: number, family: UpdateFamilyRequest): Promise<FamilyResponse> {
       try {
-         const data: UpdateFamilyRequest = { ...family, id };
-         return this.familyRepository.updateFamily(data);
+         return this.familyRepository.updateFamily(id, family);
       } catch (error) {
          throw error;
       }    

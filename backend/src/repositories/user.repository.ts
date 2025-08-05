@@ -1,5 +1,9 @@
 import { IUserRepository } from "../interfaces/repositories/IUserRepository";
-import { User, GetUserResponse, CreateUserRequest, UpdateUserRequest } from "../dto/user.dto";
+import { 
+   User, 
+   UserResponse, 
+   CreateUserRequest, 
+   UpdateUserRequest } from "../dto/user.dto";
 import { PrismaClient } from '../generated/prisma';
 import { AppError } from "../utils/errors";
 
@@ -26,7 +30,7 @@ export class UserRepository implements IUserRepository {
       this.prisma = prisma;
    }
 
-   async getUsers(): Promise<GetUserResponse[]> {
+   async getUsers(): Promise<UserResponse[]> {
       try {
          return this.prisma.users.findMany({
             select: userSelectFields
@@ -36,7 +40,7 @@ export class UserRepository implements IUserRepository {
       }
    }
 
-   async getUserById(id: number): Promise<GetUserResponse | null> {
+   async getUserById(id: number): Promise<UserResponse | null> {
       try {
          return this.prisma.users.findUnique({
             where: { id: id },
@@ -57,21 +61,23 @@ export class UserRepository implements IUserRepository {
       }
    }
    
-   async createUser(userData: CreateUserRequest): Promise<User> {
+   async createUser(data: CreateUserRequest): Promise<UserResponse> {
       try {
          return this.prisma.users.create({
-            data: userData
+            data,
+            select: userSelectFields
          });
       } catch (error: any) {
          throw new AppError(error.message);
       }
    }
    
-   async updateUser(id: number, userData: UpdateUserRequest): Promise<User> {
+   async updateUser(id: number, data: UpdateUserRequest): Promise<UserResponse> {
       try {
          return this.prisma.users.update({
             where: { id: id },
-            data: userData
+            data,
+            select: userSelectFields
          });
       } catch (error: any) {
          throw new AppError(error.message);

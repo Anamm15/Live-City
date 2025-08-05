@@ -1,5 +1,10 @@
-import { CreateReportRequest, GetReportResponse, UpdateReportRequest, UpdateResponseReportRequest } from "../dto/report.dto";
+import { 
+   CreateReportRequest, 
+   ReportResponse, 
+   UpdateReportRequest, 
+   UpdateResponseReportRequest } from "../dto/report.dto";
 import { PrismaClient } from "../generated/prisma";
+import { ReportStatus, ReportStatusType } from "../helpers/entity.constants";
 import { IReportRepository } from "../interfaces/repositories/IReportRepository";
 import { AppError } from "../utils/errors";
 
@@ -29,10 +34,18 @@ export class ReportRepository implements IReportRepository {
    }
 
 
-   async getReports(): Promise<GetReportResponse[]> {
+   async getReports(filter: string, offset: number, limit: number): Promise<ReportResponse[]> {
       try {
          const reports = await this.prisma.reports.findMany({
-            select: reportSelectedField
+            where: {
+               ...(filter && ReportStatus.includes(filter as ReportStatusType)
+                  ? { status: filter as ReportStatusType }
+                  : {}),
+            },
+            select: reportSelectedField,
+            skip: offset,
+            take: limit,
+            orderBy: { id: "desc" }
          });
          return reports;
       } catch (error: any) {
@@ -40,7 +53,7 @@ export class ReportRepository implements IReportRepository {
       }
    }
 
-   async getReportById(id: number): Promise<GetReportResponse | null> {
+   async getReportById(id: number): Promise<ReportResponse | null> {
       try {
          const report = await this.prisma.reports.findUnique({
             where: { id },
@@ -52,7 +65,7 @@ export class ReportRepository implements IReportRepository {
       }
    }
 
-   async getReportsByUserId(userId: number): Promise<GetReportResponse[]> {
+   async getReportsByUserId(userId: number): Promise<ReportResponse[]> {
       try {   
          const reports = await this.prisma.reports.findMany({
             where: { userId },
@@ -64,10 +77,11 @@ export class ReportRepository implements IReportRepository {
       }
    }
 
-   async createReport(report: CreateReportRequest): Promise<GetReportResponse> {
+   async createReport(data: CreateReportRequest): Promise<ReportResponse> {
        try {
          const newReport = await this.prisma.reports.create({
-            data: report
+            data,
+            select: reportSelectedField
          });
          return newReport;
       } catch (error: any) {
@@ -75,11 +89,12 @@ export class ReportRepository implements IReportRepository {
       }
    }
 
-   async updateReport(id: number, report: UpdateReportRequest): Promise<GetReportResponse> {
+   async updateReport(id: number, data: UpdateReportRequest): Promise<ReportResponse> {
       try {
          const updatedReport = await this.prisma.reports.update({
             where: { id: id },
-            data: report
+            data,
+            select: reportSelectedField
          });
          return updatedReport;
       } catch (error: any) {
@@ -87,11 +102,12 @@ export class ReportRepository implements IReportRepository {
       }
    }
 
-   async updateResponseReport(id: number, report: UpdateResponseReportRequest): Promise<GetReportResponse> {
+   async updateResponseReport(id: number, data: UpdateResponseReportRequest): Promise<ReportResponse> {
       try {
          const updatedReport = await this.prisma.reports.update({
             where: { id: id },
-            data: report
+            data,
+            select: reportSelectedField
          })
          return updatedReport;
       } catch (error: any) {
@@ -103,7 +119,7 @@ export class ReportRepository implements IReportRepository {
       try {
          await this.prisma.reports.delete({
             where: { id }
-         })
+         });
       } catch (error: any) {
          throw new AppError(error.message);
       }

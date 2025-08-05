@@ -1,0 +1,51 @@
+@baseUrl = http://localhost:3000/api/v1
+
+### Login User
+POST {{ baseUrl }}/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "anam1234"
+}
+
+### Get Submissions
+GET {{ baseUrl }}/submissions?filter=
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTQzNzI1OTAsImV4cCI6MTc1NDM3NjE5MH0.41Ou4E5FRYC035ZAx2jmp-fpaui7QXn6kZjAcNqq9HU
+
+### Create Submission
+POST {{ baseUrl }}/submissions
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTQzNzI1OTAsImV4cCI6MTc1NDM3NjE5MH0.41Ou4E5FRYC035ZAx2jmp-fpaui7QXn6kZjAcNqq9HU
+Content-Type: application/json
+
+{
+  "title": "Submission Title 4",
+  "date": "1990-01-01T00:00:00.000Z",
+  "category": "DOMICILE_CERTIFICATE",
+  "status": "PENDING",
+  "description": "This is a test submission.",
+  "userId": 6
+}
+
+### Update Submission
+PATCH {{ baseUrl }}/submissions/3
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTQzNzI1OTAsImV4cCI6MTc1NDM3NjE5MH0.41Ou4E5FRYC035ZAx2jmp-fpaui7QXn6kZjAcNqq9HU
+Content-Type: application/json
+
+{
+  "title": "Updated Submission Title",
+  "description": "This is an updated test submission."
+}
+
+### Update status of Submission
+PATCH {{ baseUrl }}/submissions/5/status
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc1Mzg0NDYwNywiZXhwIjoxNzUzODQ4MjA3fQ.uU6-oHtm37VlVPTOXwwtwtrajqxy_0sIesCeIwSz9Z0
+Content-Type: application/json
+
+{
+  "status": "COMPLETED"
+}
+
+### Delete Submission
+DELETE {{ baseUrl }}/submissions/2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc1Mzg0NDYwNywiZXhwIjoxNzUzODQ4MjA3fQ.uU6-oHtm37VlVPTOXwwtwtrajqxy_0sIesCeIwSz9Z0

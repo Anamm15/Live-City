@@ -1,4 +1,4 @@
-export type GetFacilityResponse = {
+export type FacilityResponse = {
    id: number,
    name: string,
    description: string | null,

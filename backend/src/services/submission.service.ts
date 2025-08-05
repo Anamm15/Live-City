@@ -1,5 +1,9 @@
-import { CreateSubmissionRequest, GetSubmissionResponse, UpdateSubmissionRequest } from "../dto/submission.dto";
+import { 
+   CreateSubmissionRequest, 
+   SubmissionResponse, 
+   UpdateSubmissionRequest } from "../dto/submission.dto";
 import { SubmissionStatus } from "../generated/prisma";
+import { LIMIT_SUBMISSION_PAGE } from "../helpers/app.constants";
 import { SubmissionMessage } from "../helpers/message.constants";
 import { ISubmissionRepository } from "../interfaces/repositories/ISubmissionRepository";
 import { ISubmissionService } from "../interfaces/services/ISubmissionSerivce";
@@ -13,9 +17,11 @@ export class SubmissionService implements ISubmissionService {
       this.submissionRepository = submissionRepository;
    }
 
-   async getSubmissions(): Promise<GetSubmissionResponse[]> {
+   async getSubmissions(page: number, filter: string): Promise<SubmissionResponse[]> {
       try {
-         const submissions = await this.submissionRepository.getSubmissions();
+         if (page < 1) page = 1;
+         const offset = (page - 1) * LIMIT_SUBMISSION_PAGE;
+         const submissions = await this.submissionRepository.getSubmissions(filter, offset, LIMIT_SUBMISSION_PAGE);
          if (submissions.length === 0) {
             throw new NotFoundError(SubmissionMessage.SUBMISSION_NOT_FOUND);
          }
@@ -25,7 +31,7 @@ export class SubmissionService implements ISubmissionService {
       }
    }
 
-   async getSubmissionById(id: number): Promise<GetSubmissionResponse> {
+   async getSubmissionById(id: number): Promise<SubmissionResponse> {
       try {
          const submission = await this.submissionRepository.getSubmissionById(id);
          if (!submission) {
@@ -37,7 +43,7 @@ export class SubmissionService implements ISubmissionService {
       }
    }
 
-   async getSubmissionsByUserId(userId: number): Promise<GetSubmissionResponse[]> {
+   async getSubmissionsByUserId(userId: number): Promise<SubmissionResponse[]> {
       try {
          const submissions = await this.submissionRepository.getSubmissionsByUserId(userId);
          if (!submissions) {
@@ -49,7 +55,7 @@ export class SubmissionService implements ISubmissionService {
       }
    }
 
-   async createSubmission(submission: CreateSubmissionRequest): Promise<GetSubmissionResponse> {
+   async createSubmission(submission: CreateSubmissionRequest): Promise<SubmissionResponse> {
       try {
          return this.submissionRepository.createSubmission(submission);
       } catch (error) {
@@ -57,7 +63,7 @@ export class SubmissionService implements ISubmissionService {
       }
    }
 
-   async updateSubmission(id: number, submission: UpdateSubmissionRequest): Promise<GetSubmissionResponse> {
+   async updateSubmission(id: number, submission: UpdateSubmissionRequest): Promise<SubmissionResponse> {
       try {
          return this.submissionRepository.updateSubmission(id, submission);
       } catch (error) {
@@ -65,7 +71,7 @@ export class SubmissionService implements ISubmissionService {
       }
    }
 
-   async updateSubmissionStatus(id: number, status: SubmissionStatus): Promise<GetSubmissionResponse> {
+   async updateSubmissionStatus(id: number, status: SubmissionStatus): Promise<SubmissionResponse> {
       try {
          return this.submissionRepository.updateSubmissionStatus(id, status);
       } catch (error) {

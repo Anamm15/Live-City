@@ -17,7 +17,8 @@ export class NewsController implements INewsController {
 
    async getNews(req: Request, res: Response, next: NextFunction): Promise<void> {
       try {
-         const results = await this.newsService.getNews();
+      let page: number = parseInt(req.query.page as string, 10) || 1;
+         const results = await this.newsService.getNews(page);
          res.status(StatusCode.OK).send(buildResponseSuccess(results, NewsMessage.NEWS_RETRIEVED));
       } catch (error: any) {
          if (error instanceof NotFoundError) {
@@ -93,10 +94,15 @@ export class NewsController implements INewsController {
    async getNewsComments(req: Request, res: Response, next: NextFunction): Promise<void> {
       try {
          const newsId = parseInt(req.params.id, 10);
+         let page: number = parseInt(req.query.page as string, 10);
          if (isNaN(newsId)) {
             throw new BadRequestError(CommonMessage.INVALID_PARAMS);
          }
-         const results = await this.newsService.getNewsComments(newsId);
+         if (isNaN(page) || page < 1) {
+            page = 1;
+         }
+
+         const results = await this.newsService.getNewsComments(newsId, page);
          res.status(StatusCode.OK).send(buildResponseSuccess(results, NewsMessage.NEWS_COMMENT_RETRIEVED));
       } catch (error: any) {
          if (error instanceof NotFoundError) {

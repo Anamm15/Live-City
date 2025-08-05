@@ -1,4 +1,4 @@
-export type GetResponseVillage = {
+export type VillageResponse = {
    id: number;
    name: string;
    postalCode: string;

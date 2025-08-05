@@ -1,6 +1,6 @@
 import { ReportStatus, ReportCategory } from "../generated/prisma";
 
-export type GetReportResponse = {
+export type ReportResponse = {
    id: number;
    title: string;
    description: string;

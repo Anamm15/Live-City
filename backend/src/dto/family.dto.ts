@@ -1,6 +1,6 @@
 import { EconomicStatus } from "../generated/prisma";
 
-export type GetFamilyResponse = {
+export type FamilyResponse = {
    id: number;
    familyNumber: string;
    headFamily: string;
@@ -9,7 +9,7 @@ export type GetFamilyResponse = {
    createdAt: Date;
 }
 
-export type GetFamilyWithMembers = GetFamilyResponse & {
+export type FamilyWithMembersResponse = FamilyResponse & {
    users: {
       id: number;
       name: string;
@@ -26,7 +26,6 @@ export type CreateFamilyRequest = {
 }
 
 export type UpdateFamilyRequest = {
-   id?: number;
    familyNumber?: string;
    headFamily?: string;
    economicStatus?: EconomicStatus;

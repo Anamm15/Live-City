@@ -1,5 +1,9 @@
-import { CreateSubmissionRequest, GetSubmissionResponse, UpdateSubmissionRequest } from "../dto/submission.dto";
-import { PrismaClient, SubmissionStatus } from "../generated/prisma";
+import { 
+   CreateSubmissionRequest, 
+   SubmissionResponse, 
+   UpdateSubmissionRequest } from "../dto/submission.dto";
+import { PrismaClient } from "../generated/prisma";
+import { SubmissionStatus, SubmissionStatusType } from "../helpers/entity.constants";
 import { ISubmissionRepository } from "../interfaces/repositories/ISubmissionRepository";
 import { AppError } from "../utils/errors";
 
@@ -27,8 +31,27 @@ export class SubmissionRepository implements ISubmissionRepository {
    constructor(prisma: PrismaClient) {
       this.prisma = prisma;
    }
+
+   async getSubmissions(filter: string, offset: number, limit: number): Promise<SubmissionResponse[]> {
+      try {
+      const submissions = await this.prisma.submissions.findMany({
+         where: {
+            ...(filter && SubmissionStatus.includes(filter as SubmissionStatusType)
+               ? { status: filter as SubmissionStatusType }
+               : {}),
+         },
+         select: submissionSelectFields,
+         skip: offset,
+         take: limit,
+         orderBy: { id: "desc" }
+      });
+      return submissions;
+      } catch (error: any) {
+         throw new AppError(error.message);
+      }
+   }
    
-   async getSubmissionById(id: number): Promise<GetSubmissionResponse | null> {
+   async getSubmissionById(id: number): Promise<SubmissionResponse | null> {
       try {
          const submission = await this.prisma.submissions.findUnique({
             where: { id },
@@ -40,18 +63,7 @@ export class SubmissionRepository implements ISubmissionRepository {
       }
    }
 
-   async getSubmissions(): Promise<GetSubmissionResponse[]> {
-      try {
-      const submissions = await this.prisma.submissions.findMany({
-         select: submissionSelectFields
-      });
-      return submissions;
-      } catch (error: any) {
-         throw new AppError(error.message);
-      }
-   }
-
-   async getSubmissionsByUserId(userId: number): Promise<GetSubmissionResponse[] | null> {
+   async getSubmissionsByUserId(userId: number): Promise<SubmissionResponse[] | null> {
       try {
       const submissions = await this.prisma.submissions.findMany({
             where: { userId: userId },
@@ -63,10 +75,11 @@ export class SubmissionRepository implements ISubmissionRepository {
       }
    }
 
-   async createSubmission(submission: CreateSubmissionRequest): Promise<GetSubmissionResponse> {
+   async createSubmission(data: CreateSubmissionRequest): Promise<SubmissionResponse> {
       try {
          const newSubmission = await this.prisma.submissions.create({
-            data: submission,
+            data,
+            select: submissionSelectFields,
          });
          return newSubmission;
       } catch (error: any) {
@@ -74,11 +87,12 @@ export class SubmissionRepository implements ISubmissionRepository {
       }
    }
 
-   async updateSubmission(id: number, submission: UpdateSubmissionRequest): Promise<GetSubmissionResponse> {
+   async updateSubmission(id: number, data: UpdateSubmissionRequest): Promise<SubmissionResponse> {
       try {
          const updatedSubmission = await this.prisma.submissions.update({
             where: { id },
-            data: submission,
+            data,
+            select: submissionSelectFields,
          });
          return updatedSubmission;
       } catch (error: any) {
@@ -86,7 +100,7 @@ export class SubmissionRepository implements ISubmissionRepository {
       }
    }
 
-   async updateSubmissionStatus(id: number, status: SubmissionStatus): Promise<GetSubmissionResponse> {
+   async updateSubmissionStatus(id: number, status: SubmissionStatusType): Promise<SubmissionResponse> {
       try {
          const updatedSubmission = await this.prisma.submissions.update({
             where: { id },

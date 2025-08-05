@@ -6,6 +6,7 @@ import { CreateSubmissionRequest, UpdateSubmissionRequest, UpdateSubmissionStatu
 import { CommonMessage, SubmissionMessage } from "../helpers/message.constants";
 import { StatusCode } from "../helpers/status_code.constant";
 import { BadRequestError, NotFoundError } from "../utils/errors";
+import { SubmissionStatus, SubmissionStatusType } from "../helpers/entity.constants";
 
 
 export class SubmissionController implements ISubmissionController {
@@ -17,12 +18,21 @@ export class SubmissionController implements ISubmissionController {
 
    async getSubmissions(req: Request, res: Response, next: NextFunction): Promise<void> {
       try {
-         const results = await this.submissionService.getSubmissions();
+         let page: number = parseInt(req.query.page as string, 10) || 1;
+         let filter: string = req.query.filter as string || '';
+         if (filter && !SubmissionStatus.includes(filter as SubmissionStatusType)) {
+            throw new BadRequestError(CommonMessage.INVALID_PARAMS);
+         }
+
+         const results = await this.submissionService.getSubmissions(page, filter);
          res.status(StatusCode.OK).send(buildResponseSuccess(results, SubmissionMessage.SUBMISSION_RETRIEVED));
       } catch (error: any) {
          if (error instanceof NotFoundError) {
             res.status(StatusCode.NOT_FOUND).send(buildResponseError(error.message, SubmissionMessage.SUBMISSION_NOT_FOUND));
-         } else {
+         } else if (error instanceof BadRequestError) {
+            res.status(StatusCode.BAD_REQUEST).send(buildResponseError(error.message, CommonMessage.INVALID_PARAMS));
+         } 
+         else {
             res.status(StatusCode.INTERNAL_SERVER_ERROR).send(buildResponseError(error.message, CommonMessage.SERVER_ERROR));
          }
       }

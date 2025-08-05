@@ -1,4 +1,7 @@
-import { CreateFacilityRequest, GetFacilityResponse, UpdateFacilityRequest } from "../dto/facility.dto";
+import { 
+   CreateFacilityRequest, 
+   FacilityResponse, 
+   UpdateFacilityRequest } from "../dto/facility.dto";
 import { PrismaClient } from "../generated/prisma";
 import { IFacilityRepository } from "../interfaces/repositories/IFacilityRepository";
 import { AppError } from "../utils/errors";
@@ -19,10 +22,11 @@ export class FacilityRepository implements IFacilityRepository {
       this.prisma = prisma;
    }
 
-   async getFacilities(): Promise<GetFacilityResponse[]> {
+   async getFacilities(): Promise<FacilityResponse[]> {
       try {
          const facilities = await this.prisma.facilities.findMany({
-            select: selectedFacilityFields
+            select: selectedFacilityFields,
+            orderBy: { name: "asc" }
          });
          return facilities;
       } catch (error: any) {
@@ -30,7 +34,7 @@ export class FacilityRepository implements IFacilityRepository {
       }
    }
 
-   async getFacilityById(id: number): Promise<GetFacilityResponse | null> {
+   async getFacilityById(id: number): Promise<FacilityResponse | null> {
       try {
          const facility = await this.prisma.facilities.findUnique({
             where: { id },
@@ -42,7 +46,7 @@ export class FacilityRepository implements IFacilityRepository {
       }
    }
 
-   async createFacility(data: CreateFacilityRequest): Promise<GetFacilityResponse> {
+   async createFacility(data: CreateFacilityRequest): Promise<FacilityResponse> {
       try {
          const newFacility = await this.prisma.facilities.create({
             data,
@@ -54,7 +58,7 @@ export class FacilityRepository implements IFacilityRepository {
       }
    }
 
-   async updateFacility(id: number, data: UpdateFacilityRequest): Promise<GetFacilityResponse> {
+   async updateFacility(id: number, data: UpdateFacilityRequest): Promise<FacilityResponse> {
       try {
          const updatedFacility = await this.prisma.facilities.update({
             where: { id: id},

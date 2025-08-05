@@ -36,3 +36,18 @@ export const FileableType = [
    'REPORT',
    'USER',
 ] as const;
+
+export type EconomicStatusType = typeof EconomicStatus[number];
+export type GenderType = typeof Gender[number];
+export type ReligionType = typeof Religion[number];
+export type MaritalStatusType = typeof MaritalStatus[number];
+export type RoleType = typeof Role[number];
+export type EducationType = typeof Education[number];
+export type OccupationType = typeof Occupation[number];
+export type ReportCategoryType = typeof ReportCategory[number];
+export type ReportStatusType = typeof ReportStatus[number];
+export type SubmissionCategoryType = typeof SubmissionCategory[number];
+export type SubmissionStatusType = typeof SubmissionStatus[number];
+export type PollsTypeType = typeof PollsType[number];
+export type PollsStatusType = typeof PollsStatus[number];
+export type FileableTypeType = typeof FileableType[number];

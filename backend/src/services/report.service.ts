@@ -1,4 +1,9 @@
-import { CreateReportRequest, GetReportResponse, UpdateReportRequest, UpdateResponseReportRequest } from "../dto/report.dto";
+import { 
+   CreateReportRequest, 
+   ReportResponse, 
+   UpdateReportRequest, 
+   UpdateResponseReportRequest } from "../dto/report.dto";
+import { LIMIT_REPORT_PAGE } from "../helpers/app.constants";
 import { ReportMessage } from "../helpers/message.constants";
 import { IReportRepository } from "../interfaces/repositories/IReportRepository";
 import { IReportService } from "../interfaces/services/IReportService";
@@ -12,9 +17,11 @@ export class ReportService implements IReportService {
       this.reportRepository = reportRepository;
    }
 
-   async getReports(): Promise<GetReportResponse[]> {
+   async getReports(page: number, filter: string): Promise<ReportResponse[]> {
       try {
-         const reports = await this.reportRepository.getReports();
+         if (page < 1) page = 1;
+         const offset = (page - 1) * LIMIT_REPORT_PAGE;
+         const reports = await this.reportRepository.getReports(filter, offset, LIMIT_REPORT_PAGE);
          if (reports.length === 0) {
             throw new NotFoundError(ReportMessage.REPORT_NOT_FOUND);
          }
@@ -24,7 +31,7 @@ export class ReportService implements IReportService {
       }
    }
 
-   async getReportById(id: number): Promise<GetReportResponse | null> {
+   async getReportById(id: number): Promise<ReportResponse | null> {
       try {
          const report = await this.reportRepository.getReportById(id);
          if (!report) {
@@ -36,7 +43,7 @@ export class ReportService implements IReportService {
       }
    }
 
-   async getReportsByUserId(userId: number): Promise<GetReportResponse[]> {
+   async getReportsByUserId(userId: number): Promise<ReportResponse[]> {
       try {
          const reports = await this.reportRepository.getReportsByUserId(userId);
          if (reports.length === 0) {
@@ -48,7 +55,7 @@ export class ReportService implements IReportService {
       }
    }
 
-   async createReport(report: CreateReportRequest): Promise<GetReportResponse> {
+   async createReport(report: CreateReportRequest): Promise<ReportResponse> {
       try {
          return this.reportRepository.createReport(report);
       } catch (error) {
@@ -56,7 +63,7 @@ export class ReportService implements IReportService {
       }
    }
 
-   async updateReport(id: number, report: UpdateReportRequest): Promise<GetReportResponse> {
+   async updateReport(id: number, report: UpdateReportRequest): Promise<ReportResponse> {
       try {
          return this.reportRepository.updateReport(id, report);
       } catch (error) {
@@ -64,7 +71,7 @@ export class ReportService implements IReportService {
       }
    }
 
-   async updateResponseReport(id: number, report: UpdateResponseReportRequest): Promise<GetReportResponse> {
+   async updateResponseReport(id: number, report: UpdateResponseReportRequest): Promise<ReportResponse> {
       try {
          return this.reportRepository.updateResponseReport(id, report);
       } catch (error) {

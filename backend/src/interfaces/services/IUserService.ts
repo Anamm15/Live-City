@@ -1,9 +1,12 @@
-import { CreateUserRequest, GetUserResponse, UpdateUserRequest } from "../../dto/user.dto";
+import { 
+   CreateUserRequest, 
+   UserResponse, 
+   UpdateUserRequest } from "../../dto/user.dto";
 
 export interface IUserService {
-   getUsers(): Promise<GetUserResponse[]>;
-   getUserById(userId: number): Promise<GetUserResponse>;
-   createUser(userData: CreateUserRequest): Promise<GetUserResponse>;
-   updateUser(id: number, userData: UpdateUserRequest): Promise<GetUserResponse>;
+   getUsers(): Promise<UserResponse[]>;
+   getUserById(userId: number): Promise<UserResponse>;
+   createUser(userData: CreateUserRequest): Promise<UserResponse>;
+   updateUser(id: number, userData: UpdateUserRequest): Promise<UserResponse>;
    deleteUser(userId: number): Promise<void>;
 }
