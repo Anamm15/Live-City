@@ -3,14 +3,17 @@ import {
    VillageResponse, 
    UpdateVillageRequest } from "../dto/villages.dto";
 import { VillageMessage } from "../helpers/message.constants";
+import { IFileRepository } from "../interfaces/repositories/IFileRepository";
 import { IVillageRepository } from "../interfaces/repositories/IVillageRepository";
 import { IVillageService } from "../interfaces/services/IVillageService";
 
 export class VillageService implements IVillageService {
    private villageRepository: IVillageRepository;
+   private fileRepository: IFileRepository;
 
-   constructor(villageRepository: IVillageRepository) {
+   constructor(villageRepository: IVillageRepository, fileRepository: IFileRepository) {
       this.villageRepository = villageRepository;
+      this.fileRepository = fileRepository;
    }
 
    async getVillages(): Promise<VillageResponse[]> {

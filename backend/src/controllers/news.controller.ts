@@ -50,10 +50,17 @@ export class NewsController implements INewsController {
 
    async createNews(req: Request<{}, {}, CreateNewsInput>, res: Response, next: NextFunction): Promise<void> {
       try {
-         const result = await this.newsService.createNews(req.body);
+         if (!req.file) {
+            throw new BadRequestError(CommonMessage.FILE_NOT_FOUND);
+         }
+         const result = await this.newsService.createNews(req.body, req.file);
          res.status(StatusCode.CREATED).send(buildResponseSuccess(result, NewsMessage.NEWS_CREATED));
       } catch (error: any) {
-         res.status(StatusCode.INTERNAL_SERVER_ERROR).send(buildResponseError(error.message, NewsMessage.NEWS_CREATE_FAILED));
+         if (error instanceof BadRequestError) {
+            res.status(StatusCode.BAD_REQUEST).send(buildResponseError(error.message, CommonMessage.FILE_NOT_FOUND));
+         } else {
+            res.status(StatusCode.INTERNAL_SERVER_ERROR).send(buildResponseError(error.message, NewsMessage.NEWS_CREATE_FAILED));
+         }
       }   
    }
 

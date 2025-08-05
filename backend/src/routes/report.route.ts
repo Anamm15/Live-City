@@ -1,26 +1,33 @@
 import { Router } from "express";
-import { ReportController } from "../controllers/report.controller";
-import { PrismaClient, Role } from "../generated/prisma";
-import { ReportRepository } from "../repositories/report.repository";
-import { ReportService } from "../services/report.service";
 import authMiddleware from "../middlewares/authentication";
 import authorizeRoles from "../middlewares/authorization";
 import { validate } from "../middlewares/validate";
 import { CreateReportSchema, UpdateReportSchema, UpdateResponseReportSchema } from "../validators/report.validator";
+import { IReportController } from "../interfaces/controllers/IReportController";
+import { Role } from "../generated/prisma";
 
-const prisma = new PrismaClient();
-const reportRepositry = new ReportRepository(prisma);
-const reportService = new ReportService(reportRepositry);
-const reportController = new ReportController(reportService);  
+export class ReportRoutes {
+   private router: Router;
+   private reportController: IReportController;
 
-const router = Router();
+   constructor(reportController: IReportController) {
+      this.router = Router();
+      this.reportController = reportController;
+      this.configureRoutes();
+   }
 
-router.get('/', authMiddleware, authorizeRoles(Role.ADMIN), reportController.getReports.bind(reportController));
-router.get('/:id', authMiddleware, reportController.getReportById.bind(reportController));
-router.get('/user/:userId', authMiddleware, reportController.getReportsByUserId.bind(reportController));
-router.post('/', authMiddleware, validate(CreateReportSchema), reportController.createReport.bind(reportController));
-router.patch('/:id', authMiddleware, validate(UpdateReportSchema), reportController.updateReport.bind(reportController));
-router.patch('/:id/response', authMiddleware, authorizeRoles(Role.ADMIN), validate(UpdateResponseReportSchema), reportController.updateResponseReport.bind(reportController));
-router.delete('/:id', authMiddleware, reportController.deleteReport.bind(reportController));
+   private configureRoutes() {
+      this.router.get('/', authMiddleware, authorizeRoles(Role.ADMIN), this.reportController.getReports.bind(this.reportController));
+      this.router.get('/:id', authMiddleware, this.reportController.getReportById.bind(this.reportController));
+      this.router.get('/user/:userId', authMiddleware, this.reportController.getReportsByUserId.bind(this.reportController));
+      this.router.post('/', authMiddleware, validate(CreateReportSchema), this.reportController.createReport.bind(this.reportController));
+      this.router.patch('/:id', authMiddleware, validate(UpdateReportSchema), this.reportController.updateReport.bind(this.reportController));
+      this.router.patch('/:id/response', authMiddleware, authorizeRoles(Role.ADMIN), validate(UpdateResponseReportSchema), this.reportController.updateResponseReport.bind(this.reportController));
+      this.router.delete('/:id', authMiddleware, this.reportController.deleteReport.bind(this.reportController));
+      return this.router;
+   }
 
-export default router;
+   public getRoutes() {
+      return this.router;
+   }
+}

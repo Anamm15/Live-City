@@ -4,14 +4,17 @@ import {
    UpdateFacilityRequest } from "../dto/facility.dto";
 import { FacilityMessage } from "../helpers/message.constants";
 import { IFacilityRepository } from "../interfaces/repositories/IFacilityRepository";
+import { IFileRepository } from "../interfaces/repositories/IFileRepository";
 import { IFacilityService } from "../interfaces/services/IFacilityService";
 import { NotFoundError } from "../utils/errors";
 
 export class FacilityService implements IFacilityService {
    private facilityRepository: IFacilityRepository;
+   private fileRepository: IFileRepository;
 
-   constructor(facilityRepository: IFacilityRepository) {
+   constructor(facilityRepository: IFacilityRepository, fileRepository: IFileRepository) {
       this.facilityRepository = facilityRepository;
+      this.fileRepository = fileRepository;
    }
 
    async getFacilities(): Promise<FacilityResponse[]> {

@@ -10,7 +10,7 @@ import {
 export interface INewsService {
    getNews(page: number): Promise<NewsResponse[]>;
    getNewsById(id: number): Promise<NewsResponse>;
-   createNews(news: CreateNewsRequest): Promise<NewsResponse>;
+   createNews(news: CreateNewsRequest, file: Express.Multer.File): Promise<NewsResponse>;
    updateNews(id: number, news: UpdateNewsRequest): Promise<NewsResponse>;
    deleteNews(newsId: number): Promise<void>;
    getNewsComments(newsId: number, page: number): Promise<NewsCommentResponse[]>;

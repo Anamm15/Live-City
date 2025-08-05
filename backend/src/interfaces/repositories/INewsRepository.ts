@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import { 
    CreateNewsCommentRequest, 
    CreateNewsReactionRequest, 
@@ -10,7 +11,7 @@ import {
 export interface INewsRepository {
    getNews(offset: number, limit: number): Promise<NewsResponse[]>;
    getNewsById(id: number): Promise<NewsResponse | null>;
-   createNews(data: CreateNewsRequest): Promise<NewsResponse>;
+   createNews(data: CreateNewsRequest, tx: Prisma.TransactionClient): Promise<NewsResponse>;
    updateNews(id: number, data: UpdateNewsRequest): Promise<NewsResponse>;
    deleteNews(id: number): Promise<void>;
    getNewsComments(newsId: number, offset: number, limit: number): Promise<NewsCommentResponse[]>;

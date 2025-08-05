@@ -1,0 +1,20 @@
+import prisma from "../database/prisma";
+import { FacilityRepository } from "./facility.repository";
+import { FamilyRepository } from "./family.repository";
+import { FileRepository } from "./file.repository";
+import { NewsRepository } from "./news.repository";
+import { PollRepository } from "./poll.repository";
+import { ReportRepository } from "./report.repository";
+import { SubmissionRepository } from "./submission.repository";
+import { UserRepository } from "./user.repository";
+import { VillageRepository } from "./village.repository";
+
+export const userRepository = new UserRepository(prisma);
+export const facilityRepository = new FacilityRepository(prisma);
+export const familyRepository = new FamilyRepository(prisma);
+export const newsRepository = new NewsRepository(prisma);
+export const pollRepository = new PollRepository(prisma);
+export const reportRepository = new ReportRepository(prisma);
+export const submissionRepository = new SubmissionRepository(prisma);
+export const villageRepository = new VillageRepository(prisma);
+export const fileRepository = new FileRepository(prisma);

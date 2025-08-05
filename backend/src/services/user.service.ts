@@ -3,6 +3,7 @@ import {
    UserResponse, 
    UpdateUserRequest } from "../dto/user.dto";
 import { UserMessage } from "../helpers/message.constants";
+import { IFileRepository } from "../interfaces/repositories/IFileRepository";
 import { IUserRepository } from "../interfaces/repositories/IUserRepository";
 import { IUserService } from "../interfaces/services/IUserService";
 import { hashPassword } from "../utils/encode";
@@ -10,9 +11,11 @@ import { NotFoundError } from "../utils/errors";
 
 export class UserService implements IUserService {
    private userRepository: IUserRepository;
+   private fileRepository: IFileRepository;
 
-   constructor(userRepository: IUserRepository) {
+   constructor(userRepository: IUserRepository, fileRepository: IFileRepository) {
       this.userRepository = userRepository;
+      this.fileRepository = fileRepository;
    }
 
    async getUsers(): Promise<UserResponse[]> {
