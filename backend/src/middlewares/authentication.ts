@@ -6,7 +6,7 @@ declare global {
   namespace Express {
     interface Request {
       user?: {
-        id: string;
+        id: number;
         role: string;
       };
     }
@@ -29,7 +29,7 @@ const authMiddleware = (
   try {
     const payload = JWTService.verifyToken(token);
     req.user = {
-      id: payload.id,
+      id: parseInt(payload.id, 10),
       role: payload.role,
     };
     next();

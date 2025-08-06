@@ -16,7 +16,7 @@ import { INewsService } from "../interfaces/services/INewsService";
 import { NotFoundError } from "../utils/errors";
 import { UploadFile } from "../dto/file.dto";
 import { FileableType, Prisma, PrismaClient } from "../generated/prisma";
-import { generateFilename } from "../utils/formatFilename";
+import { generateFilename } from "../utils/format";
 
 export class NewsService implements INewsService {
    private newsRepository: INewsRepository;
@@ -125,9 +125,9 @@ export class NewsService implements INewsService {
       }
    }
 
-   async deleteNewsComment(id: number): Promise<void> {
+   async deleteNewsComment(id: number, userId: number): Promise<void> {
       try {
-         return this.newsRepository.deleteNewsComment(id);
+         return this.newsRepository.deleteNewsComment(id, userId);
       } catch (error) {
          throw error;
       }   
@@ -141,8 +141,12 @@ export class NewsService implements INewsService {
       }       
    }
 
-   async createNewsReactions(data: CreateNewsReactionRequest): Promise<NewsReactionResponse> {
+   async createNewsReactions(newsId: number, userId: number): Promise<NewsReactionResponse> {
       try {
+         let data: CreateNewsReactionRequest = {
+            newsId,
+            userId
+         }
          return this.newsRepository.reactToNews(data);
       } catch (error) {
          throw error;

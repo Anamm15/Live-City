@@ -89,10 +89,13 @@ export class ReportRepository implements IReportRepository {
       }
    }
 
-   async updateReport(id: number, data: UpdateReportRequest): Promise<ReportResponse> {
+   async updateReport(id: number, userId: number, data: UpdateReportRequest): Promise<ReportResponse> {
       try {
          const updatedReport = await this.prisma.reports.update({
-            where: { id: id },
+            where: { 
+               id,
+               userId
+            },
             data,
             select: reportSelectedField
          });
@@ -115,10 +118,13 @@ export class ReportRepository implements IReportRepository {
       }
    }
 
-   async deleteReport(id: number): Promise<void> {
+   async deleteReport(id: number, userId: number): Promise<void> {
       try {
          await this.prisma.reports.delete({
-            where: { id }
+            where: { 
+               id,
+               userId
+            }
          });
       } catch (error: any) {
          throw new AppError(error.message);

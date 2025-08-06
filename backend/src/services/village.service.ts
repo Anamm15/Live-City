@@ -10,7 +10,7 @@ import { VillageMessage } from "../helpers/message.constants";
 import { IFileRepository } from "../interfaces/repositories/IFileRepository";
 import { IVillageRepository } from "../interfaces/repositories/IVillageRepository";
 import { IVillageService } from "../interfaces/services/IVillageService";
-import { generateFilename } from "../utils/formatFilename";
+import { generateFilename } from "../utils/format";
 import { CloudFolderName } from "../helpers/app.constants";
 
 export class VillageService implements IVillageService {

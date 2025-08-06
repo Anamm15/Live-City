@@ -148,10 +148,13 @@ export class NewsRepository implements INewsRepository {
       }
    }
 
-   async deleteNewsComment(id: number): Promise<void> {
+   async deleteNewsComment(id: number, userId: number): Promise<void> {
       try {
          await this.prisma.newsComments.delete({
-            where: { id }
+            where: { 
+               id,
+               userId
+            }
          })
       } catch (error: any) {
          throw new AppError(error.message);

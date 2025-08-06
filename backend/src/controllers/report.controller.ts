@@ -3,7 +3,7 @@ import { IReportController } from "../interfaces/controllers/IReportController";
 import { buildResponseSuccess, buildResponseError } from "../utils/response";
 import { CreateReportInput, UpdateReportInput, UpdateResponseReportInput } from "../validators/report.validator";
 import { IReportService } from "../interfaces/services/IReportService";
-import { CommonMessage, ReportMessage } from "../helpers/message.constants";
+import { CommonMessage, ReportMessage, UserMessage } from "../helpers/message.constants";
 import { StatusCode } from "../helpers/status_code.constant";
 import { BadRequestError, NotFoundError } from "../utils/errors";
 import { ReportStatus, ReportStatusType } from "../helpers/entity.constants";
@@ -59,11 +59,10 @@ export class ReportController implements IReportController {
 
    async getReportsByUserId(req: Request, res: Response, next: NextFunction): Promise<void> {
       try {
-         const userId = parseInt(req.params.id, 10);
-         if (isNaN(userId)) {
-            throw new BadRequestError(CommonMessage.INVALID_PARAMS);
+         if (!req.user) {
+            throw new BadRequestError(UserMessage.USER_NOT_FOUND);
          }
-         const results = await this.reportService.getReportsByUserId(userId);
+         const results = await this.reportService.getReportsByUserId(req.user.id);
          res.status(StatusCode.OK).send(buildResponseSuccess(results, ReportMessage.REPORT_RETRIEVED));
       } catch (error: any) {
          if (error instanceof NotFoundError) {
@@ -81,7 +80,10 @@ export class ReportController implements IReportController {
          if (!req.file) {
             throw new BadRequestError(CommonMessage.FILE_NOT_FOUND);
          }
-         const results = await this.reportService.createReport(req.body, req.file);
+         if (!req.user) {
+            throw new BadRequestError(UserMessage.USER_NOT_FOUND);
+         }
+         const results = await this.reportService.createReport(req.user.id, req.body, req.file);
          res.status(StatusCode.CREATED).send(buildResponseSuccess(results, ReportMessage.REPORT_CREATED));
       } catch (error: any) {
          if (error instanceof BadRequestError) {
@@ -98,7 +100,10 @@ export class ReportController implements IReportController {
          if (isNaN(reportId)) {
             throw new BadRequestError(CommonMessage.INVALID_PARAMS);
          }
-         const result = await this.reportService.updateReport(reportId, req.body);
+         if (!req.user) {
+            throw new BadRequestError(UserMessage.USER_NOT_FOUND);
+         }
+         const result = await this.reportService.updateReport(reportId, req.user.id,req.body);
          res.status(StatusCode.OK).send(buildResponseSuccess(result, ReportMessage.REPORT_UPDATED)); 
       } catch (error: any) {
          if (error instanceof BadRequestError) {
@@ -132,7 +137,10 @@ export class ReportController implements IReportController {
          if (isNaN(reportId)) {
             throw new BadRequestError(CommonMessage.INVALID_PARAMS);
          }
-         await this.reportService.deleteReport(reportId);
+         if (!req.user) {
+            throw new BadRequestError(UserMessage.USER_NOT_FOUND);
+         }
+         await this.reportService.deleteReport(reportId, req.user.id);
          res.status(StatusCode.NO_CONTENT).send();
       } catch (error: any) {
          if (error instanceof BadRequestError) {

@@ -20,7 +20,7 @@ export class ReportRoutes {
    private configureRoutes() {
       this.router.get('/', authMiddleware, authorizeRoles(Role.ADMIN), this.reportController.getReports.bind(this.reportController));
       this.router.get('/:id', authMiddleware, this.reportController.getReportById.bind(this.reportController));
-      this.router.get('/user/:userId', authMiddleware, this.reportController.getReportsByUserId.bind(this.reportController));
+      this.router.get('/user', authMiddleware, this.reportController.getReportsByUserId.bind(this.reportController));
       this.router.post('/', authMiddleware, upload.single('file'), validate(CreateReportSchema), this.reportController.createReport.bind(this.reportController));
       this.router.patch('/:id', authMiddleware, validate(UpdateReportSchema), this.reportController.updateReport.bind(this.reportController));
       this.router.patch('/:id/response', authMiddleware, authorizeRoles(Role.ADMIN), validate(UpdateResponseReportSchema), this.reportController.updateResponseReport.bind(this.reportController));

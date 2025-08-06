@@ -10,7 +10,7 @@ export interface IReportRepository {
    getReportById(id: number): Promise<ReportResponse | null>;
    getReportsByUserId(userId: number): Promise<ReportResponse[]>;
    createReport(data: CreateReportRequest, tx: Prisma.TransactionClient): Promise<ReportResponse>;
-   updateReport(id: number, data: UpdateReportRequest): Promise<ReportResponse>;
+   updateReport(id: number, userId: number, data: UpdateReportRequest): Promise<ReportResponse>;
    updateResponseReport(id: number, data: UpdateResponseReportRequest): Promise<ReportResponse>;
-   deleteReport(id: number): Promise<void>;
+   deleteReport(id: number, userId: number): Promise<void>;
 }

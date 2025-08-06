@@ -9,7 +9,7 @@ export interface ISubmissionRepository {
    getSubmissionById(id: number): Promise<SubmissionResponse | null>;
    getSubmissionsByUserId(userId: number): Promise<SubmissionResponse[] | null>;
    createSubmission(data: CreateSubmissionRequest, tx: Prisma.TransactionClient): Promise<SubmissionResponse>;
-   updateSubmission(id: number, data: UpdateSubmissionRequest): Promise<SubmissionResponse>;
+   updateSubmission(id: number, userId: number, data: UpdateSubmissionRequest): Promise<SubmissionResponse>;
    updateSubmissionStatus(id: number, status: SubmissionStatus): Promise<SubmissionResponse>;
-   deleteSubmission(id: number): Promise<void>;
+   deleteSubmission(id: number, userId: number): Promise<void>;
 }

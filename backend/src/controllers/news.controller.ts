@@ -128,13 +128,10 @@ export class NewsController implements INewsController {
          if (isNaN(newsId)) {
             throw new BadRequestError(CommonMessage.INVALID_PARAMS);
          }
-
-         let userId: number;
          if (!req.user) {
             throw new BadRequestError(UserMessage.USER_NOT_FOUND);
          }
-         userId = parseInt(req.user.id, 10);
-         const result = await this.newsService.createNewsComment(newsId, userId, req.body);
+         const result = await this.newsService.createNewsComment(newsId, req.user.id, req.body);
          res.status(StatusCode.CREATED).send(buildResponseSuccess(result, NewsMessage.NEWS_COMMENT_CREATED));
       } catch (error: any) {
          if (error instanceof NotFoundError) {
@@ -153,7 +150,10 @@ export class NewsController implements INewsController {
          if (isNaN(commentId)) {
             throw new BadRequestError(CommonMessage.INVALID_PARAMS);
          }
-         await this.newsService.deleteNewsComment(commentId);
+         if (!req.user) {
+            throw new BadRequestError(UserMessage.USER_NOT_FOUND);
+         }
+         await this.newsService.deleteNewsComment(commentId, req.user.id);
          res.status(StatusCode.OK).send();
       } catch (error: any) {
          if (error instanceof BadRequestError) {
@@ -189,14 +189,11 @@ export class NewsController implements INewsController {
          if (isNaN(newsId)) {
             throw new BadRequestError(CommonMessage.INVALID_PARAMS);
          }
-         
-         let userId: number;
          if (!req.user) {
             throw error("User not found");
          }
 
-         userId = parseInt(req.user.id, 10);
-         const result = await this.newsService.createNewsReactions({ newsId, userId });
+         const result = await this.newsService.createNewsReactions(newsId, req.user.id);
          res.status(StatusCode.CREATED).send(buildResponseSuccess(result, NewsMessage.NEWS_REACTION_CREATED));
       } catch (error: any) {
          if (error instanceof NotFoundError) {
