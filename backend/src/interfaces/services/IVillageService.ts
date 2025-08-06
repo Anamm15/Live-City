@@ -5,7 +5,7 @@ import {
 
 export interface IVillageService {
    getVillages(): Promise<VillageResponse[]>;
-   createVillage(data: CreateVillageRequest): Promise<VillageResponse>;
+   createVillage(data: CreateVillageRequest, file: Express.Multer.File): Promise<VillageResponse>;
    updateVillage(id: number, data: UpdateVillageRequest): Promise<VillageResponse>;
    deleteVillage(id: number): Promise<void>;
 }

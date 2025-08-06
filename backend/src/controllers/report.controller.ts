@@ -15,7 +15,7 @@ export class ReportController implements IReportController {
       this.reportService = reportService;
    }
 
-   async getReports(req: Request, res: Response, next: NextFunction): Promise<void> {
+   async getReports(req: Request, res: Response, next: NextFunction): Promise<void> {  
       try {
          let page: number = parseInt(req.query.page as string, 10) || 1;
          let filter: string = req.query.filter as string || '';
@@ -28,7 +28,7 @@ export class ReportController implements IReportController {
       } catch (error: any) {
          if (error instanceof NotFoundError) {
             res.status(StatusCode.NOT_FOUND).send(buildResponseError(error.message, ReportMessage.REPORT_NOT_FOUND));
-         } 
+         }
          else if (error instanceof BadRequestError) {
             res.status(StatusCode.BAD_REQUEST).send(buildResponseError(error.message, CommonMessage.INVALID_PARAMS));
          } 
@@ -78,10 +78,17 @@ export class ReportController implements IReportController {
 
    async createReport(req: Request<{}, {}, CreateReportInput>, res: Response, next: NextFunction): Promise<void> {
       try {
-         const results = await this.reportService.createReport(req.body);
+         if (!req.file) {
+            throw new BadRequestError(CommonMessage.FILE_NOT_FOUND);
+         }
+         const results = await this.reportService.createReport(req.body, req.file);
          res.status(StatusCode.CREATED).send(buildResponseSuccess(results, ReportMessage.REPORT_CREATED));
       } catch (error: any) {
-         res.status(StatusCode.INTERNAL_SERVER_ERROR).send(buildResponseError(error.message, ReportMessage.REPORT_CREATE_FAILED));
+         if (error instanceof BadRequestError) {
+            res.status(StatusCode.BAD_REQUEST).send(buildResponseError(error.message, CommonMessage.FILE_NOT_FOUND));
+         } else {
+            res.status(StatusCode.INTERNAL_SERVER_ERROR).send(buildResponseError(error.message, ReportMessage.REPORT_CREATE_FAILED));
+         }
       }   
    }
 

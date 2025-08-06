@@ -20,7 +20,7 @@ export class NewsRoutes {
    private configureRoutes() {
       this.router.get('/', authMiddleware, this.newsController.getNews.bind(this.newsController));
       this.router.get('/:id', authMiddleware, this.newsController.getNewsById.bind(this.newsController));
-      this.router.post('/', authMiddleware, authorizeRoles(Role.ADMIN), upload.single('image'), validate(CreateNewsSchema), this.newsController.createNews.bind(this.newsController));
+      this.router.post('/', authMiddleware, authorizeRoles(Role.ADMIN), upload.single('file'), validate(CreateNewsSchema), this.newsController.createNews.bind(this.newsController));
       this.router.patch('/:id', authMiddleware, authorizeRoles(Role.ADMIN), validate(UpdateNewsSchema), this.newsController.updateNews.bind(this.newsController));
       this.router.delete('/:id', authMiddleware, authorizeRoles(Role.ADMIN), this.newsController.deleteNews.bind(this.newsController));
       this.router.get('/:id/comments', authMiddleware, this.newsController.getNewsComments.bind(this.newsController));

@@ -10,8 +10,8 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (req: any, file: any, cb: any) => {
-  if (file.mimetype.startsWith('image/')) cb(null, true);
-  else cb(new Error('Only images are allowed'), false);
+  console.log(`Uploading file with mimetype: ${file.mimetype}`);
+  cb(null, true);
 };
 
 const upload = multer({ storage, fileFilter });

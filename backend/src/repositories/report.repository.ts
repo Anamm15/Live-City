@@ -3,7 +3,7 @@ import {
    ReportResponse, 
    UpdateReportRequest, 
    UpdateResponseReportRequest } from "../dto/report.dto";
-import { PrismaClient } from "../generated/prisma";
+import { Prisma, PrismaClient } from "../generated/prisma";
 import { ReportStatus, ReportStatusType } from "../helpers/entity.constants";
 import { IReportRepository } from "../interfaces/repositories/IReportRepository";
 import { AppError } from "../utils/errors";
@@ -77,9 +77,9 @@ export class ReportRepository implements IReportRepository {
       }
    }
 
-   async createReport(data: CreateReportRequest): Promise<ReportResponse> {
+   async createReport(data: CreateReportRequest, tx: Prisma.TransactionClient): Promise<ReportResponse> {
        try {
-         const newReport = await this.prisma.reports.create({
+         const newReport = await tx.reports.create({
             data,
             select: reportSelectedField
          });

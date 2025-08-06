@@ -2,6 +2,7 @@ import {
    CreateUserRequest, 
    UserResponse, 
    UpdateUserRequest } from "../dto/user.dto";
+import { PrismaClient } from "../generated/prisma";
 import { UserMessage } from "../helpers/message.constants";
 import { IFileRepository } from "../interfaces/repositories/IFileRepository";
 import { IUserRepository } from "../interfaces/repositories/IUserRepository";
@@ -12,10 +13,15 @@ import { NotFoundError } from "../utils/errors";
 export class UserService implements IUserService {
    private userRepository: IUserRepository;
    private fileRepository: IFileRepository;
+   private prisma: PrismaClient;
 
-   constructor(userRepository: IUserRepository, fileRepository: IFileRepository) {
+   constructor(
+      userRepository: IUserRepository, 
+      fileRepository: IFileRepository,
+      prisma: PrismaClient) {
       this.userRepository = userRepository;
       this.fileRepository = fileRepository;
+      this.prisma = prisma;
    }
 
    async getUsers(): Promise<UserResponse[]> {

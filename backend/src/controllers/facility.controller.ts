@@ -52,10 +52,18 @@ export class FacilityController implements IFacilityController {
 
    async createFacility(req: Request<{}, {}, CreateFacilityInput>, res: Response, next: NextFunction): Promise<void> {
       try {
-         const result = await this.facilityService.createFacility(req.body);
+         if (!req.file) {
+            throw new BadRequestError(CommonMessage.FILE_NOT_FOUND);
+         }
+         const result = await this.facilityService.createFacility(req.body, req.file);
          res.status(StatusCode.CREATED).send(buildResponseSuccess(result, FacilityMessage.FACILITY_CREATED));
       } catch (error: any) {
-         res.status(StatusCode.INTERNAL_SERVER_ERROR).send(buildResponseError(error.message, FacilityMessage.FACILITY_CREATE_FAILED));
+         if (error instanceof BadRequestError) {
+            res.status(StatusCode.BAD_REQUEST).send(buildResponseError(error.message, CommonMessage.FILE_NOT_FOUND));
+         }
+         else {
+            res.status(StatusCode.INTERNAL_SERVER_ERROR).send(buildResponseError(error.message, FacilityMessage.FACILITY_CREATE_FAILED));
+         }
       }   
    }
 

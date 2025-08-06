@@ -2,7 +2,7 @@ import {
    CreateFacilityRequest, 
    FacilityResponse, 
    UpdateFacilityRequest } from "../dto/facility.dto";
-import { PrismaClient } from "../generated/prisma";
+import { Prisma, PrismaClient } from "../generated/prisma";
 import { IFacilityRepository } from "../interfaces/repositories/IFacilityRepository";
 import { AppError } from "../utils/errors";
 
@@ -46,9 +46,9 @@ export class FacilityRepository implements IFacilityRepository {
       }
    }
 
-   async createFacility(data: CreateFacilityRequest): Promise<FacilityResponse> {
+   async createFacility(data: CreateFacilityRequest, tx: Prisma.TransactionClient): Promise<FacilityResponse> {
       try {
-         const newFacility = await this.prisma.facilities.create({
+         const newFacility = await tx.facilities.create({
             data,
             select: selectedFacilityFields
          });
