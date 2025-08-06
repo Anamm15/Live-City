@@ -3,6 +3,8 @@ import authMiddleware from '../middlewares/authentication';
 import { validate } from '../middlewares/validate';
 import { CreateUserSchema, UpdateUserSchema } from '../validators/user.validator';
 import { IUserController } from '../interfaces/controllers/IUserController';
+import authorizeRoles from '../middlewares/authorization';
+import { Role } from '../generated/prisma';
 
 export class UserRoutes {
    private router: Router;
@@ -19,7 +21,7 @@ export class UserRoutes {
       this.router.get('/:id', authMiddleware, this.userController.getUserById.bind(this.userController));
       this.router.post('/', authMiddleware, validate(CreateUserSchema), this.userController.createUser.bind(this.userController));
       this.router.patch('/:id', authMiddleware, validate(UpdateUserSchema), this.userController.updateUser.bind(this.userController));
-      this.router.delete('/:id', authMiddleware, this.userController.deleteUser.bind(this.userController));
+      this.router.delete('/:id', authMiddleware, authorizeRoles(Role.ADMIN), this.userController.deleteUser.bind(this.userController));
       return this.router;
    }
 
