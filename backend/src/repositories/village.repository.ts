@@ -2,7 +2,7 @@ import {
    CreateVillageRequest, 
    VillageResponse, 
    UpdateVillageRequest } from "../dto/villages.dto";
-import { PrismaClient } from "../generated/prisma";
+import { Prisma, PrismaClient } from "../generated/prisma";
 import { IVillageRepository } from "../interfaces/repositories/IVillageRepository";
 import { AppError } from "../utils/errors";
 
@@ -33,9 +33,9 @@ export class VillageRepository implements IVillageRepository {
       }
    }
 
-   async createVillage(data: CreateVillageRequest): Promise<VillageResponse> {
+   async createVillage(data: CreateVillageRequest, tx: Prisma.TransactionClient): Promise<VillageResponse> {
       try {
-         const newVillage = await this.prisma.villages.create({
+         const newVillage = await tx.villages.create({
             data,
             select: selectedVillageFields
          });

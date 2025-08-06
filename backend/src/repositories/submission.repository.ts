@@ -2,7 +2,7 @@ import {
    CreateSubmissionRequest, 
    SubmissionResponse, 
    UpdateSubmissionRequest } from "../dto/submission.dto";
-import { PrismaClient } from "../generated/prisma";
+import { Prisma, PrismaClient } from "../generated/prisma";
 import { SubmissionStatus, SubmissionStatusType } from "../helpers/entity.constants";
 import { ISubmissionRepository } from "../interfaces/repositories/ISubmissionRepository";
 import { AppError } from "../utils/errors";
@@ -75,9 +75,9 @@ export class SubmissionRepository implements ISubmissionRepository {
       }
    }
 
-   async createSubmission(data: CreateSubmissionRequest): Promise<SubmissionResponse> {
+   async createSubmission(data: CreateSubmissionRequest, tx: Prisma.TransactionClient): Promise<SubmissionResponse> {
       try {
-         const newSubmission = await this.prisma.submissions.create({
+         const newSubmission = await tx.submissions.create({
             data,
             select: submissionSelectFields,
          });

@@ -8,7 +8,7 @@ import {
    NewsCommentResponse, 
    NewsReactionResponse, 
    UpdateNewsRequest, } from "../dto/news.dto";
-import { LIMIT_NEWS_COMMENT_PAGE, LIMIT_NEWS_PAGE } from "../helpers/app.constants";
+import { CloudFolderName, LIMIT_NEWS_COMMENT_PAGE, LIMIT_NEWS_PAGE } from "../helpers/app.constants";
 import { NewsMessage } from "../helpers/message.constants";
 import { IFileRepository } from "../interfaces/repositories/IFileRepository";
 import { INewsRepository } from "../interfaces/repositories/INewsRepository";
@@ -21,10 +21,15 @@ import { generateFilename } from "../utils/formatFilename";
 export class NewsService implements INewsService {
    private newsRepository: INewsRepository;
    private fileRepository: IFileRepository;
+   private prisma: PrismaClient;
 
-   constructor(newsRepository: INewsRepository, fileRepository: IFileRepository) {
+   constructor(
+      newsRepository: INewsRepository, 
+      fileRepository: IFileRepository,
+      prisma: PrismaClient) {
       this.newsRepository = newsRepository;
       this.fileRepository = fileRepository;
+      this.prisma = prisma;
    }
 
    async getNews(page: number): Promise<NewsResponse[]> {
@@ -55,14 +60,13 @@ export class NewsService implements INewsService {
 
    async createNews(news: CreateNewsRequest, file: Express.Multer.File): Promise<NewsResponse> {
       let cloudinaryResult: any | null = null;
-      const prisma = new PrismaClient();
       
-      return await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
+      return await this.prisma.$transaction(async (tx: Prisma.TransactionClient) => {
          try {
             const newNews = await this.newsRepository.createNews(news, tx);
             const newFilename = generateFilename(FileableType.NEWS, newNews.id);
             cloudinaryResult = await cloudinary.uploader.upload(file.path, {
-               folder: FileableType.NEWS,
+               folder: CloudFolderName.NEWS,
                public_id: newFilename
             });
             

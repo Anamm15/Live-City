@@ -1,4 +1,3 @@
-import { Prisma } from "@prisma/client";
 import { 
    CreateNewsCommentRequest, 
    CreateNewsReactionRequest, 
@@ -7,6 +6,7 @@ import {
    NewsCommentResponse, 
    NewsReactionResponse, 
    UpdateNewsRequest } from "../../dto/news.dto";
+import { Prisma } from "../../generated/prisma";
 
 export interface INewsRepository {
    getNews(offset: number, limit: number): Promise<NewsResponse[]>;

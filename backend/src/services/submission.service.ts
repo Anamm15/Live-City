@@ -1,23 +1,32 @@
+import cloudinary from "../config/cloudinary";
+import { UploadFile } from "../dto/file.dto";
+import fs from "fs";
 import { 
    CreateSubmissionRequest, 
    SubmissionResponse, 
    UpdateSubmissionRequest } from "../dto/submission.dto";
-import { SubmissionStatus } from "../generated/prisma";
-import { LIMIT_SUBMISSION_PAGE } from "../helpers/app.constants";
+import { FileableType, Prisma, PrismaClient, SubmissionStatus } from "../generated/prisma";
+import { CloudFolderName, LIMIT_SUBMISSION_PAGE } from "../helpers/app.constants";
 import { SubmissionMessage } from "../helpers/message.constants";
 import { IFileRepository } from "../interfaces/repositories/IFileRepository";
 import { ISubmissionRepository } from "../interfaces/repositories/ISubmissionRepository";
 import { ISubmissionService } from "../interfaces/services/ISubmissionSerivce";
 import { NotFoundError } from "../utils/errors";
+import { generateFilename } from "../utils/formatFilename";
 
 
 export class SubmissionService implements ISubmissionService {
    private submissionRepository: ISubmissionRepository;
    private fileRepository: IFileRepository;
+   private prisma: PrismaClient;
 
-   constructor(submissionRepository: ISubmissionRepository, fileRepository: IFileRepository) {
+   constructor(
+      submissionRepository: ISubmissionRepository, 
+      fileRepository: IFileRepository,
+      prisma: PrismaClient) {
       this.submissionRepository = submissionRepository;
       this.fileRepository = fileRepository;
+      this.prisma = prisma;
    }
 
    async getSubmissions(page: number, filter: string): Promise<SubmissionResponse[]> {
@@ -58,12 +67,32 @@ export class SubmissionService implements ISubmissionService {
       }
    }
 
-   async createSubmission(submission: CreateSubmissionRequest): Promise<SubmissionResponse> {
-      try {
-         return this.submissionRepository.createSubmission(submission);
-      } catch (error) {
-         throw error;
-      }
+   async createSubmission(submission: CreateSubmissionRequest, file: Express.Multer.File): Promise<SubmissionResponse> {
+      let cloudinaryResult: any | null = null;
+      return await this.prisma.$transaction(async (tx: Prisma.TransactionClient) => {
+         try {
+            const newSubmission = await this.submissionRepository.createSubmission(submission, tx);
+            const newFilename = generateFilename(FileableType.SUBMISSION, newSubmission.id);
+            cloudinaryResult = await cloudinary.uploader.upload(file.path, {
+               folder: CloudFolderName.SUBMISSION,
+               public_id: newFilename
+            });
+            
+            fs.unlinkSync(file.path);
+            const fileData: UploadFile = {
+               urlFile: cloudinaryResult.secure_url,
+               fileableId: newSubmission.id,
+               fileableType: FileableType.SUBMISSION
+            };
+            await this.fileRepository.uploadFile(fileData, tx);
+            return newSubmission;
+         } catch (error) {
+            if (cloudinaryResult?.public_id) {
+               await cloudinary.uploader.destroy(cloudinaryResult.public_id);
+            }
+            throw error;
+         }
+      });
    }
 
    async updateSubmission(id: number, submission: UpdateSubmissionRequest): Promise<SubmissionResponse> {
