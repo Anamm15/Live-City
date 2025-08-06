@@ -87,10 +87,13 @@ export class SubmissionRepository implements ISubmissionRepository {
       }
    }
 
-   async updateSubmission(id: number, data: UpdateSubmissionRequest): Promise<SubmissionResponse> {
+   async updateSubmission(id: number, userId: number, data: UpdateSubmissionRequest): Promise<SubmissionResponse> {
       try {
          const updatedSubmission = await this.prisma.submissions.update({
-            where: { id },
+            where: { 
+               id,
+               userId
+            },
             data,
             select: submissionSelectFields,
          });
@@ -112,10 +115,13 @@ export class SubmissionRepository implements ISubmissionRepository {
       }
    }
 
-   async deleteSubmission(id: number): Promise<void> {
+   async deleteSubmission(id: number, userId: number): Promise<void> {
       try {
          await this.prisma.submissions.delete({
-            where: { id },
+            where: { 
+               id,
+               userId
+            },
          });
       } catch (error: any) {
          throw new AppError(error.message);

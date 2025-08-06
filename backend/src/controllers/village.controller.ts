@@ -30,7 +30,10 @@ export class VillageController implements IVillageController {
 
    async createVillage(req: Request<{}, {}, CreateVillageInput>, res: Response, next: NextFunction): Promise<void> {
       try {
-         const results = await this.villageService.createVillage(req.body);
+         if (!req.file) {
+            throw new BadRequestError(CommonMessage.FILE_NOT_FOUND);
+         }
+         const results = await this.villageService.createVillage(req.body, req.file);
          res.status(StatusCode.CREATED).send(buildResponseSuccess(results, VillageMessage.VILLAGE_CREATED));
       } catch (error: any) {
          res.status(StatusCode.BAD_REQUEST).send(buildResponseError(error.message, VillageMessage.VILLAGE_CREATE_FAILED));

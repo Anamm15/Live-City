@@ -5,7 +5,7 @@ POST {{ baseUrl }}/auth/login
 Content-Type: application/json
 
 {
-  "email": "test2@example.com",
+  "email": "test@example.com",
   "password": "anam1234"
 }
 
@@ -48,4 +48,4 @@ Content-Type: application/json
 
 ### delete report response
 DELETE {{baseUrl}}/reports/3
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTM4NzU3MzQsImV4cCI6MTc1Mzg3OTMzNH0.nLEUXv0V42K3CYCfgwuc6flS3waLC2mbo8nZH5umsS4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTQ0NDk1NjcsImV4cCI6MTc1NDQ1MzE2N30.8LPNEc3wkrSh03AfANa7IXEB5bVJI_74cUTAp611v2U

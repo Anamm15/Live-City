@@ -8,8 +8,8 @@ export interface ISubmissionService {
    getSubmissions(page: number, filter: string): Promise<SubmissionResponse[]>;
    getSubmissionById(id: number): Promise<SubmissionResponse>;
    getSubmissionsByUserId(userId: number): Promise<SubmissionResponse[]>;
-   createSubmission(submission: CreateSubmissionRequest, file: Express.Multer.File): Promise<SubmissionResponse>;
-   updateSubmission(id: number, submission: UpdateSubmissionRequest): Promise<SubmissionResponse>;
+   createSubmission(userId: number, submission: CreateSubmissionRequest, file: Express.Multer.File): Promise<SubmissionResponse>;
+   updateSubmission(id: number, userId: number, submission: UpdateSubmissionRequest): Promise<SubmissionResponse>;
    updateSubmissionStatus(id: number, status: SubmissionStatus): Promise<SubmissionResponse>;
-   deleteSubmission(id: number): Promise<void>;
+   deleteSubmission(id: number, userId: number): Promise<void>;
 }

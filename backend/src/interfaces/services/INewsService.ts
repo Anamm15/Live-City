@@ -15,7 +15,7 @@ export interface INewsService {
    deleteNews(newsId: number): Promise<void>;
    getNewsComments(newsId: number, page: number): Promise<NewsCommentResponse[]>;
    createNewsComment(newsId: number, userId: number, comment: CreateNewsCommentRequest): Promise<NewsCommentResponse>;
-   deleteNewsComment(id: number): Promise<void>;
+   deleteNewsComment(id: number, userId: number): Promise<void>;
    getNewsReactions(newsId: number): Promise<NewsReactionResponse[]>;
-   createNewsReactions(data: CreateNewsReactionRequest): Promise<NewsReactionResponse>;
+   createNewsReactions(newsId: number, userId: number): Promise<NewsReactionResponse>;
 }

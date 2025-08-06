@@ -3,7 +3,7 @@ import { ISubmissionController } from "../interfaces/controllers/ISubmissionCont
 import { ISubmissionService } from "../interfaces/services/ISubmissionSerivce";
 import { buildResponseSuccess, buildResponseError } from "../utils/response";
 import { CreateSubmissionRequest, UpdateSubmissionRequest, UpdateSubmissionStatusRequest } from "../validators/submission.validator";
-import { CommonMessage, SubmissionMessage } from "../helpers/message.constants";
+import { CommonMessage, SubmissionMessage, UserMessage } from "../helpers/message.constants";
 import { StatusCode } from "../helpers/status_code.constant";
 import { BadRequestError, NotFoundError } from "../utils/errors";
 import { SubmissionStatus, SubmissionStatusType } from "../helpers/entity.constants";
@@ -59,11 +59,10 @@ export class SubmissionController implements ISubmissionController {
 
    async getSubmissionsByUserId(req: Request, res: Response, next: NextFunction): Promise<void> {
       try {
-         const userId = parseInt(req.params.userId, 10);
-         if (isNaN(userId)) {
-            throw new BadRequestError(CommonMessage.INVALID_PARAMS);
+         if (!req.user) {
+            throw new BadRequestError(UserMessage.USER_NOT_FOUND);
          }
-         const results = await this.submissionService.getSubmissionsByUserId(userId);
+         const results = await this.submissionService.getSubmissionsByUserId(req.user.id);
          res.status(StatusCode.OK).send(buildResponseSuccess(results, SubmissionMessage.SUBMISSION_RETRIEVED));
       } catch (error: any) {
          if (error instanceof NotFoundError) {
@@ -81,7 +80,10 @@ export class SubmissionController implements ISubmissionController {
          if (!req.file) {
             throw new BadRequestError(CommonMessage.INVALID_PARAMS);
          }
-         const result = await this.submissionService.createSubmission(req.body, req.file);
+         if(!req.user) {
+            throw new BadRequestError(UserMessage.USER_NOT_FOUND);
+         }
+         const result = await this.submissionService.createSubmission(req.user.id, req.body, req.file);
          res.status(StatusCode.CREATED).send(buildResponseSuccess(result, SubmissionMessage.SUBMISSION_CREATED));
       } catch (error: any) {
          if (error instanceof BadRequestError) {
@@ -98,7 +100,10 @@ export class SubmissionController implements ISubmissionController {
          if (isNaN(submissionId)) {
             throw new BadRequestError(CommonMessage.INVALID_PARAMS);
          }
-         const result = await this.submissionService.updateSubmission(submissionId, req.body);
+         if(!req.user) {
+            throw new BadRequestError(UserMessage.USER_NOT_FOUND);
+         }
+         const result = await this.submissionService.updateSubmission(submissionId, req.user.id, req.body);
          res.status(StatusCode.OK).send(buildResponseSuccess(result, SubmissionMessage.SUBMISSION_UPDATED));
       } catch (error: any) {
          if (error instanceof BadRequestError) {
@@ -132,7 +137,10 @@ export class SubmissionController implements ISubmissionController {
          if (isNaN(submissionId)) {
             throw new BadRequestError(CommonMessage.INVALID_PARAMS);
          }
-         await this.submissionService.deleteSubmission(submissionId);
+         if(!req.user) {
+            throw new BadRequestError(UserMessage.USER_NOT_FOUND);
+         }
+         await this.submissionService.deleteSubmission(submissionId, req.user.id);
          res.status(204).send();
       } catch (error: any) {
          if (error instanceof BadRequestError) {

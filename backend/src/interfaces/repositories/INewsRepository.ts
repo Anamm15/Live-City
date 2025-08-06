@@ -16,7 +16,7 @@ export interface INewsRepository {
    deleteNews(id: number): Promise<void>;
    getNewsComments(newsId: number, offset: number, limit: number): Promise<NewsCommentResponse[]>;
    createNewsComment(data: CreateNewsCommentRequest): Promise<NewsCommentResponse>;
-   deleteNewsComment(id: number): Promise<void>;
+   deleteNewsComment(id: number, userId: number): Promise<void>;
    getNewsReactions(newsId: number): Promise<NewsReactionResponse[]>;
    reactToNews(data: CreateNewsReactionRequest): Promise<NewsReactionResponse>;
 }

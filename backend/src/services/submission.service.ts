@@ -12,7 +12,7 @@ import { IFileRepository } from "../interfaces/repositories/IFileRepository";
 import { ISubmissionRepository } from "../interfaces/repositories/ISubmissionRepository";
 import { ISubmissionService } from "../interfaces/services/ISubmissionSerivce";
 import { NotFoundError } from "../utils/errors";
-import { generateFilename } from "../utils/formatFilename";
+import { generateFilename } from "../utils/format";
 
 
 export class SubmissionService implements ISubmissionService {
@@ -67,11 +67,12 @@ export class SubmissionService implements ISubmissionService {
       }
    }
 
-   async createSubmission(submission: CreateSubmissionRequest, file: Express.Multer.File): Promise<SubmissionResponse> {
+   async createSubmission(userId: number, submission: CreateSubmissionRequest, file: Express.Multer.File): Promise<SubmissionResponse> {
       let cloudinaryResult: any | null = null;
+      let data: CreateSubmissionRequest = { ...submission, userId };
       return await this.prisma.$transaction(async (tx: Prisma.TransactionClient) => {
          try {
-            const newSubmission = await this.submissionRepository.createSubmission(submission, tx);
+            const newSubmission = await this.submissionRepository.createSubmission(data, tx);
             const newFilename = generateFilename(FileableType.SUBMISSION, newSubmission.id);
             cloudinaryResult = await cloudinary.uploader.upload(file.path, {
                folder: CloudFolderName.SUBMISSION,
@@ -95,9 +96,9 @@ export class SubmissionService implements ISubmissionService {
       });
    }
 
-   async updateSubmission(id: number, submission: UpdateSubmissionRequest): Promise<SubmissionResponse> {
+   async updateSubmission(id: number, userId: number, submission: UpdateSubmissionRequest): Promise<SubmissionResponse> {
       try {
-         return this.submissionRepository.updateSubmission(id, submission);
+         return this.submissionRepository.updateSubmission(id, userId, submission);
       } catch (error) {
          throw error;
       }
@@ -111,9 +112,9 @@ export class SubmissionService implements ISubmissionService {
       }
    }
 
-   async deleteSubmission(id: number): Promise<void> {
+   async deleteSubmission(id: number, userId: number): Promise<void> {
       try {
-         return this.submissionRepository.deleteSubmission(id);
+         return this.submissionRepository.deleteSubmission(id, userId);
       } catch (error) {
          throw error;
       }

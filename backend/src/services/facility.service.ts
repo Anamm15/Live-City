@@ -12,7 +12,7 @@ import { IFacilityService } from "../interfaces/services/IFacilityService";
 import { NotFoundError } from "../utils/errors";
 import cloudinary from "../config/cloudinary";
 import { UploadFile } from "../dto/file.dto";
-import { generateFilename } from "../utils/formatFilename";
+import { generateFilename } from "../utils/format";
 import { CloudFolderName } from "../helpers/app.constants";
 
 export class FacilityService implements IFacilityService {

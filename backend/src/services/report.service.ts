@@ -13,7 +13,7 @@ import { IFileRepository } from "../interfaces/repositories/IFileRepository";
 import { IReportRepository } from "../interfaces/repositories/IReportRepository";
 import { IReportService } from "../interfaces/services/IReportService";
 import { NotFoundError } from "../utils/errors";
-import { generateFilename } from "../utils/formatFilename";
+import { generateFilename } from "../utils/format";
 
 
 export class ReportService implements IReportService {
@@ -68,11 +68,12 @@ export class ReportService implements IReportService {
       }
    }
 
-   async createReport(report: CreateReportRequest, file: Express.Multer.File): Promise<ReportResponse> {
+   async createReport(userId: number, report: CreateReportRequest, file: Express.Multer.File): Promise<ReportResponse> {
       let cloudinaryResult: any | null = null;
+      let data: CreateReportRequest = { ...report, userId };
       return await this.prisma.$transaction(async (tx: Prisma.TransactionClient) => {
          try {
-            const newReport = await this.reportRepository.createReport(report, tx);
+            const newReport = await this.reportRepository.createReport(data, tx);
             const newFilename = generateFilename(FileableType.REPORT, newReport.id);
             cloudinaryResult = await cloudinary.uploader.upload(file.path, {
                folder: CloudFolderName.REPORT,
@@ -96,9 +97,9 @@ export class ReportService implements IReportService {
       });
    }
 
-   async updateReport(id: number, report: UpdateReportRequest): Promise<ReportResponse> {
+   async updateReport(id: number, userId: number, report: UpdateReportRequest): Promise<ReportResponse> {
       try {
-         return this.reportRepository.updateReport(id, report);
+         return this.reportRepository.updateReport(id, userId, report);
       } catch (error) {
          throw error;
       }
@@ -112,9 +113,9 @@ export class ReportService implements IReportService {
       }
    }
 
-   async deleteReport(id: number): Promise<void> {
+   async deleteReport(id: number, userId: number): Promise<void> {
       try {
-         return this.reportRepository.deleteReport(id);
+         return this.reportRepository.deleteReport(id, userId);
       } catch (error) {
          throw error;
       }
