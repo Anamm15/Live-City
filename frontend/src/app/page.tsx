@@ -1,12 +1,16 @@
 "use client"
+import Navbar from "@/components/semantic/Navbar";
 import Hero from "./components/hero";
 import Profile from "./components/profile";
 
 export default function Home() {
   return (
-    <div className="overflow-x-hidden h-[2000px]">
-      <Hero />
-      <Profile />
+    <>
+      <Navbar />
+      <div className="overflow-x-hidden h-[2000px]">
+        <Hero />
+        <Profile />
     </div>
+    </>
   );
 }

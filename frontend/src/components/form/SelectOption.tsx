@@ -1,22 +1,39 @@
+"use client";
+
+import React from "react";
 import LabelText from "./LabelText";
 
-const SelectOption = (props) => {
-   const {
-      id,
-      label,
-      helperText,
-      hideError = false,
-      validation,
-      className,
-      readOnly = false,
-      defaultValue = '',
-      placeholder = '',
-      options,
-      optionKey,
-      optionValue,
-      optionLabel
-   } = props;
+interface SelectOptionProps<T> {
+   id: string;
+   label: string;
+   helperText?: string;
+   hideError?: boolean;
+   validation?: boolean;
+   className?: string;
+   readOnly?: boolean;
+   defaultValue?: string;
+   placeholder?: string;
+   options: T[];
+   optionKey: keyof T;
+   optionValue: keyof T;
+   optionLabel: keyof T;
+}
 
+const SelectOption = <T,>({
+   id,
+   label,
+   helperText,
+   hideError = false,
+   validation,
+   className = "",
+   readOnly = false,
+   defaultValue = "",
+   placeholder = "",
+   options,
+   optionKey,
+   optionValue,
+   optionLabel,
+}: SelectOptionProps<T>) => {
    return (
       <div className="mb-4 flex flex-col space-y-2">
          <LabelText id={label}>{label}</LabelText>
@@ -24,15 +41,15 @@ const SelectOption = (props) => {
             <select
                id={label}
                name={label}
-               readOnly={readOnly}
+               disabled={readOnly}
                className={`appearance-none w-full px-3 py-2 border border-[#808080] rounded-md 
-                        focus:outline-1 focus:outline-primary-info-active focus:ring-inset 
-                        hover:ring-1 hover:ring-inset hover:ring-[#000] 
-                        placeholder:text-sm placeholder:text-[#9AA2B1] focus:placeholder:text-[#092540] 
-                        pr-10`}
+            focus:outline-1 focus:outline-primary-info-active focus:ring-inset 
+            hover:ring-1 hover:ring-inset hover:ring-[#000] 
+            placeholder:text-sm placeholder:text-[#9AA2B1] focus:placeholder:text-[#092540] 
+            pr-10`}
                defaultValue={defaultValue}
                aria-label={label}
-               aria-describedby={helperText ? `${id}-helper` : ''}
+               aria-describedby={helperText ? `${id}-helper` : ""}
                aria-invalid={validation && !hideError ? "true" : "false"}
             >
                {placeholder && (
@@ -41,11 +58,8 @@ const SelectOption = (props) => {
                   </option>
                )}
                {options.map((option) => (
-                  <option
-                     key={option[optionKey]}
-                     value={option[optionValue]}
-                  >
-                     {option[optionLabel]}
+                  <option key={String(option[optionKey])} value={String(option[optionValue])}>
+                     {String(option[optionLabel])}
                   </option>
                ))}
             </select>
