@@ -33,9 +33,8 @@ export type CreateSubmissionRequest = {
    title: string;
    date: Date;
    category: SubmissionCategory;
-   status: SubmissionStatus;
    description: string;
-   userId: number;
+   userId?: number;
 }
 
 export type UpdateSubmissionRequest = {

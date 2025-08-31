@@ -20,8 +20,7 @@ export type CreateReportRequest = {
    title: string;
    description: string;
    category: ReportCategory;
-   status: ReportStatus;
-   userId: number;
+   userId?: number;
 }
 
 export type UpdateReportRequest = {

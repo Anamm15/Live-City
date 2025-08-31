@@ -5,8 +5,6 @@ export const CreateReportSchema = z.object({
    title: z.string().min(1, "Judul tidak boleh kosong"),
    description: z.string().min(1, "Deskripsi tidak boleh kosong"),
    category: z.enum(ReportCategory, "Kategori tidak valid"),
-   status: z.enum(ReportStatus, "Status tidak valid"),
-   userId: z.number(),
 });
 
 export const UpdateReportSchema = z.object({

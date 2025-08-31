@@ -1,4 +1,4 @@
-@baseUrl = http://localhost:3000/api/v1
+@baseUrl = http://localhost:8000/api/v1
 
 ### Login User
 POST {{ baseUrl }}/auth/login
@@ -22,9 +22,7 @@ Content-Type: application/json
   "title": "Submission Title 4",
   "date": "1990-01-01T00:00:00.000Z",
   "category": "DOMICILE_CERTIFICATE",
-  "status": "PENDING",
   "description": "This is a test submission.",
-  "userId": 6
 }
 
 ### Update Submission

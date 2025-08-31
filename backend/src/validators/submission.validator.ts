@@ -15,9 +15,7 @@ export const CreateSubmissionSchema = z.object({
     z.date({ message: "Tanggal lahir tidak valid" })
   ),
    category: z.enum(SubmissionCategory, "Kategori tidak valid"),
-   status: z.enum(SubmissionStatus, "Status tidak valid"),
    description: z.string().min(1, "Deskripsi tidak boleh kosong"),
-   userId: z.number(),
 });
 
 export const UpdateSubmissionSchema = z.object({
