@@ -1,6 +1,7 @@
 "use client"
 import NewsCard from "@/components/cards/news";
 import Modal from "@/components/modal/modal";
+import Navbar from "@/components/semantic/Navbar";
 import { useState } from "react";
 
 export default function News() {
@@ -13,6 +14,7 @@ export default function News() {
 
   return (
    <>
+      <Navbar />
       <div className="overflow-x-hidden flex justify-center">
          <div className="mt-24 border border-gray-300 rounded-2xl w-xl flex flex-col">
             {

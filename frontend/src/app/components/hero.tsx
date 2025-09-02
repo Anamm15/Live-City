@@ -14,12 +14,12 @@ export default function Hero() {
       {/* Overlay gelap */}
       <div className="absolute inset-0 bg-black/40"></div>
 
-      <div className="absolute inset-0 ms-28 mt-[28rem] text-white z-10 w-[45%]">
+      <div className="absolute inset-0 ms-28 mt-[25rem] text-white z-10 w-[45%]">
         <p className="text-6xl font-bold">
           Welcome to the First Sustainable City in The World
         </p>
         <Button className="mt-4 flex items-center gap-3">
-          Explore More
+          Login as Resident
           <FaArrowRight />
         </Button>
       </div>

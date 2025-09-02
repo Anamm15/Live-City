@@ -40,6 +40,7 @@ const Navbar = () => {
           {user && (
             <div className="hidden md:flex items-center gap-10 font-bold text-lg text-black">
               <CustomNavLink href="/">Home</CustomNavLink>
+              <CustomNavLink href="/profile">Profile</CustomNavLink>
               <CustomNavLink href="/services">Services</CustomNavLink>
               <CustomNavLink href="/news">News</CustomNavLink>
               <CustomNavLink href="/facilities">Facilities</CustomNavLink>
@@ -105,6 +106,9 @@ const Navbar = () => {
                 <>
                   <li>
                     <CustomNavLink href="/">Home</CustomNavLink>
+                  </li>
+                  <li>
+                    <CustomNavLink href="/profile">Profile</CustomNavLink>
                   </li>
                   <li>
                     <CustomNavLink href="/services">Services</CustomNavLink>

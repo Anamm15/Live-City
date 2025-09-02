@@ -3,16 +3,17 @@
 import React from "react";
 
 interface LabelTextProps {
-    id: string;
-    children: React.ReactNode;
+  id: string;
+  children: React.ReactNode;
+  className?: string;
 }
 
-const LabelText: React.FC<LabelTextProps> = ({ id, children }) => {
-    return (
-        <label htmlFor={id} className="font-semibold text-gray-800">
-            {children}
-        </label>
-    );
+const LabelText: React.FC<LabelTextProps> = ({ id, children, className }) => {
+  return (
+    <label htmlFor={id} className={`font-semibold text-text ${className}`}>
+      {children}
+    </label>
+  );
 };
 
 export default LabelText;

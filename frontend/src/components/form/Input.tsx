@@ -6,7 +6,8 @@ import LabelText from "./LabelText";
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
   className?: string;
-  error ?: string;
+  error?: string;
+  icon?: React.ReactNode;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -19,15 +20,17 @@ const Input: React.FC<InputProps> = ({
   placeholder,
   error = "",
   required = false,
+  icon,
   ...rest
 }) => {
   return (
     <div className="mb-4 flex flex-col space-y-2">
-      <LabelText id={label}>
-        {label}
-        {
-          required && <span className="text-red-500 ms-1">*</span>
-        }
+      <LabelText id={label} className="flex items-center gap-2">
+        {icon && <span>{icon}</span>}
+        <span>
+          {label}
+          {required && <span className="text-red-500 ms-1">*</span>}
+        </span>
       </LabelText>
       <input
         id={label}

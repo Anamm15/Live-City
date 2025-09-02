@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { useSubmissionMutation } from "./mutation";
 
 export function useSubmission() {
-   const {
+  const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
@@ -19,7 +19,8 @@ export function useSubmission() {
     },
   });
 
-  const { mutate, isPending, isError, isSuccess, error } = useSubmissionMutation();
+  const { mutate, isPending, isError, isSuccess, error } =
+    useSubmissionMutation();
 
   const onSubmit = (data: SubmissionFormData) => {
     const formData = new FormData();
@@ -34,7 +35,6 @@ export function useSubmission() {
       onSuccess: () => reset(),
     });
   };
-
 
   return {
     register,
