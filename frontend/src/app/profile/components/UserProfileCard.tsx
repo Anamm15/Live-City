@@ -2,13 +2,7 @@
 
 import { useState, useRef } from "react";
 import Image from "next/image";
-import {
-  UserProfile,
-  Gender,
-  Religion,
-  MaritalStatus,
-  Education,
-} from "@/types/user";
+import { Gender, Religion, MaritalStatus, Education, User } from "@/types/user";
 import ProfileField from "@/app/profile/components/ProfileField";
 import toast from "react-hot-toast";
 
@@ -30,7 +24,7 @@ import { FaVenusMars, FaBook, FaMosque, FaHeart } from "react-icons/fa";
 import Button from "@/components/buttons/Button";
 
 type UserProfileCardProps = {
-  user: UserProfile;
+  user: User;
 };
 
 // Data untuk dropdown
@@ -93,7 +87,7 @@ export default function UserProfileCard({ user }: UserProfileCardProps) {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setFormData((prev) => ({
+        setFormData((prev: User) => ({
           ...prev,
           profilePictureUrl: reader.result as string,
         }));
@@ -111,8 +105,11 @@ export default function UserProfileCard({ user }: UserProfileCardProps) {
         <div className="flex flex-col items-center space-y-4 md:col-span-1 my-auto">
           <div className="group relative">
             <Image
-              src={formData.profilePictureUrl}
-              alt={formData.name}
+              src={
+                formData.profilePictureUrl ||
+                "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=2576&auto=format&fit=crop"
+              }
+              alt={formData.name || "Profile Picture"}
               width={144}
               height={144}
               className="h-36 w-36 rounded-full object-cover shadow-lg transition-transform duration-300 group-hover:scale-105"
@@ -278,6 +275,7 @@ export default function UserProfileCard({ user }: UserProfileCardProps) {
             <ProfileField
               label="Poin"
               name="points"
+              type="number"
               value={formData.points}
               isEditing={false}
               icon={<FiAward />}

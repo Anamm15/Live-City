@@ -11,7 +11,7 @@ type ProfileFieldProps = {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => void;
   name: string;
-  type?: "text" | "email" | "date" | "select";
+  type?: "text" | "email" | "date" | "select" | "number";
   options?: { value: string; label: string }[];
 };
 
@@ -56,7 +56,9 @@ export default function ProfileField({
             <span className="ml-2">{label}</span>
           </label>
           <p className="mt-1 rounded-md bg-transparent p-2 text-text border py-1.5 mb-4">
-            {value || <span className="text-gray-400">Belum diisi</span>}
+            {(value && value)?.toLocaleString() || (
+              <span className="text-gray-400">Belum diisi</span>
+            )}
           </p>
         </>
       )}

@@ -4,6 +4,13 @@ import Button from "@/components/buttons/Button";
 import Input from "@/components/form/Input";
 import TextArea from "@/components/form/TextArea";
 import { useSubmission } from "./hooks/useSubmission";
+import SelectOption from "@/components/form/SelectOption";
+import { SubmissionCategory } from "@/types/submission";
+
+const categoriesOptions = Object.values(SubmissionCategory).map((r, l) => ({
+  value: r,
+  label: String(r),
+}));
 
 export default function SubmissionPage() {
   const { register, handleSubmit, errors } = useSubmission();
@@ -42,12 +49,13 @@ export default function SubmissionPage() {
             error={errors.date ? "Date is required" : ""}
             required
           />
-          <Input
-            type="text"
+          <SelectOption
             placeholder="Enter your category"
             label="Category"
             {...register("category", { required: true })}
             error={errors.category ? "Category is required" : ""}
+            options={categoriesOptions}
+            className="py-2"
             required
           />
         </div>

@@ -1,14 +1,12 @@
-// export function useProfileMutation() {
-//   return useMutation({
-//     mutationFn: (data: FormData) => updateProfile(data),
-//     onSuccess: () => {
-//       toast.success("Profile updated successfully!");
-//     },
-//     onError: (error) => {
-//       toast.error("Failed to update profile: " + error.message);
-//     },
-//     onMutate: () => {
-//       toast.loading("Updating profile...");
-//     },
-//   });
-// }
+import { getMe } from "@/services/user";
+import { UserResponse } from "@/types/user";
+import { useQuery } from "@tanstack/react-query";
+
+export function useGetMeQuery() {
+  return useQuery<UserResponse>({
+    queryKey: ["user"],
+    queryFn: getMe,
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: true,
+  });
+}

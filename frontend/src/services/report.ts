@@ -1,19 +1,11 @@
-import { SERVER_API } from "@/constants/api";
-import axios from "axios";
-
-const API_URL = SERVER_API + "/reports";
+import api from "@/lib/axios";
 
 export const createReport = async (data: FormData) => {
-   try {
-     const response = await axios.post(API_URL, data, {
-       headers: {
-         "Content-Type": "multipart/form-data",
-       },
-       withCredentials: true,
-     });
-     return response.data;
-   } catch (error) {
-     console.error("Error creating submission:", error);
-     throw error;
-   }
-}
+  try {
+    const response = await api.post("/reports", data);
+    return response;
+  } catch (error) {
+    console.error("Error creating report:", error);
+    throw error;
+  }
+};

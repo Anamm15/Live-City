@@ -26,7 +26,7 @@ export enum Education {
   DOCTORATE = "Doctorate",
 }
 
-export type UserProfile = {
+export type User = {
   id: number;
   nationalIdentityNumber: string;
   name: string;
@@ -41,4 +41,10 @@ export type UserProfile = {
   job?: string;
   phoneNumber?: string;
   profilePictureUrl: string;
+};
+
+export type UserResponse = {
+  data: User;
+  message: string;
+  status: string;
 };

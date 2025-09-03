@@ -1,4 +1,10 @@
-import { Heart, MessageCircle, MoreHorizontal, Calendar, Send } from "lucide-react";
+import {
+  Heart,
+  MessageCircle,
+  MoreHorizontal,
+  Calendar,
+  Send,
+} from "lucide-react";
 import Image from "next/image";
 
 type NewsProps = {
@@ -22,26 +28,27 @@ export default function NewsCard({
   reactionCount,
   commentCount,
   setIsModalOpen,
-  setCommentId
+  setCommentId,
 }: NewsProps) {
-
   const handleCommentClick = () => {
     setCommentId(id);
     setIsModalOpen(true);
   };
 
   return (
-    <div className="w-full h-max py-4">
+    <div className="w-full h-max py-2">
       <div className="flex justify-between items-center px-4 py-3">
         <div>
           <h2 className="text-md font-semibold text-gray-900">{title}</h2>
           <p className="text-xs text-gray-500 flex items-center gap-1">
             <Calendar className="w-3 h-3" />
-            {new Date(date).toLocaleDateString("id-ID", {
-              day: "2-digit",
-              month: "short",
-              year: "numeric",
-            })}
+            <span className="mt-0.5 ">
+              {new Date(date).toLocaleDateString("id-ID", {
+                day: "2-digit",
+                month: "short",
+                year: "numeric",
+              })}
+            </span>
           </p>
         </div>
         <button className="text-gray-500 hover:text-gray-700">
@@ -49,18 +56,16 @@ export default function NewsCard({
         </button>
       </div>
 
-      {
-         imageUrl && (
-            <div className="w-full h-64 bg-gray-100">
-               <Image
-                 src={imageUrl}
-                 alt={title}
-                 className="w-full h-full object-cover"
-                 layout="fill"
-               />
-            </div>
-         )
-      }
+      {imageUrl && (
+        <div className="w-full h-64 bg-gray-100">
+          <Image
+            src={imageUrl}
+            alt={title}
+            className="w-full h-full object-cover"
+            layout="fill"
+          />
+        </div>
+      )}
 
       <div className="px-4 py-3">
         <p className="text-sm text-gray-700 line-clamp-3">{content}</p>
@@ -71,9 +76,10 @@ export default function NewsCard({
           <Heart className="w-6 h-6" />
           <span className="text-sm">{reactionCount}</span>
         </button>
-        <button 
-          onClick={handleCommentClick} 
-          className="flex cursor-pointer items-center gap-1 text-gray-600 hover:text-blue-600 transition">
+        <button
+          onClick={handleCommentClick}
+          className="flex cursor-pointer items-center gap-1 text-gray-600 hover:text-blue-600 transition"
+        >
           <MessageCircle className="w-6 h-6" />
           <span className="text-sm">{commentCount}</span>
         </button>

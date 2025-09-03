@@ -11,9 +11,11 @@ type SelectOptionProps = {
   className?: string;
   readOnly?: boolean;
   defaultValue?: string;
+  error?: string;
+  required?: boolean;
   placeholder?: string;
   icon?: React.ReactNode;
-  value: string | number | undefined;
+  value?: string | number | undefined;
   options: { value: string | number | undefined; label: string }[];
 };
 
@@ -24,16 +26,22 @@ const SelectOption = ({
   defaultValue = "",
   placeholder = "",
   icon,
+  error = "",
   options,
   value,
+  required = false,
+  ...rest
 }: SelectOptionProps) => {
   return (
     <div className="mb-4 flex flex-col space-y-2">
       <LabelText id={label} className="flex items-center gap-2">
         {icon && <span>{icon}</span>}
-        {label}
+        <span>
+          {label}
+          {required && <span className="text-red-500 ms-1">*</span>}
+        </span>
       </LabelText>
-      <div className={`relative ${className}`}>
+      <div className="relative">
         <select
           id={label}
           name={label}
@@ -42,10 +50,11 @@ const SelectOption = ({
             focus:outline-1 focus:outline-primary-info-active focus:ring-inset 
             hover:ring-1 hover:ring-inset hover:ring-[#000] 
             placeholder:text-sm placeholder:text-[#9AA2B1] focus:placeholder:text-[#092540] 
-            pr-10`}
+            pr-10 ${className}`}
           defaultValue={defaultValue}
           aria-label={label}
           value={value}
+          {...rest}
         >
           {placeholder && (
             <option value="" disabled hidden>
@@ -75,6 +84,7 @@ const SelectOption = ({
           </svg>
         </span>
       </div>
+      {error && <span className="text-red-500 text-xs">{error}</span>}
     </div>
   );
 };
