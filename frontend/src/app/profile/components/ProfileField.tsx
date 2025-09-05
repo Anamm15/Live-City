@@ -55,7 +55,7 @@ export default function ProfileField({
             {icon}
             <span className="ml-2">{label}</span>
           </label>
-          <p className="mt-1 rounded-md bg-transparent p-2 text-text border py-1.5 mb-4">
+          <p className="mt-1 rounded-md bg-transparent p-2 text-text border py-1.5 mb-4 text-sm md:text-md">
             {(value && value)?.toLocaleString() || (
               <span className="text-gray-400">Belum diisi</span>
             )}

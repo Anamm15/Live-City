@@ -1,4 +1,5 @@
 @baseUrl = http://localhost:8000/api/v1
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTY5NDYwMjUsImV4cCI6MTc1Njk0OTYyNX0.Ykh3AjiDUIcZekyvr4orJQh_ou7JUhHkfCkPKJXG57E
 
 ### Get Users
 GET {{ baseUrl }}/users
@@ -8,7 +9,7 @@ GET {{ baseUrl }}/users/1
 
 ###
 GET {{baseUrl}}/users/me
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTY4OTUxMzcsImV4cCI6MTc1Njg5ODczN30.QtoOIR_wzrUrImKwGGsvipJrfA1xwzuOT3OgHdFMEE8
+Authorization: {{ token }}
 
 
 ### Create User
@@ -35,8 +36,7 @@ Content-Type: application/json
 
 ### Update User
 PATCH  {{ baseUrl }}/users/6
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc1Mzg1MDM2OCwiZXhwIjoxNzUzODUzOTY4fQ.QWFQXL1k5hyJifvurhfmb5kIilX9ins8ve9w50mFZ7Y
-Content-Type: application/json
+Authorization: {{ token }}
 
 {
   "name": "Choirul Anam Updated"
@@ -44,4 +44,4 @@ Content-Type: application/json
 
 ### Delete User
 DELETE {{ baseUrl }}/users/3
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTM4OTE0MjMsImV4cCI6MTc1Mzg5NTAyM30.ZQsXQXnPdZF5pl-wK8Ba6A8HHBwXPc436VM0GU25aGY
+Authorization: {{ token }}

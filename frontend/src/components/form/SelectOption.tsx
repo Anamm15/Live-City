@@ -48,7 +48,7 @@ const SelectOption = ({
           disabled={readOnly}
           className={`appearance-none w-full px-3 py-1.5 border border-[#808080] rounded-md 
             focus:outline-1 focus:outline-primary-info-active focus:ring-inset 
-            hover:ring-1 hover:ring-inset hover:ring-[#000] 
+            hover:ring-1 hover:ring-inset hover:ring-[#000] text-sm md:text-md
             placeholder:text-sm placeholder:text-[#9AA2B1] focus:placeholder:text-[#092540] 
             pr-10 ${className}`}
           defaultValue={defaultValue}

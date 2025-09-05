@@ -1,3 +1,5 @@
+import { converEnumToOptions } from "@/utils/objectConverting";
+
 export enum Gender {
   MALE = "Male",
   FEMALE = "Female",
@@ -25,6 +27,11 @@ export enum Education {
   MASTER = "Master",
   DOCTORATE = "Doctorate",
 }
+
+export const GenderOptions = converEnumToOptions(Gender);
+export const ReligionOptions = converEnumToOptions(Religion);
+export const MaritalStatusOptions = converEnumToOptions(MaritalStatus);
+export const EducationOptions = converEnumToOptions(Education);
 
 export type User = {
   id: number;

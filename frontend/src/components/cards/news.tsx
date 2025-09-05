@@ -15,26 +15,18 @@ type NewsProps = {
   imageUrl: string;
   reactionCount: number;
   commentCount: number;
-  setIsModalOpen: (isOpen: boolean) => void;
-  setCommentId: (id: number | null) => void;
+  onCommentClick?: () => void;
 };
 
 export default function NewsCard({
-  id,
   title,
   date,
   content,
   imageUrl,
   reactionCount,
   commentCount,
-  setIsModalOpen,
-  setCommentId,
+  onCommentClick,
 }: NewsProps) {
-  const handleCommentClick = () => {
-    setCommentId(id);
-    setIsModalOpen(true);
-  };
-
   return (
     <div className="w-full h-max py-2">
       <div className="flex justify-between items-center px-4 py-3">
@@ -68,7 +60,7 @@ export default function NewsCard({
       )}
 
       <div className="px-4 py-3">
-        <p className="text-sm text-gray-700 line-clamp-3">{content}</p>
+        <p className="text-gray-700 line-clamp-3">{content}</p>
       </div>
 
       <div className="flex items-center gap-4 px-4 py-2 border-t border-gray-100">
@@ -77,7 +69,7 @@ export default function NewsCard({
           <span className="text-sm">{reactionCount}</span>
         </button>
         <button
-          onClick={handleCommentClick}
+          onClick={onCommentClick}
           className="flex cursor-pointer items-center gap-1 text-gray-600 hover:text-blue-600 transition"
         >
           <MessageCircle className="w-6 h-6" />

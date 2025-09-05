@@ -1,4 +1,5 @@
 @baseUrl = http://localhost:8000/api/v1
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTY5NDYwMjUsImV4cCI6MTc1Njk0OTYyNX0.Ykh3AjiDUIcZekyvr4orJQh_ou7JUhHkfCkPKJXG57E
 
 ### Login User
 POST {{ baseUrl }}/auth/login
@@ -11,11 +12,11 @@ Content-Type: application/json
 
 ### Get Submissions
 GET {{ baseUrl }}/submissions?filter=
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTQzNzI1OTAsImV4cCI6MTc1NDM3NjE5MH0.41Ou4E5FRYC035ZAx2jmp-fpaui7QXn6kZjAcNqq9HU
+Authorization: {{ token }}
 
 ### Create Submission
 POST {{ baseUrl }}/submissions
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTQzNzI1OTAsImV4cCI6MTc1NDM3NjE5MH0.41Ou4E5FRYC035ZAx2jmp-fpaui7QXn6kZjAcNqq9HU
+Authorization: {{ token }}
 Content-Type: application/json
 
 {
@@ -27,7 +28,7 @@ Content-Type: application/json
 
 ### Update Submission
 PATCH {{ baseUrl }}/submissions/3
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTQzNzI1OTAsImV4cCI6MTc1NDM3NjE5MH0.41Ou4E5FRYC035ZAx2jmp-fpaui7QXn6kZjAcNqq9HU
+Authorization: {{ token }}
 Content-Type: application/json
 
 {
@@ -37,7 +38,7 @@ Content-Type: application/json
 
 ### Update status of Submission
 PATCH {{ baseUrl }}/submissions/5/status
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc1Mzg0NDYwNywiZXhwIjoxNzUzODQ4MjA3fQ.uU6-oHtm37VlVPTOXwwtwtrajqxy_0sIesCeIwSz9Z0
+Authorization: {{ token }}
 Content-Type: application/json
 
 {
@@ -46,4 +47,4 @@ Content-Type: application/json
 
 ### Delete Submission
 DELETE {{ baseUrl }}/submissions/2
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc1Mzg0NDYwNywiZXhwIjoxNzUzODQ4MjA3fQ.uU6-oHtm37VlVPTOXwwtwtrajqxy_0sIesCeIwSz9Z0
+Authorization: {{ token }}

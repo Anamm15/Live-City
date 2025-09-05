@@ -1,20 +1,25 @@
-export const SubmissionCategory = {
-  ID_CARD: "Id card",
-  FAMILY_CARD: "Family card",
-  POLICE_CLEARANCE: "Police clearance",
-  BUSINESS_CERTIFICATE: "Business certificate",
-  DOMICILE_CERTIFICATE: "Domicile certificate",
-  POVERTY_CERTIFICATE: "Poverty certificate",
-  EVENT_PERMIT: "Event permit",
-  MICRO_BUSINESS_LICENSE: "Micro business license",
-  INHERITANCE_CERTIFICATE: "Inheritance certificate",
-  HEIR_CERTIFICATE: "Heir certificate",
-  DEATH_CERTIFICATE: "Death certificate",
-  BIRTH_CERTIFICATE: "Birth certificate",
-  MARRIAGE_CERTIFICATE: "Marriage certificate",
-  DIVORCE_CERTIFICATE: "Divorce certificate",
-  COVER_LETTER: "Cover letter",
-};
+import { converEnumToOptions } from "@/utils/objectConverting";
+
+export enum SubmissionCategory {
+  ID_CARD = "ID Card",
+  FAMILY_CARD = "Family Card",
+  POLICE_CLEARANCE = "Police Clearance",
+  BUSINESS_CERTIFICATE = "Business Certificate",
+  DOMICILE_CERTIFICATE = "Domicile Certificate",
+  POVERTY_CERTIFICATE = "Poverty Certificate",
+  EVENT_PERMIT = "Event Permit",
+  MICRO_BUSINESS_LICENSE = "Micro Business License",
+  INHERITANCE_CERTIFICATE = "Inheritance Certificate",
+  HEIR_CERTIFICATE = "Heir Certificate",
+  DEATH_CERTIFICATE = "Death Certificate",
+  BIRTH_CERTIFICATE = "Birth Certificate",
+  MARRIAGE_CERTIFICATE = "Marriage Certificate",
+  DIVORCE_CERTIFICATE = "Divorce Certificate",
+  COVER_LETTER = "Cover Letter",
+}
+
+export const SubmissionCategoryOptions =
+  converEnumToOptions(SubmissionCategory);
 
 export type SubmissionFormData = {
   title: string;
@@ -23,4 +28,10 @@ export type SubmissionFormData = {
   category: string;
   file?: FileList;
   description: string;
+};
+
+export type Submission = SubmissionFormData & {
+  id: string;
+  shortId: string;
+  status: string;
 };

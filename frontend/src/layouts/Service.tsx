@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useState, ReactNode } from 'react';
-import Sidebar from './Sidebar';
-import { HiMenuAlt1 } from 'react-icons/hi';
+import { useState, ReactNode } from "react";
+import Sidebar from "./Sidebar";
+import { HiMenuAlt1 } from "react-icons/hi";
 
 type ServiceLayoutProps = {
   children: ReactNode;
@@ -34,15 +34,13 @@ export default function ServiceLayout({ children }: ServiceLayoutProps) {
             <span className="sr-only">Buka sidebar</span>
             <HiMenuAlt1 size={32} />
           </button>
-          
+
           <div className="flex items-center">
             <p>Welcome, Surabaya!</p>
           </div>
         </header>
 
-        <main className="flex-1 p-4 sm:p-6">
-          {children}
-        </main>
+        <main className="flex-1 p-4 sm:p-6">{children}</main>
       </div>
     </div>
   );

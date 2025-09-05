@@ -1,14 +1,15 @@
 import prisma from "../database/prisma";
-import { 
-   facilityRepository, 
-   familyRepository, 
-   fileRepository, 
-   newsRepository, 
-   pollRepository, 
-   reportRepository, 
-   submissionRepository, 
-   userRepository, 
-   villageRepository } from "../repositories";
+import {
+  facilityRepository,
+  familyRepository,
+  fileRepository,
+  newsRepository,
+  pollRepository,
+  reportRepository,
+  submissionRepository,
+  userRepository,
+  villageRepository,
+} from "../repositories";
 import { AuthService } from "./auth.service";
 import { FacilityService } from "./facility.service";
 import { FamilyService } from "./family.service";
@@ -20,11 +21,35 @@ import { UserService } from "./user.service";
 import { VillageService } from "./village.service";
 
 export const authService = new AuthService(userRepository);
-export const userService = new UserService(userRepository, fileRepository, prisma);
-export const facilityService = new FacilityService(facilityRepository, fileRepository, prisma);
+export const userService = new UserService(
+  userRepository,
+  fileRepository,
+  prisma
+);
+export const facilityService = new FacilityService(
+  facilityRepository,
+  fileRepository,
+  prisma
+);
 export const familyService = new FamilyService(familyRepository);
-export const newsService = new NewsService(newsRepository, fileRepository, prisma);
+export const newsService = new NewsService(
+  newsRepository,
+  fileRepository,
+  prisma
+);
 export const pollService = new PollService(pollRepository);
-export const reportService = new ReportService(reportRepository, fileRepository, prisma);
-export const submissionService = new SubmissionService(submissionRepository, fileRepository, prisma);
-export const villageService = new VillageService(villageRepository, fileRepository, prisma);
+export const reportService = new ReportService(
+  reportRepository,
+  fileRepository,
+  prisma
+);
+export const submissionService = new SubmissionService(
+  submissionRepository,
+  fileRepository,
+  prisma
+);
+export const villageService = new VillageService(
+  villageRepository,
+  fileRepository,
+  prisma
+);

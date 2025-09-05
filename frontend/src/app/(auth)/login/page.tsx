@@ -3,6 +3,7 @@ import Navbar from "@/components/semantic/Navbar";
 import { login } from "@/services/auth";
 import { useAuthStore } from "@/stores/authStore";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -24,8 +25,10 @@ export default function LoginPage() {
           useAuthStore.getState().accessToken
         );
       }
+      toast.success("Login berhasil!");
     } catch (error) {
       console.error("Login failed:", error);
+      toast.error("Login gagal!");
     }
   };
 

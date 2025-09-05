@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Button from "@/components/buttons/Button";
 import { FaArrowRight } from "react-icons/fa";
+import Link from "next/link";
 
 export default function Hero() {
   return (
@@ -18,9 +19,11 @@ export default function Hero() {
         <p className="text-6xl font-bold">
           Welcome to the First Sustainable City in The World
         </p>
-        <Button className="mt-4 flex items-center gap-3">
-          Login as Resident
-          <FaArrowRight />
+        <Button className="mt-4">
+          <Link href={"/login"} className="flex items-center gap-3">
+            Login as Resident
+            <FaArrowRight />
+          </Link>
         </Button>
       </div>
     </div>

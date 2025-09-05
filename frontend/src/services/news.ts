@@ -20,12 +20,32 @@ export const getNews = async (id: string) => {
   }
 };
 
+export const getNewsComments = async (newsId: number) => {
+  try {
+    const response = await api.get(`/news/${newsId}/comments`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching news comments:", error);
+    throw error;
+  }
+};
+
 export const createNews = async (data: FormData) => {
   try {
     const response = await api.post("/news", data);
     return response.data;
   } catch (error) {
     console.error("Error creating news:", error);
+    throw error;
+  }
+};
+
+export const createNewsComment = async (newsId: number, content: string) => {
+  try {
+    const response = await api.post(`/news/${newsId}/comments`, { content });
+    return response.data;
+  } catch (error) {
+    console.error("Error creating news comment:", error);
     throw error;
   }
 };

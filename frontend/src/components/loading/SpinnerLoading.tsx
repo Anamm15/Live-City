@@ -1,12 +1,18 @@
 type SpinnerLoadingProps = {
   className?: string;
+  size?: string;
+  label?: string;
 };
 
-export default function SpinnerLoading({ className }: SpinnerLoadingProps) {
+export default function SpinnerLoading({
+  className,
+  size = "4",
+  label,
+}: SpinnerLoadingProps) {
   return (
     <div className="flex items-center gap-3 text-blue-600 mt-2.5">
       <svg
-        className="animate-spin h-4 w-4 text-blue-600"
+        className={`animate-spin -ml-1 mr-3 h-${size} w-${size} text-blue-600`}
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
@@ -26,10 +32,12 @@ export default function SpinnerLoading({ className }: SpinnerLoadingProps) {
         ></path>
       </svg>
 
-      <p className={`text-sm font-medium ${className}`}>
-        Processing your request
-        <span className="animate-pulse">...</span>
-      </p>
+      {label && (
+        <p className={`text-sm font-medium ${className}`}>
+          {label}
+          <span className="animate-pulse">...</span>
+        </p>
+      )}
     </div>
   );
 }

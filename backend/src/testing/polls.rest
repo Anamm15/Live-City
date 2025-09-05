@@ -1,4 +1,5 @@
 @baseUrl = http://localhost:3000/api/v1
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTY5NDYwMjUsImV4cCI6MTc1Njk0OTYyNX0.Ykh3AjiDUIcZekyvr4orJQh_ou7JUhHkfCkPKJXG57E
 
 ### Login User
 POST {{ baseUrl }}/auth/login

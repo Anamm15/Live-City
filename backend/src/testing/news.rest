@@ -1,5 +1,6 @@
 ### Login User
 @baseUrl = http://localhost:8000/api/v1
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTcwNDYxNTIsImV4cCI6MTc1NzA0OTc1Mn0.z3aLCU9o5El-Z7DyLHOkrynk-RFoNFeM0EGlzOjDSG0
 POST {{ baseUrl }}/auth/login
 Content-Type: application/json
 
@@ -10,22 +11,26 @@ Content-Type: application/json
 
 ### Get News
 GET {{baseUrl}}/news
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTM5MjAzNDksImV4cCI6MTc1MzkyMzk0OX0.BhVmuIJ5ZeK5I-7GYkI_a6fPHigai5Fs9ANedregZCU
+Authorization: Bearer {{token}}
+
+###
+GET {{baseUrl}}/news/9/comments
+Authorization: Bearer {{token}}
 
 ### Create News
 POST {{baseUrl}}/news
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTQzOTg3ODQsImV4cCI6MTc1NDQwMjM4NH0.QlPm-oVEJloeLaAwV67zJ5kkRXdopGt4BcruRhoAZnE
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-   "title": "News test title",
+   "title": "News test title s",
    "date": "1990-01-01T00:00:00.000",
    "content": "News content title"
 }
 
 ### Update 
 PATCH {{baseUrl}}/news/7
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTM5MjAzNDksImV4cCI6MTc1MzkyMzk0OX0.BhVmuIJ5ZeK5I-7GYkI_a6fPHigai5Fs9ANedregZCU
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
@@ -35,4 +40,4 @@ Content-Type: application/json
 
 ### Delete
 DELETE {{baseUrl}}/news/6
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTM5MjAzNDksImV4cCI6MTc1MzkyMzk0OX0.BhVmuIJ5ZeK5I-7GYkI_a6fPHigai5Fs9ANedregZCU
+Authorization: Bearer {{token}}

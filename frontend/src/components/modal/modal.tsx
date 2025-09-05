@@ -8,7 +8,12 @@ type ModalProps = {
   title?: string;
 };
 
-export default function Modal({ children, isOpen, onClose, title }: ModalProps) {
+export default function Modal({
+  children,
+  isOpen,
+  onClose,
+  title,
+}: ModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -16,37 +21,11 @@ export default function Modal({ children, isOpen, onClose, title }: ModalProps) 
       if (event.key === "Escape") {
         onClose();
       }
-
-      if (event.key === "Tab") {
-        const focusableElements = modalRef.current?.querySelectorAll<HTMLElement>(
-          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-        );
-
-        if (!focusableElements || focusableElements.length === 0) return;
-
-        const firstElement = focusableElements[0];
-        const lastElement = focusableElements[focusableElements.length - 1];
-
-        if (event.shiftKey) {
-          if (document.activeElement === firstElement) {
-            lastElement.focus();
-            event.preventDefault();
-          }
-        } else {
-          if (document.activeElement === lastElement) {
-            firstElement.focus();
-            event.preventDefault();
-          }
-        }
-      }
     };
 
     if (isOpen) {
-      document.body.style.overflow = "hidden";
       document.addEventListener("keydown", handleKeyDown);
-      modalRef.current?.focus();
-    } else {
-      document.body.style.overflow = "auto";
+      document.body.style.overflow = "hidden";
     }
 
     return () => {
@@ -54,8 +33,6 @@ export default function Modal({ children, isOpen, onClose, title }: ModalProps) 
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, [isOpen, onClose]);
-
-  if (!isOpen) return null;
 
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
@@ -65,7 +42,11 @@ export default function Modal({ children, isOpen, onClose, title }: ModalProps) 
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 transition-opacity duration-300"
+      className={`
+        fixed inset-0 z-50 flex items-center justify-center 
+        transition-opacity duration-300
+        ${isOpen ? "opacity-100 bg-black/60" : "opacity-0 pointer-events-none"}
+      `}
       onClick={handleBackdropClick}
       role="dialog"
       aria-modal="true"
@@ -73,8 +54,12 @@ export default function Modal({ children, isOpen, onClose, title }: ModalProps) 
     >
       <div
         ref={modalRef}
-        className="relative flex w-11/12 max-w-lg flex-col gap-4 rounded-lg bg-white p-6 shadow-xl transition-all duration-300 sm:w-full sm:p-8"
-        tabIndex={-1} 
+        className={`
+          relative flex w-11/12 max-w-lg flex-col gap-4 rounded-lg bg-white p-2 md:p-6 shadow-xl transition-all duration-300 ease-out 
+          ${isOpen ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"}
+          sm:w-full sm:p-8
+        `}
+        tabIndex={-1}
       >
         <button
           onClick={onClose}
@@ -83,16 +68,12 @@ export default function Modal({ children, isOpen, onClose, title }: ModalProps) 
         >
           <IoClose />
         </button>
-        
+
         {title && (
-          <h2 id="modal-title" className="text-xl font-semibold text-gray-800">
-            {title}
-          </h2>
+          <h2 className="text-xl font-semibold text-gray-800 p-1">{title}</h2>
         )}
-        
-        <div className="max-h-[70vh] overflow-y-auto pr-2">
-            {children}
-        </div>
+
+        <div className="max-h-[70vh] overflow-y-auto pr-2">{children}</div>
       </div>
     </div>
   );

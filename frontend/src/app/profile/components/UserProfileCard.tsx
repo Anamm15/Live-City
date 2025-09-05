@@ -2,7 +2,13 @@
 
 import { useState, useRef } from "react";
 import Image from "next/image";
-import { Gender, Religion, MaritalStatus, Education, User } from "@/types/user";
+import {
+  GenderOptions,
+  ReligionOptions,
+  MaritalStatusOptions,
+  EducationOptions,
+  User,
+} from "@/types/user";
 import ProfileField from "@/app/profile/components/ProfileField";
 import toast from "react-hot-toast";
 
@@ -22,34 +28,19 @@ import {
 } from "react-icons/fi";
 import { FaVenusMars, FaBook, FaMosque, FaHeart } from "react-icons/fa";
 import Button from "@/components/buttons/Button";
+import { formatToUSDate } from "@/utils/dateFormatter";
+import SpinnerLoading from "@/components/loading/SpinnerLoading";
 
 type UserProfileCardProps = {
   user: User;
 };
-
-// Data untuk dropdown
-const genderOptions = Object.values(Gender).map((g) => ({
-  value: g,
-  label: g,
-}));
-const religionOptions = Object.values(Religion).map((r) => ({
-  value: r,
-  label: r,
-}));
-const maritalStatusOptions = Object.values(MaritalStatus).map((m) => ({
-  value: m,
-  label: m,
-}));
-const educationOptions = Object.values(Education).map((e) => ({
-  value: e,
-  label: e,
-}));
 
 export default function UserProfileCard({ user }: UserProfileCardProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState(user);
   const [isLoading, setIsLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [loading, setLoading] = useState(false);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -59,6 +50,10 @@ export default function UserProfileCard({ user }: UserProfileCardProps) {
   };
 
   const handleEditToggle = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
     if (isEditing) {
       // Batal edit, kembalikan data ke semula
       setFormData(user);
@@ -97,6 +92,14 @@ export default function UserProfileCard({ user }: UserProfileCardProps) {
       reader.readAsDataURL(file);
     }
   };
+
+  if (loading) {
+    return (
+      <>
+        <SpinnerLoading size="10" className="text-5xl" />
+      </>
+    );
+  }
 
   return (
     <div className="w-full md:w-max rounded-2xl bg-white border border-gray-200 p-8 shadow-2xl backdrop-blur-xl md:px-20">
@@ -210,7 +213,7 @@ export default function UserProfileCard({ user }: UserProfileCardProps) {
             <ProfileField
               label="Tanggal Lahir"
               name="birthday"
-              value={formData.birthday}
+              value={formatToUSDate(formData.birthday)}
               isEditing={isEditing}
               onChange={handleInputChange}
               type="date"
@@ -231,7 +234,7 @@ export default function UserProfileCard({ user }: UserProfileCardProps) {
               isEditing={isEditing}
               onChange={handleInputChange}
               type="select"
-              options={genderOptions}
+              options={GenderOptions}
               icon={<FaVenusMars />}
             />
             <ProfileField
@@ -241,7 +244,7 @@ export default function UserProfileCard({ user }: UserProfileCardProps) {
               isEditing={isEditing}
               onChange={handleInputChange}
               type="select"
-              options={religionOptions}
+              options={ReligionOptions}
               icon={<FaMosque />}
             />
             <ProfileField
@@ -251,7 +254,7 @@ export default function UserProfileCard({ user }: UserProfileCardProps) {
               isEditing={isEditing}
               onChange={handleInputChange}
               type="select"
-              options={maritalStatusOptions}
+              options={MaritalStatusOptions}
               icon={<FaHeart />}
             />
             <ProfileField
@@ -261,7 +264,7 @@ export default function UserProfileCard({ user }: UserProfileCardProps) {
               isEditing={isEditing}
               onChange={handleInputChange}
               type="select"
-              options={educationOptions}
+              options={EducationOptions}
               icon={<FaBook />}
             />
             <ProfileField

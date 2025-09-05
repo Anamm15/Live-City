@@ -22,9 +22,14 @@ export default function Profile() {
       <div className="text-text max-w-1/3">
         <p className="text-5xl font-bold ">Profile City</p>
         <p className="text-lg mt-2 text-justify whitespace-pre-line">
-         Our city envisions a future where growth and sustainability walk hand in hand. Guided by a commitment to innovation, inclusivity, and environmental stewardship, we strive to create a city that not only thrives today but also preserves its resources for generations to come.
-
-         With a mission to balance economic development, social well-being, and ecological harmony, we are building a resilient, livable, and green city—where every citizen contributes to and benefits from a sustainable way of life.
+          Our city envisions a future where growth and sustainability walk hand
+          in hand. Guided by a commitment to innovation, inclusivity, and
+          environmental stewardship, we strive to create a city that not only
+          thrives today but also preserves its resources for generations to
+          come. With a mission to balance economic development, social
+          well-being, and ecological harmony, we are building a resilient,
+          livable, and green city—where every citizen contributes to and
+          benefits from a sustainable way of life.
         </p>
       </div>
       <div className="relative">

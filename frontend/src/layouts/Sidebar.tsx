@@ -1,7 +1,7 @@
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { HiHome, HiChartBar, HiUsers, HiCog } from 'react-icons/hi';
-import { IoClose } from 'react-icons/io5';
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { HiHome, HiChartBar, HiUsers, HiCog } from "react-icons/hi";
+import { IoClose } from "react-icons/io5";
 
 type SidebarProps = {
   isOpen: boolean;
@@ -9,10 +9,10 @@ type SidebarProps = {
 };
 
 const menuItems = [
-  { href: '/services', label: 'Dashboard', icon: HiHome },
-  { href: '/services/submission', label: 'Submission', icon: HiChartBar },
-  { href: '/services/report', label: 'Report', icon: HiUsers },
-  { href: '/services/settings', label: 'Settings', icon: HiCog },
+  { href: "/services", label: "Dashboard", icon: HiHome },
+  { href: "/services/submission", label: "Submission", icon: HiChartBar },
+  { href: "/services/report", label: "Report", icon: HiUsers },
+  { href: "/services/history", label: "History", icon: HiCog },
 ];
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
@@ -20,8 +20,8 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
 
   return (
     <aside
-      className={`fixed inset-y-0 left-0 z-40 w-72 xl:w-96 px-10 transform bg-background text-black transition-transform shadow-xl duration-300 ease-in-out lg:translate-x-0 ${
-        isOpen ? 'translate-x-0' : '-translate-x-full'
+      className={`fixed inset-y-0 left-0 z-40 w-72 xl:w-80 2xl:w-96 px-2 md:px-10 transform bg-background text-black transition-transform shadow-xl duration-300 ease-in-out lg:translate-x-0 ${
+        isOpen ? "translate-x-0" : "-translate-x-full"
       }`}
       aria-label="Sidebar"
     >
@@ -45,11 +45,11 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
               <Link
                 key={item.href}
                 href={item.href}
-                onClick={onClose} 
+                onClick={onClose}
                 className={`flex items-center rounded-md px-4 py-2.5 text-lg font-medium transition-colors duration-200 ${
                   isActive
-                    ? 'bg-gray-700/80 text-white'
-                    : 'text-black hover:bg-gray-300 hover:text-gray-900'
+                    ? "bg-gray-700/80 text-white"
+                    : "text-black hover:bg-gray-300 hover:text-gray-900"
                 }`}
               >
                 <item.icon className="mr-3 h-8 w-8" />

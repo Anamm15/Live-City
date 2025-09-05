@@ -1,4 +1,5 @@
 @baseUrl = http://localhost:3000/api/v1
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTY5NDYwMjUsImV4cCI6MTc1Njk0OTYyNX0.Ykh3AjiDUIcZekyvr4orJQh_ou7JUhHkfCkPKJXG57E
 ### Login User
 POST {{ baseUrl }}/auth/login
 Content-Type: application/json
@@ -10,15 +11,15 @@ Content-Type: application/json
 
 ###
 GET {{baseUrl}}/families
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTM5NjUyMTYsImV4cCI6MTc1Mzk2ODgxNn0.CS7vRkDFwCjYMnWSnwsWUwcZfdutg9plY-CULWapZB0
+Authorization: {{ token }}
 
 ###
 GET {{baseUrl}}/families/3
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTM5NjUyMTYsImV4cCI6MTc1Mzk2ODgxNn0.CS7vRkDFwCjYMnWSnwsWUwcZfdutg9plY-CULWapZB0
+Authorization: {{ token }}
 
 ###
 POST {{baseUrl}}/families
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTM5NjUyMTYsImV4cCI6MTc1Mzk2ODgxNn0.CS7vRkDFwCjYMnWSnwsWUwcZfdutg9plY-CULWapZB0
+Authorization: {{ token }}
 Content-Type: application/json
 
 {
@@ -30,7 +31,7 @@ Content-Type: application/json
 
 ###
 PATCH {{baseUrl}}/families/3
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTM5NjUyMTYsImV4cCI6MTc1Mzk2ODgxNn0.CS7vRkDFwCjYMnWSnwsWUwcZfdutg9plY-CULWapZB0
+Authorization: {{ token }}
 Content-Type: application/json
 
 {
@@ -39,4 +40,4 @@ Content-Type: application/json
 
 ###
 DELETE {{baseUrl}}/families/4
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTM5NjUyMTYsImV4cCI6MTc1Mzk2ODgxNn0.CS7vRkDFwCjYMnWSnwsWUwcZfdutg9plY-CULWapZB0
+Authorization: {{ token }}

@@ -199,6 +199,7 @@ model RewardLogs {
 
 model Polls {
   id          Int           @id @default(autoincrement())
+  shortId     String        @unique
   title       String
   description String
   type        PollsType
@@ -263,6 +264,7 @@ model CommunityMembers {
 
 model Reports {
   id          Int        @id @default(autoincrement())
+  shortId     String     @unique
   title       String
   date        DateTime   @default(now())
   description String
@@ -278,6 +280,7 @@ model Reports {
 
 model Submissions {
   id          Int               @id @default(autoincrement())
+  shortId     String            @unique
   title       String
   date        DateTime          @default(now())
   category    SubmissionCategory
@@ -292,6 +295,7 @@ model Submissions {
 
 model News {
   id            Int             @id @default(autoincrement())
+  shortId     String            @unique
   title         String
   date          DateTime        @default(now())
   content       String

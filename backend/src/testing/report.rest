@@ -1,4 +1,5 @@
 @baseUrl = http://localhost:3000/api/v1
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTY5NDYwMjUsImV4cCI6MTc1Njk0OTYyNX0.Ykh3AjiDUIcZekyvr4orJQh_ou7JUhHkfCkPKJXG57E
 
 ### Login User
 POST {{ baseUrl }}/auth/login
@@ -12,11 +13,11 @@ Content-Type: application/json
 
 ### Get Report
 GET {{baseUrl}}/reports?filter=IN_PROGRESS
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTQzNzI1OTAsImV4cCI6MTc1NDM3NjE5MH0.41Ou4E5FRYC035ZAx2jmp-fpaui7QXn6kZjAcNqq9HU
+Authorization: {{token}}
 
 ### Create report
 POST {{baseUrl}}/reports
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjgiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc1NDM3MzEzMSwiZXhwIjoxNzU0Mzc2NzMxfQ.k52m5k_5vJleSfOnpqXRB3PHI5ZgHMY552TykZ3gj1g
+Authorization: {{token}}
 Content-Type: application/json
 
 {
@@ -29,7 +30,7 @@ Content-Type: application/json
 
 ### Update report
 PATCH {{baseUrl}}/reports/1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTQzNzI1OTAsImV4cCI6MTc1NDM3NjE5MH0.41Ou4E5FRYC035ZAx2jmp-fpaui7QXn6kZjAcNqq9HU
+Authorization: {{token}}
 Content-Type: application/json
 
 {
@@ -38,7 +39,7 @@ Content-Type: application/json
 
 ### update report response
 PATCH {{baseUrl}}/reports/3/response
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTQzNzI1OTAsImV4cCI6MTc1NDM3NjE5MH0.41Ou4E5FRYC035ZAx2jmp-fpaui7QXn6kZjAcNqq9HU
+Authorization: {{token}}
 Content-Type: application/json
 
 {
@@ -48,4 +49,4 @@ Content-Type: application/json
 
 ### delete report response
 DELETE {{baseUrl}}/reports/3
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTQ0NDk1NjcsImV4cCI6MTc1NDQ1MzE2N30.8LPNEc3wkrSh03AfANa7IXEB5bVJI_74cUTAp611v2U
+Authorization: {{token}}

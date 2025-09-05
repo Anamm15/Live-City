@@ -1,49 +1,49 @@
 import { PollsType, PollsStatus } from "../generated/prisma";
 
 export type pollVoter = {
-   id: number;
-   user : {
-      id: number;
-      name: string;
-   }
-}
+  id: number;
+  user: {
+    id: number;
+    name: string;
+  };
+};
 
 export type PollOption = {
-   id: number;
-   label: string;
-   voteCount: number;
-}
+  id: number;
+  label: string;
+  voteCount: number;
+};
 
 export type PollResponse = {
-   id: number;
-   title: string;
-   description: string;
-   type: PollsType;
-   status: PollsStatus;
-   pollOptions?: PollOption[];
-}
+  shortId: string;
+  title: string;
+  description: string;
+  type: PollsType;
+  status: PollsStatus;
+  pollOptions?: PollOption[];
+};
 
 export type VoteResponse = {
-   id: number;
-   pollOptionId: number;
-   userId: number;
-}
+  id: number;
+  pollOptionId: number;
+  userId: number;
+};
 
 export type CreatePollRequest = {
-   title: string;
-   description: string;
-   type: PollsType;
-   status: PollsStatus;
-}
+  title: string;
+  description: string;
+  type: PollsType;
+  status: PollsStatus;
+};
 
 export type UpdatePollRequest = {
-   title?: string;
-   description?: string;
-   type?: PollsType;
-   status?: PollsStatus;
-}
+  title?: string;
+  description?: string;
+  type?: PollsType;
+  status?: PollsStatus;
+};
 
 export type CreateVoteRequest = {
-   pollOptionId: number;
-   userId: number;
-}
+  pollOptionId: number;
+  userId: number;
+};
