@@ -2,7 +2,7 @@ import { Router } from "express";
 import upload from "../middlewares/upload";
 import authMiddleware from "../middlewares/authentication";
 import authorizeRoles from "../middlewares/authorization";
-import { Role } from "../generated/prisma";
+import { Role } from "@prisma/client";
 import { validate } from "../middlewares/validate";
 import {
   CreateNewsCommentSchema,

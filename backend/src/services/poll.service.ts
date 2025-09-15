@@ -8,6 +8,8 @@ import {
   UpdatePollRequest,
   VoteResponse,
 } from "../dto/poll.dto";
+import { generateUUIDWithPrefix } from "../utils/uuid";
+import { PrefixType } from "../helpers/app.constants";
 
 export class PollService implements IPollService {
   private pollRepository: IPollRepository;
@@ -16,9 +18,9 @@ export class PollService implements IPollService {
     this.pollRepository = pollRepository;
   }
 
-  async getPolls(): Promise<PollResponse[]> {
+  async getPolls(userId: number): Promise<PollResponse[]> {
     try {
-      const polls = await this.pollRepository.getPolls();
+      const polls = await this.pollRepository.getPolls(userId);
       if (polls.length === 0) {
         throw new Error("No polls found");
       }
@@ -54,15 +56,29 @@ export class PollService implements IPollService {
 
   async createPoll(poll: CreatePollRequest): Promise<PollResponse> {
     try {
+      const shortId = generateUUIDWithPrefix(PrefixType.POllS);
+      poll.shortId = shortId;
       return this.pollRepository.createPoll(poll);
     } catch (error: any) {
       throw new Error(error.message);
     }
   }
 
-  async votesPoll(data: CreateVoteRequest): Promise<VoteResponse> {
+  async votesPoll(
+    data: CreateVoteRequest,
+    userId: number
+  ): Promise<VoteResponse> {
     try {
+      data.userId = userId;
       return this.pollRepository.votesPoll(data);
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+  async deleteVotePoll(pollId: number, userId: number): Promise<void> {
+    try {
+      return this.pollRepository.deleteVotePoll(pollId, userId);
     } catch (error: any) {
       throw new Error(error.message);
     }

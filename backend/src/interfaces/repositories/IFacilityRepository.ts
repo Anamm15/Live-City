@@ -3,7 +3,7 @@ import {
   FacilityResponse,
   UpdateFacilityRequest,
 } from "../../dto/facility.dto";
-import { Prisma } from "../../generated/prisma";
+import { Prisma } from "@prisma/client";
 
 export interface IFacilityRepository {
   getFacilities(): Promise<FacilityResponse[]>;

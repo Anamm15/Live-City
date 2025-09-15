@@ -7,7 +7,7 @@ import {
   NewsReactionResponse,
   UpdateNewsRequest,
 } from "../dto/news.dto";
-import { Prisma, PrismaClient } from "../generated/prisma";
+import { Prisma, PrismaClient } from "@prisma/client";
 import { INewsRepository } from "../interfaces/repositories/INewsRepository";
 import { AppError } from "../utils/errors";
 

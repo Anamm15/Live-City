@@ -7,7 +7,7 @@ import {
   NewsReactionResponse,
   UpdateNewsRequest,
 } from "../../dto/news.dto";
-import { Prisma } from "../../generated/prisma";
+import { Prisma } from "@prisma/client";
 
 export interface INewsRepository {
   getNews(offset: number, limit: number): Promise<NewsResponse[]>;

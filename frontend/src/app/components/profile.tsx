@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 
-export default function Profile() {
+export default function ProfileSection() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(true);
 

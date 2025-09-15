@@ -3,7 +3,7 @@ import {
   UserResponse,
   UpdateUserRequest,
 } from "../dto/user.dto";
-import { PrismaClient } from "../generated/prisma";
+import { PrismaClient } from "@prisma/client";
 import { UserMessage } from "../helpers/message.constants";
 import { IFileRepository } from "../interfaces/repositories/IFileRepository";
 import { IUserRepository } from "../interfaces/repositories/IUserRepository";

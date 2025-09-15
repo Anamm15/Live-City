@@ -1,0 +1,25 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.fileRepository = exports.villageRepository = exports.submissionRepository = exports.reportRepository = exports.pollRepository = exports.newsRepository = exports.familyRepository = exports.facilityRepository = exports.userRepository = void 0;
+const prisma_1 = __importDefault(require("../database/prisma"));
+const facility_repository_1 = require("./facility.repository");
+const family_repository_1 = require("./family.repository");
+const file_repository_1 = require("./file.repository");
+const news_repository_1 = require("./news.repository");
+const poll_repository_1 = require("./poll.repository");
+const report_repository_1 = require("./report.repository");
+const submission_repository_1 = require("./submission.repository");
+const user_repository_1 = require("./user.repository");
+const village_repository_1 = require("./village.repository");
+exports.userRepository = new user_repository_1.UserRepository(prisma_1.default);
+exports.facilityRepository = new facility_repository_1.FacilityRepository(prisma_1.default);
+exports.familyRepository = new family_repository_1.FamilyRepository(prisma_1.default);
+exports.newsRepository = new news_repository_1.NewsRepository(prisma_1.default);
+exports.pollRepository = new poll_repository_1.PollRepository(prisma_1.default);
+exports.reportRepository = new report_repository_1.ReportRepository(prisma_1.default);
+exports.submissionRepository = new submission_repository_1.SubmissionRepository(prisma_1.default);
+exports.villageRepository = new village_repository_1.VillageRepository(prisma_1.default);
+exports.fileRepository = new file_repository_1.FileRepository(prisma_1.default);

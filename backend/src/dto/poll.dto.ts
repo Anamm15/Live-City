@@ -31,9 +31,11 @@ export type VoteResponse = {
 
 export type CreatePollRequest = {
   title: string;
+  shortId: string;
   description: string;
   type: PollsType;
   status: PollsStatus;
+  pollOptions: { label: string }[];
 };
 
 export type UpdatePollRequest = {
@@ -44,6 +46,7 @@ export type UpdatePollRequest = {
 };
 
 export type CreateVoteRequest = {
+  pollId: number;
   pollOptionId: number;
   userId: number;
 };

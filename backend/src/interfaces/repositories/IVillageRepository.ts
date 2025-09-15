@@ -3,7 +3,7 @@ import {
   VillageResponse,
   UpdateVillageRequest,
 } from "../../dto/villages.dto";
-import { Prisma } from "../../generated/prisma";
+import { Prisma } from "@prisma/client";
 
 export interface IVillageRepository {
   getVillages(): Promise<VillageResponse[]>;

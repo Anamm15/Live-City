@@ -28,6 +28,7 @@ export class AuthController implements IAuthController {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
+        path: "/",
       });
       res
         .status(StatusCode.OK)

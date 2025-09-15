@@ -11,7 +11,7 @@ import {
   Prisma,
   PrismaClient,
   SubmissionStatus,
-} from "../generated/prisma";
+} from "@prisma/client";
 import {
   CloudFolderName,
   LIMIT_SUBMISSION_PAGE,

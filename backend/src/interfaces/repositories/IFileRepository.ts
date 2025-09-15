@@ -1,5 +1,5 @@
 import { FileResponse, UpdateFile, UploadFile } from "../../dto/file.dto";
-import { Prisma } from "../../generated/prisma";
+import { Prisma } from "@prisma/client";
 
 export interface IFileRepository {
   getFile(id: number): Promise<FileResponse | null>;

@@ -5,7 +5,7 @@ import {
   FacilityResponse,
   UpdateFacilityRequest,
 } from "../dto/facility.dto";
-import { FileableType, PrismaClient } from "../generated/prisma";
+import { FileableType, PrismaClient } from "@prisma/client";
 import { FacilityMessage } from "../helpers/message.constants";
 import { IFacilityRepository } from "../interfaces/repositories/IFacilityRepository";
 import { IFileRepository } from "../interfaces/repositories/IFileRepository";

@@ -7,7 +7,7 @@ import {
   UpdateReportRequest,
   UpdateResponseReportRequest,
 } from "../dto/report.dto";
-import { FileableType, Prisma, PrismaClient } from "../generated/prisma";
+import { FileableType, Prisma, PrismaClient } from "@prisma/client";
 import {
   CloudFolderName,
   LIMIT_REPORT_PAGE,

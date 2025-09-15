@@ -21,7 +21,7 @@ import { INewsRepository } from "../interfaces/repositories/INewsRepository";
 import { INewsService } from "../interfaces/services/INewsService";
 import { NotFoundError } from "../utils/errors";
 import { UploadFile } from "../dto/file.dto";
-import { FileableType, Prisma, PrismaClient } from "../generated/prisma";
+import { FileableType, Prisma, PrismaClient } from "@prisma/client";
 import { generateFilename } from "../utils/format";
 import { generateUUIDWithPrefix } from "../utils/uuid";
 

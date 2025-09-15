@@ -1,5 +1,5 @@
 import { UploadFile, FileResponse, UpdateFile } from "../dto/file.dto";
-import { Prisma, PrismaClient } from "../generated/prisma";
+import { Prisma, PrismaClient } from "@prisma/client";
 import { IFileRepository } from "../interfaces/repositories/IFileRepository";
 import { AppError } from "../utils/errors";
 

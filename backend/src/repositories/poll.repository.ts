@@ -6,16 +6,17 @@ import {
   UpdatePollRequest,
   VoteResponse,
 } from "../dto/poll.dto";
-import { PrismaClient } from "../generated/prisma";
+import { PrismaClient } from "@prisma/client";
 import { IPollRepository } from "../interfaces/repositories/IPollRepository";
 
 const selectedPollFields = {
+  id: true,
   shortId: true,
   title: true,
   description: true,
   type: true,
   status: true,
-  pollOptions: {
+  options: {
     select: {
       id: true,
       label: true,
@@ -31,12 +32,23 @@ export class PollRepository implements IPollRepository {
     this.prisma = prisma;
   }
 
-  async getPolls(): Promise<PollResponse[]> {
+  async getPolls(userId: number): Promise<any[]> {
     try {
       const polls = await this.prisma.polls.findMany({
-        select: selectedPollFields,
+        select: {
+          ...selectedPollFields,
+          votes: {
+            where: { userId },
+            select: { pollOptionId: true },
+          },
+        },
+        orderBy: { id: "desc" },
       });
-      return polls;
+
+      return polls.map((poll) => ({
+        ...poll,
+        selectedOptionId: poll.votes[0]?.pollOptionId ?? null,
+      }));
     } catch (error: any) {
       throw new Error(error.message);
     }
@@ -80,10 +92,29 @@ export class PollRepository implements IPollRepository {
 
   async createPoll(data: CreatePollRequest): Promise<PollResponse> {
     try {
-      const newPoll = await this.prisma.polls.create({
-        data,
+      const result = await this.prisma.$transaction(async (tx) => {
+        const newPoll = await tx.polls.create({
+          data: {
+            shortId: data.shortId,
+            title: data.title,
+            description: data.description,
+            type: data.type,
+            status: data.status,
+          },
+          select: selectedPollFields,
+        });
+
+        await tx.pollOptions.createMany({
+          data: data.pollOptions.map((option) => ({
+            ...option,
+            pollId: newPoll.id,
+          })),
+        });
+
+        return newPoll;
       });
-      return newPoll;
+
+      return result;
     } catch (error: any) {
       throw new Error(error.message);
     }
@@ -91,10 +122,94 @@ export class PollRepository implements IPollRepository {
 
   async votesPoll(data: CreateVoteRequest): Promise<VoteResponse> {
     try {
-      const newVote = await this.prisma.pollVotes.create({
-        data,
+      return await this.prisma.$transaction(async (tx) => {
+        const existingVote = await tx.pollVotes.findUnique({
+          where: {
+            userId_pollId: {
+              userId: data.userId,
+              pollId: data.pollId,
+            },
+          },
+        });
+
+        let newVote;
+
+        if (existingVote) {
+          newVote = await tx.pollVotes.update({
+            where: {
+              userId_pollId: {
+                userId: data.userId,
+                pollId: data.pollId,
+              },
+            },
+            data: {
+              pollOptionId: data.pollOptionId,
+            },
+          });
+
+          await tx.pollOptions.update({
+            where: { id: existingVote.pollOptionId },
+            data: { voteCount: { decrement: 1 } },
+          });
+
+          await tx.pollOptions.update({
+            where: { id: data.pollOptionId },
+            data: { voteCount: { increment: 1 } },
+          });
+        } else {
+          newVote = await tx.pollVotes.create({
+            data: {
+              userId: data.userId,
+              pollId: data.pollId,
+              pollOptionId: data.pollOptionId,
+            },
+          });
+
+          await tx.pollOptions.update({
+            where: { id: data.pollOptionId },
+            data: { voteCount: { increment: 1 } },
+          });
+        }
+
+        return newVote;
       });
-      return newVote;
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+  async deleteVotePoll(pollId: number, userId: number): Promise<void> {
+    try {
+      return await this.prisma.$transaction(async (tx) => {
+        const existingVote = await tx.pollVotes.findUnique({
+          where: {
+            userId_pollId: {
+              userId,
+              pollId,
+            },
+          },
+        });
+
+        if (!existingVote) {
+          throw new Error("Vote not found");
+        }
+
+        await tx.pollOptions.update({
+          where: { id: existingVote.pollOptionId },
+          data: { voteCount: { decrement: 1 } },
+        });
+
+        await tx.pollVotes.delete({
+          where: {
+            userId_pollId: {
+              userId,
+              pollId,
+            },
+          },
+        });
+
+        return;
+      });
     } catch (error: any) {
       throw new Error(error.message);
     }

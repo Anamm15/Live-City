@@ -7,7 +7,7 @@ import {
 } from "../validators/user.validator";
 import { IUserController } from "../interfaces/controllers/IUserController";
 import authorizeRoles from "../middlewares/authorization";
-import { Role } from "../generated/prisma";
+import { Role } from "@prisma/client";
 
 export class UserRoutes {
   private router: Router;

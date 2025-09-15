@@ -3,7 +3,7 @@ import {
   VillageResponse,
   UpdateVillageRequest,
 } from "../dto/villages.dto";
-import { Prisma, PrismaClient } from "../generated/prisma";
+import { Prisma, PrismaClient } from "@prisma/client";
 import { IVillageRepository } from "../interfaces/repositories/IVillageRepository";
 import { AppError } from "../utils/errors";
 

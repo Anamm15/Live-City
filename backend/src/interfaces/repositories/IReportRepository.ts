@@ -4,7 +4,7 @@ import {
   UpdateReportRequest,
   UpdateResponseReportRequest,
 } from "../../dto/report.dto";
-import { Prisma } from "../../generated/prisma";
+import { Prisma } from "@prisma/client";
 
 export interface IReportRepository {
   getReports(

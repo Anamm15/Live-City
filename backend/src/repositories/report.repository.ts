@@ -4,7 +4,7 @@ import {
   UpdateReportRequest,
   UpdateResponseReportRequest,
 } from "../dto/report.dto";
-import { Prisma, PrismaClient } from "../generated/prisma";
+import { Prisma, PrismaClient } from "@prisma/client";
 import { ReportStatus, ReportStatusType } from "../helpers/entity.constants";
 import { IReportRepository } from "../interfaces/repositories/IReportRepository";
 import { AppError } from "../utils/errors";

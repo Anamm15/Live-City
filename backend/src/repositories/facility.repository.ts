@@ -3,7 +3,7 @@ import {
   FacilityResponse,
   UpdateFacilityRequest,
 } from "../dto/facility.dto";
-import { Prisma, PrismaClient } from "../generated/prisma";
+import { Prisma, PrismaClient } from "@prisma/client";
 import { IFacilityRepository } from "../interfaces/repositories/IFacilityRepository";
 import { AppError } from "../utils/errors";
 

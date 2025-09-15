@@ -6,7 +6,7 @@ import {
   VillageResponse,
   UpdateVillageRequest,
 } from "../dto/villages.dto";
-import { FileableType, Prisma, PrismaClient } from "../generated/prisma";
+import { FileableType, Prisma, PrismaClient } from "@prisma/client";
 import { VillageMessage } from "../helpers/message.constants";
 import { IFileRepository } from "../interfaces/repositories/IFileRepository";
 import { IVillageRepository } from "../interfaces/repositories/IVillageRepository";

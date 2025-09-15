@@ -4,22 +4,18 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import Button from "@/components/buttons/Button";
-import "../../styles/Navbar.css";
+import styles from "./navbar.module.css";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
 
-  // Dummy auth, ganti dengan context/logic auth kamu
   const user = true;
-
-  // Tutup menu kalau path berubah
   useEffect(() => {
     setIsMenuOpen(false);
   }, [pathname]);
 
-  // Nonaktifkan scroll kalau menu terbuka
   useEffect(() => {
     document.body.style.overflow = isMenuOpen ? "hidden" : "auto";
     return () => {
@@ -29,7 +25,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="fixed z-50 backdrop-blur-sm w-full h-20 top-0 left-0 flex justify-center items-center border-b border-gray-300 bg-white/70">
+      <nav className="fixed z-50 backdrop-blur-sm w-full h-20 top-0 left-0 flex justify-center items-center border-b border-gray-300 bg-white">
         <div className="flex justify-between items-center w-full max-w-[1280px] px-4">
           {/* Logo */}
           <div className="text-3xl font-bold cursor-pointer text-black z-50">
@@ -42,8 +38,11 @@ const Navbar = () => {
               <CustomNavLink href="/">Home</CustomNavLink>
               <CustomNavLink href="/profile">Profile</CustomNavLink>
               <CustomNavLink href="/services">Services</CustomNavLink>
+              <CustomNavLink href="/information">Information</CustomNavLink>
               <CustomNavLink href="/news">News</CustomNavLink>
               <CustomNavLink href="/facilities">Facilities</CustomNavLink>
+              <CustomNavLink href="/discussion">Discussion</CustomNavLink>
+              <CustomNavLink href="/polls">Polls</CustomNavLink>
             </div>
           )}
 
@@ -69,16 +68,22 @@ const Navbar = () => {
           <div className="md:hidden z-50">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="hamburger-button"
+              className={`${styles.hamburgerButton} z-50`}
             >
               <span
-                className={`hamburger-line ${isMenuOpen ? "open" : ""}`}
+                className={`${styles.hamburgerLine} ${
+                  isMenuOpen ? styles.open : ""
+                }`}
               ></span>
               <span
-                className={`hamburger-line ${isMenuOpen ? "open" : ""}`}
+                className={`${styles.hamburgerLine} ${
+                  isMenuOpen ? styles.open : ""
+                }`}
               ></span>
               <span
-                className={`hamburger-line ${isMenuOpen ? "open" : ""}`}
+                className={`${styles.hamburgerLine} ${
+                  isMenuOpen ? styles.open : ""
+                }`}
               ></span>
             </button>
           </div>
@@ -114,10 +119,21 @@ const Navbar = () => {
                     <CustomNavLink href="/services">Services</CustomNavLink>
                   </li>
                   <li>
+                    <CustomNavLink href="/information">
+                      Information
+                    </CustomNavLink>
+                  </li>
+                  <li>
                     <CustomNavLink href="/news">News</CustomNavLink>
                   </li>
                   <li>
                     <CustomNavLink href="/facilities">Facilities</CustomNavLink>
+                  </li>
+                  <li>
+                    <CustomNavLink href="/discussion">Discussion</CustomNavLink>
+                  </li>
+                  <li>
+                    <CustomNavLink href="/polls">Polls</CustomNavLink>
                   </li>
                 </>
               ) : (
@@ -146,15 +162,21 @@ const Navbar = () => {
 
 export default Navbar;
 
-const CustomNavLink = ({ href, children }: { href: string; children: React.ReactNode }) => {
+const CustomNavLink = ({
+  href,
+  children,
+}: {
+  href: string;
+  children: React.ReactNode;
+}) => {
   const pathname = usePathname();
   const isActive = pathname === href;
   return (
     <Link
       href={href}
-      className={`${
-        isActive ? "text-blue-600 underline underline-offset-4" : "text-black"
-      } transition-colors`}
+      className={`${styles.navLink} ${
+        isActive ? styles.active : ""
+      } text-black`}
     >
       {children}
     </Link>

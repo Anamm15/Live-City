@@ -1,11 +1,41 @@
-@baseUrl = http://localhost:3000/api/v1
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTY5NDYwMjUsImV4cCI6MTc1Njk0OTYyNX0.Ykh3AjiDUIcZekyvr4orJQh_ou7JUhHkfCkPKJXG57E
+@baseUrl = http://localhost:8000/api/v1
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjgiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc1NzkyOTU5NSwiZXhwIjoxNzU3OTMzMTk1fQ.SczvAhRXBmeIq1GcA0bxXIJ1b3t8sEA7NysPKJ4HjoA
 
 ### Login User
 POST {{ baseUrl }}/auth/login
 Content-Type: application/json
 
 {
-  "email": "test@example.com",
+  "email": "test2@example.com",
   "password": "anam1234"
+}
+
+###
+GET {{baseUrl}}/polls
+Authorization: Bearer {{token}}
+
+###
+POST {{baseUrl}}/polls
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "Polls Title 3",
+  "description": "Description Polls 3",
+  "type": "SURVEY",
+  "status": "ACTIVE",
+  "pollOptions": [{
+    "label": "Option 1"
+  }, {
+    "label": "Option 2"
+  }]
+}
+
+###
+POST {{baseUrl}}/polls/1/votes
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "pollOptionId": 1
 }

@@ -1,0 +1,26 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.villageService = exports.submissionService = exports.reportService = exports.pollService = exports.newsService = exports.familyService = exports.facilityService = exports.userService = exports.authService = void 0;
+const prisma_1 = __importDefault(require("../database/prisma"));
+const repositories_1 = require("../repositories");
+const auth_service_1 = require("./auth.service");
+const facility_service_1 = require("./facility.service");
+const family_service_1 = require("./family.service");
+const news_service_1 = require("./news.service");
+const poll_service_1 = require("./poll.service");
+const report_service_1 = require("./report.service");
+const submission_service_1 = require("./submission.service");
+const user_service_1 = require("./user.service");
+const village_service_1 = require("./village.service");
+exports.authService = new auth_service_1.AuthService(repositories_1.userRepository);
+exports.userService = new user_service_1.UserService(repositories_1.userRepository, repositories_1.fileRepository, prisma_1.default);
+exports.facilityService = new facility_service_1.FacilityService(repositories_1.facilityRepository, repositories_1.fileRepository, prisma_1.default);
+exports.familyService = new family_service_1.FamilyService(repositories_1.familyRepository);
+exports.newsService = new news_service_1.NewsService(repositories_1.newsRepository, repositories_1.fileRepository, prisma_1.default);
+exports.pollService = new poll_service_1.PollService(repositories_1.pollRepository);
+exports.reportService = new report_service_1.ReportService(repositories_1.reportRepository, repositories_1.fileRepository, prisma_1.default);
+exports.submissionService = new submission_service_1.SubmissionService(repositories_1.submissionRepository, repositories_1.fileRepository, prisma_1.default);
+exports.villageService = new village_service_1.VillageService(repositories_1.villageRepository, repositories_1.fileRepository, prisma_1.default);

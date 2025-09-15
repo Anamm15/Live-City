@@ -3,7 +3,7 @@ import {
   SubmissionResponse,
   UpdateSubmissionRequest,
 } from "../../dto/submission.dto";
-import { Prisma, SubmissionStatus } from "../../generated/prisma";
+import { Prisma, SubmissionStatus } from "@prisma/client";
 
 export interface ISubmissionRepository {
   getSubmissions(

@@ -4,7 +4,7 @@ import {
   FamilyWithMembersResponse,
   UpdateFamilyRequest,
 } from "../dto/family.dto";
-import { PrismaClient } from "../generated/prisma";
+import { PrismaClient } from "@prisma/client";
 import { IFamilyRepository } from "../interfaces/repositories/IFamilyRepository";
 import { AppError } from "../utils/errors";
 

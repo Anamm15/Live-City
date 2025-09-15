@@ -6,7 +6,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -205,6 +204,7 @@ model Polls {
   type        PollsType
   status      PollsStatus
   options     PollOptions[]
+  votes       PollVotes[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime?  @updatedAt
   deletedAt   DateTime?
@@ -225,14 +225,18 @@ model PollOptions {
 model PollVotes {
   id            Int          @id @default(autoincrement())
   userId        Int
-  pollOptionId Int
+  pollOptionId  Int
+  pollId        Int
+
   user          Users        @relation(fields: [userId], references: [id])
   option        PollOptions  @relation(fields: [pollOptionId], references: [id])
+  poll          Polls        @relation(fields: [pollId], references: [id]) // <--- tambahin ini
+
   createdAt     DateTime  @default(now())
   updatedAt     DateTime?  @updatedAt
   deletedAt     DateTime?
 
-  @@unique([userId, pollOptionId]) // Opsional: user hanya boleh memilih satu kali pada satu opsi
+  @@unique([userId, pollId]) 
 }
 
 model Communities {

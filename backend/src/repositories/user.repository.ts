@@ -5,7 +5,7 @@ import {
   CreateUserRequest,
   UpdateUserRequest,
 } from "../dto/user.dto";
-import { PrismaClient } from "../generated/prisma";
+import { PrismaClient } from "@prisma/client";
 import { AppError } from "../utils/errors";
 
 const userSelectFields = {

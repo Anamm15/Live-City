@@ -3,7 +3,7 @@ import {
   SubmissionResponse,
   UpdateSubmissionRequest,
 } from "../dto/submission.dto";
-import { Prisma, PrismaClient } from "../generated/prisma";
+import { Prisma, PrismaClient } from "@prisma/client";
 import {
   SubmissionStatus,
   SubmissionStatusType,
