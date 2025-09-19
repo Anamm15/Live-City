@@ -1,4 +1,5 @@
 import api from "@/lib/axios";
+import { News, NewsFormData, NewsUpdateFormData } from "@/types/news";
 
 export const getAllNews = async () => {
   try {
@@ -50,8 +51,10 @@ export const createNewsComment = async (newsId: number, content: string) => {
   }
 };
 
-export const updateNews = async (id: string, data: FormData) => {
+export const updateNews = async (id: number, data: NewsUpdateFormData) => {
   try {
+    console.log(id);
+    console.log(data);
     const response = await api.put(`/news/${id}`, data);
     return response.data;
   } catch (error) {
@@ -60,7 +63,7 @@ export const updateNews = async (id: string, data: FormData) => {
   }
 };
 
-export const deleteNews = async (id: string) => {
+export const deleteNews = async (id: number) => {
   try {
     const response = await api.delete(`/news/${id}`);
     return response.data;

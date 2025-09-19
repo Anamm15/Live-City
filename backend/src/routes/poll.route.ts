@@ -37,7 +37,7 @@ export class PollRoutes {
       this.pollController.createPoll.bind(this.pollController)
     );
 
-    this.router.patch(
+    this.router.put(
       "/:id",
       authMiddleware,
       this.pollController.updatePoll.bind(this.pollController)

@@ -5,13 +5,14 @@ import {
 } from "../dto/submission.dto";
 import { Prisma, PrismaClient } from "@prisma/client";
 import {
+  FileableType,
   SubmissionStatus,
   SubmissionStatusType,
 } from "../helpers/entity.constants";
 import { ISubmissionRepository } from "../interfaces/repositories/ISubmissionRepository";
 import { AppError } from "../utils/errors";
 
-const submissionSelectFields = {
+const submissionSelectedFields = {
   id: true,
   shortId: true,
   title: true,
@@ -19,6 +20,10 @@ const submissionSelectFields = {
   category: true,
   status: true,
   description: true,
+};
+
+const submissionSelectedWithUserFields = {
+  ...submissionSelectedFields,
   user: {
     select: {
       id: true,
@@ -50,7 +55,7 @@ export class SubmissionRepository implements ISubmissionRepository {
             ? { status: filter as SubmissionStatusType }
             : {}),
         },
-        select: submissionSelectFields,
+        select: submissionSelectedWithUserFields,
         skip: offset,
         take: limit,
         orderBy: { id: "desc" },
@@ -65,9 +70,29 @@ export class SubmissionRepository implements ISubmissionRepository {
     try {
       const submission = await this.prisma.submissions.findUnique({
         where: { id },
-        select: submissionSelectFields,
+        select: submissionSelectedWithUserFields,
       });
-      return submission;
+
+      if (!submission) {
+        return null;
+      }
+      const files = await this.prisma.files.findMany({
+        where: {
+          fileableType: FileableType[4],
+          fileableId: submission.id,
+        },
+        select: {
+          id: true,
+          urlFile: true,
+          fileableId: true,
+        },
+      });
+
+      const submissionWithFiles = {
+        ...submission,
+        files,
+      };
+      return submissionWithFiles;
     } catch (error: any) {
       throw new AppError(error.message);
     }
@@ -79,9 +104,29 @@ export class SubmissionRepository implements ISubmissionRepository {
     try {
       const submissions = await this.prisma.submissions.findMany({
         where: { userId: userId },
-        select: submissionSelectFields,
+        select: submissionSelectedWithUserFields,
       });
-      return submissions;
+
+      if (!submissions) {
+        return null;
+      }
+      const files = await this.prisma.files.findMany({
+        where: {
+          fileableType: FileableType[4],
+          fileableId: { in: submissions.map((s) => s.id) },
+        },
+        select: {
+          id: true,
+          urlFile: true,
+          fileableId: true,
+        },
+      });
+
+      const submissionWithFiles = {
+        ...submissions,
+        files,
+      };
+      return submissionWithFiles;
     } catch (error: any) {
       throw new AppError(error.message);
     }
@@ -101,7 +146,7 @@ export class SubmissionRepository implements ISubmissionRepository {
           shortId: data.shortId,
           userId: data.userId,
         },
-        select: submissionSelectFields,
+        select: submissionSelectedFields,
       });
       return newSubmission;
     } catch (error: any) {
@@ -121,7 +166,7 @@ export class SubmissionRepository implements ISubmissionRepository {
           userId,
         },
         data,
-        select: submissionSelectFields,
+        select: submissionSelectedFields,
       });
       return updatedSubmission;
     } catch (error: any) {

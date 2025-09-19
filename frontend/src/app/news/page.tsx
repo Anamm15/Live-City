@@ -63,7 +63,7 @@ export default function NewsPage() {
                 id={news.id}
                 title={news.title}
                 date={formatToUSDate(news.date)}
-                imageUrl={news.imageUrl || ""}
+                imageUrl={news.files?.[0]?.urlFile || ""}
                 content={news.content}
                 reactionCount={news.reactionCount || 0}
                 commentCount={news.commentCount || 0}

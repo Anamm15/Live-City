@@ -9,7 +9,7 @@ import { ReportStatus, ReportStatusType } from "../helpers/entity.constants";
 import { IReportRepository } from "../interfaces/repositories/IReportRepository";
 import { AppError } from "../utils/errors";
 
-const reportSelectedField = {
+const reportSelectedFields = {
   id: true,
   shortId: true,
   title: true,
@@ -17,6 +17,10 @@ const reportSelectedField = {
   category: true,
   status: true,
   response: true,
+};
+
+const reportSelectedWithUserFields = {
+  ...reportSelectedFields,
   user: {
     select: {
       id: true,
@@ -47,7 +51,7 @@ export class ReportRepository implements IReportRepository {
             ? { status: filter as ReportStatusType }
             : {}),
         },
-        select: reportSelectedField,
+        select: reportSelectedWithUserFields,
         skip: offset,
         take: limit,
         orderBy: { id: "desc" },
@@ -62,7 +66,7 @@ export class ReportRepository implements IReportRepository {
     try {
       const report = await this.prisma.reports.findUnique({
         where: { id },
-        select: reportSelectedField,
+        select: reportSelectedWithUserFields,
       });
       return report;
     } catch (error: any) {
@@ -74,7 +78,7 @@ export class ReportRepository implements IReportRepository {
     try {
       const reports = await this.prisma.reports.findMany({
         where: { userId },
-        select: reportSelectedField,
+        select: reportSelectedWithUserFields,
       });
       return reports;
     } catch (error: any) {
@@ -96,7 +100,7 @@ export class ReportRepository implements IReportRepository {
           shortId: data.shortId,
           userId: data.userId,
         },
-        select: reportSelectedField,
+        select: reportSelectedFields,
       });
       return newReport;
     } catch (error: any) {
@@ -116,7 +120,7 @@ export class ReportRepository implements IReportRepository {
           userId,
         },
         data,
-        select: reportSelectedField,
+        select: reportSelectedFields,
       });
       return updatedReport;
     } catch (error: any) {
@@ -132,7 +136,7 @@ export class ReportRepository implements IReportRepository {
       const updatedReport = await this.prisma.reports.update({
         where: { id: id },
         data,
-        select: reportSelectedField,
+        select: reportSelectedFields,
       });
       return updatedReport;
     } catch (error: any) {

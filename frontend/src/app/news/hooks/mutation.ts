@@ -3,6 +3,7 @@ import {
   createNewsComment,
   getAllNews,
   getNewsComments,
+  updateNews,
 } from "@/services/news";
 import { News } from "@/types/news";
 import toast from "react-hot-toast";
@@ -37,6 +38,25 @@ export function useAddNewsCommentMutation() {
     onError: (error: unknown, _variables, context) => {
       if (context?.toastId) toast.dismiss(context.toastId);
       toast.error("Failed to add comment: " + (error as Error).message);
+    },
+  });
+}
+
+export function useUpdateNewsMutation() {
+  return useMutation({
+    mutationFn: ({ id, data }: { id: number; data: FormData }) =>
+      updateNews(id, data),
+    onMutate: () => {
+      const toastId = toast.loading("Updating news...");
+      return { toastId };
+    },
+    onSuccess: (_data, _variables, context) => {
+      if (context?.toastId) toast.dismiss(context.toastId);
+      toast.success("News updated successfully!");
+    },
+    onError: (error: unknown, _variables, context) => {
+      if (context?.toastId) toast.dismiss(context.toastId);
+      toast.error("Failed to update news: " + (error as Error).message);
     },
   });
 }

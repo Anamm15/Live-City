@@ -24,6 +24,11 @@ import { UploadFile } from "../dto/file.dto";
 import { FileableType, Prisma, PrismaClient } from "@prisma/client";
 import { generateFilename } from "../utils/format";
 import { generateUUIDWithPrefix } from "../utils/uuid";
+import {
+  deleteFileFromFirebase,
+  uploadFileToFirebase,
+} from "../utils/firebaseStorage";
+import path from "path";
 
 export class NewsService implements INewsService {
   private newsRepository: INewsRepository;
@@ -70,40 +75,51 @@ export class NewsService implements INewsService {
     news: CreateNewsRequest,
     file?: Express.Multer.File
   ): Promise<NewsResponse> {
-    let cloudinaryResult: any | null = null;
+    let uploadedFilename: string | null = null;
 
-    return await this.prisma.$transaction(
-      async (tx: Prisma.TransactionClient) => {
-        try {
-          const uuid = generateUUIDWithPrefix(PrefixType.NEWS);
-          news.shortId = uuid;
-          const newNews = await this.newsRepository.createNews(news, tx);
+    try {
+      const uuid = generateUUIDWithPrefix(PrefixType.NEWS);
+      const newsData = { ...news, shortId: uuid };
 
-          if (file) {
-            const newFilename = generateFilename(FileableType.NEWS, newNews.id);
-            cloudinaryResult = await cloudinary.uploader.upload(file.path, {
-              folder: CloudFolderName.NEWS,
-              public_id: newFilename,
-            });
+      let signedUrl: string | null = null;
 
-            fs.unlinkSync(file.path);
-            const fileData: UploadFile = {
-              urlFile: cloudinaryResult.secure_url,
+      if (file) {
+        const fileExtension = path.extname(file.originalname);
+        const baseFilename = generateFilename(FileableType.NEWS, uuid);
+        const newFilename = `${baseFilename}${fileExtension}`;
+
+        signedUrl = await uploadFileToFirebase(
+          file,
+          CloudFolderName.NEWS,
+          newFilename
+        );
+        uploadedFilename = newFilename;
+      }
+
+      const result = await this.prisma.$transaction(async (tx) => {
+        const newNews = await this.newsRepository.createNews(newsData, tx);
+
+        if (file && signedUrl) {
+          await this.fileRepository.uploadFile(
+            {
+              urlFile: signedUrl,
               fileableId: newNews.id,
               fileableType: FileableType.NEWS,
-            };
-            await this.fileRepository.uploadFile(fileData, tx);
-          }
-
-          return newNews;
-        } catch (error) {
-          if (cloudinaryResult?.public_id) {
-            await cloudinary.uploader.destroy(cloudinaryResult.public_id);
-          }
-          throw error;
+            },
+            tx
+          );
         }
+
+        return newNews;
+      });
+
+      return result;
+    } catch (error) {
+      if (uploadedFilename) {
+        await deleteFileFromFirebase(CloudFolderName.NEWS, uploadedFilename);
       }
-    );
+      throw error;
+    }
   }
 
   async updateNews(id: number, news: UpdateNewsRequest): Promise<NewsResponse> {

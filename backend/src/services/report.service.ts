@@ -20,6 +20,11 @@ import { IReportService } from "../interfaces/services/IReportService";
 import { NotFoundError } from "../utils/errors";
 import { generateFilename } from "../utils/format";
 import { generateUUIDWithPrefix } from "../utils/uuid";
+import path from "path";
+import {
+  deleteFileFromFirebase,
+  uploadFileToFirebase,
+} from "../utils/firebaseStorage";
 
 export class ReportService implements IReportService {
   private reportRepository: IReportRepository;
@@ -83,39 +88,49 @@ export class ReportService implements IReportService {
     report: CreateReportRequest,
     file: Express.Multer.File
   ): Promise<ReportResponse> {
-    let cloudinaryResult: any | null = null;
-    let data: CreateReportRequest = { ...report, userId };
-    return await this.prisma.$transaction(
-      async (tx: Prisma.TransactionClient) => {
-        try {
-          const uuid = generateUUIDWithPrefix(PrefixType.REPORT);
-          data.shortId = uuid;
-          const newReport = await this.reportRepository.createReport(data, tx);
-          const newFilename = generateFilename(
-            FileableType.REPORT,
-            newReport.id
-          );
-          cloudinaryResult = await cloudinary.uploader.upload(file.path, {
-            folder: CloudFolderName.REPORT,
-            public_id: newFilename,
-          });
+    let uploadedFilename: string | null = null;
 
-          fs.unlinkSync(file.path);
-          const fileData: UploadFile = {
-            urlFile: cloudinaryResult.secure_url,
+    try {
+      const uuid = generateUUIDWithPrefix(PrefixType.REPORT);
+      const reportData = { ...report, userId, shortId: uuid };
+
+      const fileExtension = path.extname(file.originalname);
+      const baseFilename = generateFilename(FileableType.REPORT, uuid);
+      const newFilename = `${baseFilename}${fileExtension}`;
+
+      const signedUrl = await uploadFileToFirebase(
+        file,
+        CloudFolderName.REPORT,
+        newFilename
+      );
+      uploadedFilename = newFilename;
+
+      const result = await this.prisma.$transaction(async (tx) => {
+        const newReport = await this.reportRepository.createReport(
+          reportData,
+          tx
+        );
+
+        await this.fileRepository.uploadFile(
+          {
+            urlFile: signedUrl,
             fileableId: newReport.id,
             fileableType: FileableType.REPORT,
-          };
-          await this.fileRepository.uploadFile(fileData, tx);
-          return newReport;
-        } catch (error) {
-          if (cloudinaryResult?.public_id) {
-            await cloudinary.uploader.destroy(cloudinaryResult.public_id);
-          }
-          throw error;
-        }
+          },
+          tx
+        );
+
+        return newReport;
+      });
+
+      return result;
+    } catch (error) {
+      if (uploadedFilename) {
+        await deleteFileFromFirebase(CloudFolderName.REPORT, uploadedFilename);
       }
-    );
+
+      throw error;
+    }
   }
 
   async updateReport(

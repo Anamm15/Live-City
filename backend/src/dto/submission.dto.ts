@@ -28,6 +28,11 @@ export type SubmissionResponse = {
     email: string | null;
     phoneNumber: string | null;
   };
+  files?: {
+    id: number;
+    urlFile: string;
+    fileableId: number;
+  }[];
 };
 
 export type CreateSubmissionRequest = {

@@ -6,6 +6,12 @@ export type NewsResponse = {
   content: string;
   reactionCount: number;
   commentCount: number;
+  comments?: NewsCommentResponse[];
+  files?: {
+    id: number;
+    urlFile: string;
+    fileableId: number;
+  }[];
 };
 
 export type NewsCommentResponse = {

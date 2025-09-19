@@ -12,7 +12,13 @@ import { IFileRepository } from "../interfaces/repositories/IFileRepository";
 import { IVillageRepository } from "../interfaces/repositories/IVillageRepository";
 import { IVillageService } from "../interfaces/services/IVillageService";
 import { generateFilename } from "../utils/format";
-import { CloudFolderName } from "../helpers/app.constants";
+import { CloudFolderName, PrefixType } from "../helpers/app.constants";
+import {
+  deleteFileFromFirebase,
+  uploadFileToFirebase,
+} from "../utils/firebaseStorage";
+import { generateUUIDWithPrefix } from "../utils/uuid";
+import path from "path";
 
 export class VillageService implements IVillageService {
   private villageRepository: IVillageRepository;
@@ -44,39 +50,43 @@ export class VillageService implements IVillageService {
     data: CreateVillageRequest,
     file: Express.Multer.File
   ): Promise<VillageResponse> {
-    let cloudinaryResult: any | null = null;
-    return await this.prisma.$transaction(
-      async (tx: Prisma.TransactionClient) => {
-        try {
-          const newVillage = await this.villageRepository.createVillage(
-            data,
-            tx
-          );
-          const newFilename = generateFilename(
-            FileableType.VILLAGE,
-            newVillage.id
-          );
-          cloudinaryResult = await cloudinary.uploader.upload(file.path, {
-            folder: CloudFolderName.VILLAGE,
-            public_id: newFilename,
-          });
+    let uploadedFilename: string | null = null;
 
-          fs.unlinkSync(file.path);
-          const fileData: UploadFile = {
-            urlFile: cloudinaryResult.secure_url,
+    try {
+      const uuid = generateUUIDWithPrefix(PrefixType.VILLAGE);
+      const fileExtension = path.extname(file.originalname);
+      const baseFilename = generateFilename(FileableType.VILLAGE, uuid);
+      const newFilename = `${baseFilename}${fileExtension}`;
+
+      const signedUrl = await uploadFileToFirebase(
+        file,
+        CloudFolderName.VILLAGE,
+        newFilename
+      );
+      uploadedFilename = newFilename;
+
+      const result = await this.prisma.$transaction(async (tx) => {
+        const newVillage = await this.villageRepository.createVillage(data, tx);
+
+        await this.fileRepository.uploadFile(
+          {
+            urlFile: signedUrl,
             fileableId: newVillage.id,
             fileableType: FileableType.VILLAGE,
-          };
-          await this.fileRepository.uploadFile(fileData, tx);
-          return newVillage;
-        } catch (error) {
-          if (cloudinaryResult?.public_id) {
-            await cloudinary.uploader.destroy(cloudinaryResult.public_id);
-          }
-          throw error;
-        }
+          },
+          tx
+        );
+
+        return newVillage;
+      });
+
+      return result;
+    } catch (error) {
+      if (uploadedFilename) {
+        await deleteFileFromFirebase(CloudFolderName.VILLAGE, uploadedFilename);
       }
-    );
+      throw error;
+    }
   }
 
   async updateVillage(

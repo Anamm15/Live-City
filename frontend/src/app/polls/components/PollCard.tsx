@@ -216,7 +216,7 @@ export function PollCard({ initialPollData }: PollCardProps) {
 
       <button
         onClick={handleClearVote}
-        className="px-8 text-sm mb-4 text-blue-600 cursor-pointer hover:text-blue-400"
+        className="px-8 text-sm mb-4 text-green-600 cursor-pointer hover:text-green-400"
       >
         Clear Your Choice
       </button>

@@ -1,12 +1,12 @@
 @baseUrl = http://localhost:8000/api/v1
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjgiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc1NzkyOTU5NSwiZXhwIjoxNzU3OTMzMTk1fQ.SczvAhRXBmeIq1GcA0bxXIJ1b3t8sEA7NysPKJ4HjoA
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTgyMTcwODIsImV4cCI6MTc1ODIyMDY4Mn0.84Qz9g5YzbeQxxgrYD3URuoS3qCj0Sx0olPezhfHCU4
 
 ### Login User
 POST {{ baseUrl }}/auth/login
 Content-Type: application/json
 
 {
-  "email": "test2@example.com",
+  "email": "test@example.com",
   "password": "anam1234"
 }
 
@@ -20,14 +20,16 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "title": "Polls Title 3",
-  "description": "Description Polls 3",
+  "title": "Polls Title 5",
+  "description": "Description Polls 5",
   "type": "SURVEY",
   "status": "ACTIVE",
   "pollOptions": [{
     "label": "Option 1"
   }, {
     "label": "Option 2"
+  }, {
+    "label": "Option 3"
   }]
 }
 
@@ -39,3 +41,13 @@ Content-Type: application/json
 {
   "pollOptionId": 1
 }
+
+###
+PUT {{baseUrl}}/polls/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "Poll 1 Updated"
+}
+

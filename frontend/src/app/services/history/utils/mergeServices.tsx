@@ -1,6 +1,6 @@
 import { Report } from "@/types/report";
 import { Submission } from "@/types/submission";
-import { HistoryItem } from "../components/HistoryCard";
+import { HistoryItem } from "../page";
 
 export function mergeServices(
   submissions?: Submission[],

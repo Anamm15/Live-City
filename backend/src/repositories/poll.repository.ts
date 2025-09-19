@@ -8,6 +8,10 @@ import {
 } from "../dto/poll.dto";
 import { PrismaClient } from "@prisma/client";
 import { IPollRepository } from "../interfaces/repositories/IPollRepository";
+import {
+  mapCreatePollRequest,
+  mapUpdatePollRequest,
+} from "../utils/prisma-adapter";
 
 const selectedPollFields = {
   id: true,
@@ -92,29 +96,13 @@ export class PollRepository implements IPollRepository {
 
   async createPoll(data: CreatePollRequest): Promise<PollResponse> {
     try {
-      const result = await this.prisma.$transaction(async (tx) => {
-        const newPoll = await tx.polls.create({
-          data: {
-            shortId: data.shortId,
-            title: data.title,
-            description: data.description,
-            type: data.type,
-            status: data.status,
-          },
-          select: selectedPollFields,
-        });
+      const prismaData = mapCreatePollRequest(data);
 
-        await tx.pollOptions.createMany({
-          data: data.pollOptions.map((option) => ({
-            ...option,
-            pollId: newPoll.id,
-          })),
-        });
-
-        return newPoll;
+      const newPoll = await this.prisma.polls.create({
+        data: prismaData,
+        include: { options: true },
       });
-
-      return result;
+      return newPoll;
     } catch (error: any) {
       throw new Error(error.message);
     }
@@ -217,10 +205,14 @@ export class PollRepository implements IPollRepository {
 
   async updatePoll(id: number, data: UpdatePollRequest): Promise<PollResponse> {
     try {
+      const prismaData = mapUpdatePollRequest(data);
+
       const updatedPoll = await this.prisma.polls.update({
         where: { id },
-        data,
+        data: prismaData,
+        include: { options: true },
       });
+
       return updatedPoll;
     } catch (error: any) {
       throw new Error(error.message);

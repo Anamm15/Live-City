@@ -1,5 +1,5 @@
 import cloudinary from "../config/cloudinary";
-import { UploadFile } from "../dto/file.dto";
+import * as path from "path";
 import fs from "fs";
 import {
   CreateSubmissionRequest,
@@ -24,6 +24,11 @@ import { ISubmissionService } from "../interfaces/services/ISubmissionSerivce";
 import { NotFoundError } from "../utils/errors";
 import { generateFilename } from "../utils/format";
 import { generateUUIDWithPrefix } from "../utils/uuid";
+import { bucket } from "../config/firebase";
+import {
+  deleteFileFromFirebase,
+  uploadFileToFirebase,
+} from "../utils/firebaseStorage";
 
 export class SubmissionService implements ISubmissionService {
   private submissionRepository: ISubmissionRepository;
@@ -91,39 +96,51 @@ export class SubmissionService implements ISubmissionService {
     submission: CreateSubmissionRequest,
     file: Express.Multer.File
   ): Promise<SubmissionResponse> {
-    let cloudinaryResult: any | null = null;
-    let data: CreateSubmissionRequest = { ...submission, userId };
-    return await this.prisma.$transaction(
-      async (tx: Prisma.TransactionClient) => {
-        try {
-          data.shortId = generateUUIDWithPrefix(PrefixType.SUBMISSION);
-          const newSubmission =
-            await this.submissionRepository.createSubmission(data, tx);
-          const newFilename = generateFilename(
-            FileableType.SUBMISSION,
-            newSubmission.id
-          );
-          cloudinaryResult = await cloudinary.uploader.upload(file.path, {
-            folder: CloudFolderName.SUBMISSION,
-            public_id: newFilename,
-          });
+    let uploadedFilename: string | null = null;
 
-          fs.unlinkSync(file.path);
-          const fileData: UploadFile = {
-            urlFile: cloudinaryResult.secure_url,
+    try {
+      const uuid = generateUUIDWithPrefix(PrefixType.SUBMISSION);
+      const submissionData = { ...submission, userId, shortId: uuid };
+
+      const fileExtension = path.extname(file.originalname);
+      const baseFilename = generateFilename(FileableType.SUBMISSION, uuid);
+      const newFilename = `${baseFilename}${fileExtension}`;
+
+      const signedUrl = await uploadFileToFirebase(
+        file,
+        CloudFolderName.SUBMISSION,
+        newFilename
+      );
+      uploadedFilename = newFilename;
+
+      const result = await this.prisma.$transaction(async (tx) => {
+        const newSubmission = await this.submissionRepository.createSubmission(
+          submissionData,
+          tx
+        );
+
+        await this.fileRepository.uploadFile(
+          {
+            urlFile: signedUrl,
             fileableId: newSubmission.id,
             fileableType: FileableType.SUBMISSION,
-          };
-          await this.fileRepository.uploadFile(fileData, tx);
-          return newSubmission;
-        } catch (error) {
-          if (cloudinaryResult?.public_id) {
-            await cloudinary.uploader.destroy(cloudinaryResult.public_id);
-          }
-          throw error;
-        }
+          },
+          tx
+        );
+
+        return newSubmission;
+      });
+
+      return result;
+    } catch (error) {
+      if (uploadedFilename) {
+        await deleteFileFromFirebase(
+          CloudFolderName.SUBMISSION,
+          uploadedFilename
+        );
       }
-    );
+      throw error;
+    }
   }
 
   async updateSubmission(

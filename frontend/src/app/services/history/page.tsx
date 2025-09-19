@@ -2,11 +2,14 @@
 import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import FilteredSection from "./components/FilteredSection";
-import HistoryCard, { HistoryItem } from "./components/HistoryCard";
 import { useSubmissionQuery } from "./mutation/useSubmission";
 import { useReportsQuery } from "./mutation/useReport";
 import { mergeServices } from "./utils/mergeServices";
+import ServiceCard from "@/components/cards/ServicesCard";
+import { Submission } from "@/types/submission";
+import { Report } from "@/types/report";
 
+export type HistoryItem = (Submission | Report) & { type: string };
 export default function HistoryPage() {
   const [filter, setFilter] = useState("All");
   const [historyData, setHistoryData] = useState<HistoryItem[]>([]);
@@ -49,7 +52,7 @@ export default function HistoryPage() {
                 key={item.shortId}
                 className="block group"
               >
-                <HistoryCard item={item} />
+                <ServiceCard item={item} />
               </Link>
             ))
           ) : (

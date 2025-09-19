@@ -10,6 +10,7 @@ import {
 import { Prisma, PrismaClient } from "@prisma/client";
 import { INewsRepository } from "../interfaces/repositories/INewsRepository";
 import { AppError } from "../utils/errors";
+import { FileableType } from "../helpers/entity.constants";
 
 const selectedNewsField = {
   id: true,
@@ -72,7 +73,26 @@ export class NewsRepository implements INewsRepository {
         take: limit,
         orderBy: { id: "desc" },
       });
-      return news;
+
+      const newsIds = news.map((n) => n.id);
+      const files = await this.prisma.files.findMany({
+        where: {
+          fileableType: FileableType[3],
+          fileableId: { in: newsIds },
+        },
+        select: {
+          id: true,
+          urlFile: true,
+          fileableId: true,
+        },
+      });
+
+      const newsWithFiles = news.map((n) => ({
+        ...n,
+        files: files.filter((f) => f.fileableId === n.id),
+      }));
+
+      return newsWithFiles;
     } catch (error: any) {
       throw new AppError(error.message);
     }
@@ -84,7 +104,28 @@ export class NewsRepository implements INewsRepository {
         where: { id },
         select: selectedNewsWithDetailField,
       });
-      return news;
+
+      if (!news) {
+        throw new AppError("News not found");
+      }
+
+      const files = await this.prisma.files.findMany({
+        where: {
+          fileableType: FileableType[3],
+          fileableId: news?.id,
+        },
+        select: {
+          id: true,
+          urlFile: true,
+          fileableId: true,
+        },
+      });
+
+      const newsWithFiles = {
+        ...news,
+        files,
+      };
+      return newsWithFiles;
     } catch (error: any) {
       throw new AppError(error.message);
     }

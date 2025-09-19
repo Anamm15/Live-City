@@ -56,6 +56,7 @@ export class PollService implements IPollService {
 
   async createPoll(poll: CreatePollRequest): Promise<PollResponse> {
     try {
+      console.log("poll" + poll);
       const shortId = generateUUIDWithPrefix(PrefixType.POllS);
       poll.shortId = shortId;
       return this.pollRepository.createPoll(poll);

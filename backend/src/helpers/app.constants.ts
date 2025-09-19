@@ -15,8 +15,10 @@ export const CloudFolderName = {
 };
 
 export const PrefixType = {
-  NEWS: "nw",
-  POllS: "pl",
+  NEWS: "new",
+  POllS: "pol",
   SUBMISSION: "sub",
   REPORT: "rep",
+  FACILITY: "fac",
+  VILLAGE: "vil",
 };

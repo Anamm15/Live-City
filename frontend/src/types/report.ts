@@ -25,7 +25,25 @@ export type ReportFormData = {
 };
 
 export type Report = ReportFormData & {
-  id: string;
+  id: number;
   shortId: string;
   status: string;
+  response?: string;
+  files?: {
+    id: number;
+    urlFile: string;
+    fileableId: number;
+  }[];
+  user: {
+    id: number;
+    name: string;
+    email?: string;
+    phoneNumber?: string;
+    nationalIdentityNumber: string;
+  };
+};
+
+export type ReportResponseUpdateData = {
+  status: string;
+  response?: string;
 };

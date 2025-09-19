@@ -31,7 +31,19 @@ export type SubmissionFormData = {
 };
 
 export type Submission = SubmissionFormData & {
-  id: string;
+  id: number;
   shortId: string;
   status: string;
+  files?: {
+    id: number;
+    urlFile: string;
+    fileableId: number;
+  }[];
+  user: {
+    id: number;
+    name: string;
+    email?: string;
+    phoneNumber?: string;
+    nationalIdentityNumber: string;
+  };
 };

@@ -54,7 +54,8 @@ export default function NewsCard({
             src={imageUrl}
             alt={title}
             className="w-full h-full object-cover"
-            layout="fill"
+            width={400}
+            height={200}
           />
         </div>
       )}

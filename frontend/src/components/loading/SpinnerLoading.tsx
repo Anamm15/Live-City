@@ -10,7 +10,7 @@ export default function SpinnerLoading({
   label,
 }: SpinnerLoadingProps) {
   return (
-    <div className="flex items-center gap-3 text-blue-600 mt-2.5">
+    <div className="flex flex-col items-center gap-3 text-blue-600 mt-2.5">
       <svg
         className={`animate-spin -ml-1 mr-3 h-${size} w-${size} text-blue-600`}
         xmlns="http://www.w3.org/2000/svg"

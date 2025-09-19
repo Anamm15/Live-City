@@ -10,10 +10,10 @@ type SelectOptionProps = {
   validation?: boolean;
   className?: string;
   readOnly?: boolean;
-  defaultValue?: string;
   error?: string;
   required?: boolean;
   placeholder?: string;
+  onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   icon?: React.ReactNode;
   value?: string | number | undefined;
   options: { value: string | number | undefined; label: string }[];
@@ -23,17 +23,17 @@ const SelectOption = ({
   label,
   className = "",
   readOnly = false,
-  defaultValue = "",
   placeholder = "",
   icon,
   error = "",
+  onChange,
   options,
   value,
   required = false,
   ...rest
 }: SelectOptionProps) => {
   return (
-    <div className="mb-4 flex flex-col space-y-2">
+    <div className="flex flex-col space-y-2">
       <LabelText id={label} className="flex items-center gap-2">
         {icon && <span>{icon}</span>}
         <span>
@@ -51,9 +51,9 @@ const SelectOption = ({
             hover:ring-1 hover:ring-inset hover:ring-[#000] text-sm md:text-md
             placeholder:text-sm placeholder:text-[#9AA2B1] focus:placeholder:text-[#092540] 
             pr-10 ${className}`}
-          defaultValue={defaultValue}
           aria-label={label}
           value={value}
+          onChange={onChange}
           {...rest}
         >
           {placeholder && (

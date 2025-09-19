@@ -41,7 +41,7 @@ export class NewsRoutes {
       validate(CreateNewsSchema),
       this.newsController.createNews.bind(this.newsController)
     );
-    this.router.patch(
+    this.router.put(
       "/:id",
       authMiddleware,
       authorizeRoles(Role.ADMIN),

@@ -1,6 +1,6 @@
 ### Login User
 @baseUrl = http://localhost:8000/api/v1
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTcwNDYxNTIsImV4cCI6MTc1NzA0OTc1Mn0.z3aLCU9o5El-Z7DyLHOkrynk-RFoNFeM0EGlzOjDSG0
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTgyMTUzOTQsImV4cCI6MTc1ODIxODk5NH0.qlTa0-MSdATXLat7jXE7hFHTj6cOeEnompjc76oF5EU
 POST {{ baseUrl }}/auth/login
 Content-Type: application/json
 
@@ -29,7 +29,7 @@ Content-Type: application/json
 }
 
 ### Update 
-PATCH {{baseUrl}}/news/7
+PUT {{baseUrl}}/news/10
 Authorization: Bearer {{token}}
 Content-Type: application/json
 

@@ -35,7 +35,7 @@ export type CreatePollRequest = {
   description: string;
   type: PollsType;
   status: PollsStatus;
-  pollOptions: { label: string }[];
+  options: { label: string }[];
 };
 
 export type UpdatePollRequest = {
@@ -43,6 +43,7 @@ export type UpdatePollRequest = {
   description?: string;
   type?: PollsType;
   status?: PollsStatus;
+  options?: { id: number; label: string; voteCount?: number }[];
 };
 
 export type CreateVoteRequest = {

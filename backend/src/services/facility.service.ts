@@ -14,7 +14,13 @@ import { NotFoundError } from "../utils/errors";
 import cloudinary from "../config/cloudinary";
 import { UploadFile } from "../dto/file.dto";
 import { generateFilename } from "../utils/format";
-import { CloudFolderName } from "../helpers/app.constants";
+import { CloudFolderName, PrefixType } from "../helpers/app.constants";
+import { generateUUIDWithPrefix } from "../utils/uuid";
+import path from "path";
+import {
+  deleteFileFromFirebase,
+  uploadFileToFirebase,
+} from "../utils/firebaseStorage";
 
 export class FacilityService implements IFacilityService {
   private facilityRepository: IFacilityRepository;
@@ -59,39 +65,49 @@ export class FacilityService implements IFacilityService {
     data: CreateFacilityRequest,
     file: Express.Multer.File
   ): Promise<FacilityResponse> {
-    let cloudinaryResult: any | null = null;
-    return await this.prisma.$transaction(
-      async (tx: Prisma.TransactionClient) => {
-        try {
-          const newFacility = await this.facilityRepository.createFacility(
-            data,
-            tx
-          );
-          const newFilename = generateFilename(
-            FileableType.FACILITY,
-            newFacility.id
-          );
-          cloudinaryResult = await cloudinary.uploader.upload(file.path, {
-            folder: CloudFolderName.FACILITY,
-            public_id: newFilename,
-          });
+    let uploadedFilename: string | null = null;
 
-          fs.unlinkSync(file.path);
-          const fileData: UploadFile = {
-            urlFile: cloudinaryResult.secure_url,
+    try {
+      const uuid = generateUUIDWithPrefix(PrefixType.FACILITY);
+      const fileExtension = path.extname(file.originalname);
+      const baseFilename = generateFilename(FileableType.FACILITY, uuid);
+      const newFilename = `${baseFilename}${fileExtension}`;
+
+      const signedUrl = await uploadFileToFirebase(
+        file,
+        CloudFolderName.FACILITY,
+        newFilename
+      );
+      uploadedFilename = newFilename;
+
+      const result = await this.prisma.$transaction(async (tx) => {
+        const newFacility = await this.facilityRepository.createFacility(
+          data,
+          tx
+        );
+
+        await this.fileRepository.uploadFile(
+          {
+            urlFile: signedUrl,
             fileableId: newFacility.id,
             fileableType: FileableType.FACILITY,
-          };
-          await this.fileRepository.uploadFile(fileData, tx);
-          return newFacility;
-        } catch (error) {
-          if (cloudinaryResult?.public_id) {
-            await cloudinary.uploader.destroy(cloudinaryResult.public_id);
-          }
-          throw error;
-        }
+          },
+          tx
+        );
+
+        return newFacility;
+      });
+
+      return result;
+    } catch (error) {
+      if (uploadedFilename) {
+        await deleteFileFromFirebase(
+          CloudFolderName.FACILITY,
+          uploadedFilename
+        );
       }
-    );
+      throw error;
+    }
   }
 
   async updateFacility(

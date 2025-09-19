@@ -1,6 +1,6 @@
 import api from "@/lib/axios";
 import { ApiResponse } from "@/types";
-import { Poll } from "@/types/polls";
+import { Poll, PollCreateFormData, PollUpdateFormData } from "@/types/polls";
 
 export const getPolls = async (): Promise<Poll[]> => {
   try {
@@ -32,7 +32,7 @@ export const getPollsVoters = async (id: string): Promise<Poll> => {
   }
 };
 
-export const createPoll = async (data: FormData) => {
+export const createPoll = async (data: PollCreateFormData) => {
   try {
     const response = await api.post("/polls", data);
     return response.data;
@@ -42,7 +42,7 @@ export const createPoll = async (data: FormData) => {
   }
 };
 
-export const updatePoll = async (id: string, data: FormData) => {
+export const updatePoll = async (id: number, data: PollUpdateFormData) => {
   try {
     const response = await api.put(`/polls/${id}`, data);
     return response.data;
@@ -52,7 +52,7 @@ export const updatePoll = async (id: string, data: FormData) => {
   }
 };
 
-export const deletePoll = async (id: string) => {
+export const deletePoll = async (id: number) => {
   try {
     const response = await api.delete(`/polls/${id}`);
     return response.data;
